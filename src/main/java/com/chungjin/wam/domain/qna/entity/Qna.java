@@ -16,26 +16,24 @@ public class Qna {
     private Long qnaId;
 
     //member 테이블에서 가져옴
-    @Column(name = "member_email")
-    private String memberEmail;
+    private String email;
 
-    @Column(name = "member_nickname")
-    private String memberNickname;
+    private String nickname;
 
-    @Column(name = "qna_title")
-    private String qnaTitle;
+    private String title;
 
-    @Column(name = "qna_content")
-    private String qnaContent;
+    private String content;
 
-    @Column(name = "qna_img")
-    private String qnaImg;
+    @Column(name = "create_date")
+    private String createDate;
 
-    @Column(name = "qna_date")
-    private String qnaDate;
+    @Column(name = "view_count")
+    private int viewCount;
 
-    @Column(name = "qna_view")
-    private int qnaView;
+    private String answer;
+
+    @Column(name = "answer_date")
+    private String answerDate;
 
     @Column(name = "qna_check")
     @Enumerated(EnumType.STRING)

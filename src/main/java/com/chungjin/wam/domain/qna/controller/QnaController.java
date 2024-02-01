@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.qna.controller;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,16 @@ public class QnaController {
     @GetMapping("/{qnaId}")
     public ResponseEntity<QnaDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
         return ResponseEntity.ok().body(qnaService.readQna(qnaId));
+    }
+
+    /**
+     * QnA 수정
+     * */
+    @PutMapping("/{qnaId}")
+    public ResponseEntity<String> updateQna(@PathVariable(value = "qnaId") Long qnaId,
+                                            @RequestBody QnaDto updateQnaDto) {
+        qnaService.updateQna(qnaId, updateQnaDto);
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 }
