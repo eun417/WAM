@@ -15,8 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class QnaService {
 
     private final QnaRepository qnaRepository;
-
     private final QnaMapper qnaMapper;
+
+
+    public void createQna(QnaDto qnaDto) {
+        Qna qna = qnaMapper.toEntity(qnaDto);
+        qnaRepository.save(qna);
+    }
 
     /**
      * QnA 조회
@@ -25,7 +30,7 @@ public class QnaService {
         Qna qna = qnaRepository.findById(qnaId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 QnA 입니다."));
                 //.orElseThrow(() -> new ResponseStatusException(ErrorCode.NOT_FOUND));
-        return QnaDto.of(qna);
+        return qnaMapper.toDto(qna);
     }
 
     /**
@@ -33,11 +38,16 @@ public class QnaService {
      * */
     @Transactional
     public void updateQna(Long qnaId, QnaDto updateQnaDto) {
-        Qna qna = qnaRepository.findById(updateQnaDto.getQnaId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
-
-//        if(!memberDto.getMemberEmail().equals(qna.getMemberEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근권한이 없습니다.");
-
+        Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
         qnaMapper.updateFromDto(updateQnaDto, qna);
+    }
+
+    /**
+     * QnA 삭제
+     * */
+    public void deleteQna(Long qnaId) {
+        Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
+        qnaRepository.delete(qna);
     }
 
 

@@ -15,6 +15,15 @@ public class QnaController {
     private final QnaService qnaService;
 
     /**
+     * QnA 등록
+     * */
+    @PostMapping("/")
+    public ResponseEntity<String> createQna(@RequestBody QnaDto qnaDto) {
+        qnaService.createQna(qnaDto);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    /**
      * QnA 조회
      * */
     @GetMapping("/{qnaId}")
@@ -29,6 +38,15 @@ public class QnaController {
     public ResponseEntity<String> updateQna(@PathVariable(value = "qnaId") Long qnaId,
                                             @RequestBody QnaDto updateQnaDto) {
         qnaService.updateQna(qnaId, updateQnaDto);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    /**
+     * QnA 삭제
+     * */
+    @DeleteMapping("/{qnaId}")
+    public ResponseEntity<String> deleteQna(@PathVariable(value = "qnaId") Long qnaId) {
+        qnaService.deleteQna(qnaId);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
