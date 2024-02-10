@@ -2,6 +2,8 @@ package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.support.dto.SupportDto;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
+import com.chungjin.wam.domain.support.dto.response.CommentDto;
+import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 public class SupportService {
 
     private final SupportRepository supportRepository;
+    private final CommentService commentService;
     private final SupportMapper supportMapper;
 
     /**
@@ -34,10 +37,25 @@ public class SupportService {
     /**
      * 후원 조회
      * */
-    public SupportDto readSupport(Long supportId) {
+    public SupportDetailDto readSupport(Long supportId) {
         Support support = supportRepository.findById(supportId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 후원 입니다."));
-        return supportMapper.toDto(support);
+        List<CommentDto> comments = commentService.findAllComment(supportId);
+        return SupportDetailDto.builder()
+                .supportId(support.getSupportId())
+                .animalId(support.getAnimalId())
+                .title(support.getTitle())
+                .goalAmount(support.getGoalAmount())
+                .supportStatus(support.getSupportStatus())
+                .startDate(support.getStartDate())
+                .endDate(support.getEndDate())
+                .firstImg(support.getFirstImg())
+                .subheading(support.getSubheading())
+                .content(support.getContent())
+                .supportLike(support.getSupportLike())
+                .supportAmount(support.getSupportAmount())
+                .comments(comments)
+                .build();
     }
 
     /**
@@ -62,7 +80,7 @@ public class SupportService {
      * 후원 삭제
      * */
     public void deleteSupport(Long supportId) {
-        Support support = supportRepository.findById(supportId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
+        Support support = supportRepository.findById(supportId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 후원 입니다."));
         supportRepository.delete(support);
     }
 

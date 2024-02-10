@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.support.controller;
 
 import com.chungjin.wam.domain.support.dto.SupportDto;
+import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/supports")
+@RequestMapping("/support")
 public class SupportController {
 
     private final SupportService supportService;
@@ -29,7 +30,7 @@ public class SupportController {
      * 후원 조회
      * */
     @GetMapping("/{supportId}")
-    public ResponseEntity<SupportDto> readSupport(@PathVariable(value = "supportId") Long supportId) {
+    public ResponseEntity<SupportDetailDto> readSupport(@PathVariable(value = "supportId") Long supportId) {
         return ResponseEntity.ok().body(supportService.readSupport(supportId));
     }
 
