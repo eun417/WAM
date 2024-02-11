@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +7,23 @@
     <link rel="stylesheet" href="CSS/header.css">
 </head>
 <body>
-    <div class="header-wrapper">
-        <div class="header">
-            <div class="left-box">
-                <div class="logo"><img src="/CSS/임시그림.png"></div>
-                <div class="menu">
-                    <a href="#">야생동물 지도</a>
-                    <a href="#">후원하기</a>
-                    <a href="#">QnA</a>
+    <header th:fragment="headerFragment" >
+        <div class="header-wrapper">
+            <div class="header">
+                <div class="left-box">
+                    <div class="logo"><img src="/CSS/임시그림.png"></div>
+                    <div class="menu">
+                        <a href="#">야생동물 지도</a>
+                        <a href="#">후원하기</a>
+                        <a href="#">QnA</a>
+                    </div>
+                </div>
+                <div class="right-box">
+                    <button class="button-login">로그인</button>
+                    <button class="button-join">회원가입</button>
                 </div>
             </div>
-            <div class="right-box">
-                <button class="button-login">로그인</button>
-                <button class="button-join">회원가입</button>
-            </div>
         </div>
-       
-    </div>
+    </header>
 </body>
 </html>
