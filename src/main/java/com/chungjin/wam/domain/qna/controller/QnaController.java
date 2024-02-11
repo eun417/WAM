@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.qna.controller;
 
+import com.chungjin.wam.domain.qna.dto.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +61,14 @@ public class QnaController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
+    /**
+     * QnA 답변 등록
+     * */
+    @PostMapping("/{qnaId}/answer")
+    public ResponseEntity<String> updateQnaAnswer(@PathVariable(value = "qnaId") Long qnaId,
+                                               @RequestBody QnaAnswerRequestDto qnaAnswerReq) {
+        qnaService.updateQnaAnswer(qnaId, qnaAnswerReq);
+        return ResponseEntity.ok("success");
+    }
 
 }

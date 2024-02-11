@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.qna.service;
 
+import com.chungjin.wam.domain.qna.dto.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.entity.Qna;
@@ -65,6 +66,14 @@ public class QnaService {
     public void deleteQna(Long qnaId) {
         Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
         qnaRepository.delete(qna);
+    }
+
+    /**
+     * QnA 답변 등록
+     * */
+    public void updateQnaAnswer(Long qnaId, QnaAnswerRequestDto qnaAnswerReq) {
+        Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 Qna 입니다."));
+        qnaMapper.updateFromDto(qnaAnswerReq, qna);
     }
 
 }
