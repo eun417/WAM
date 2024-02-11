@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 정보 입력</title>
+</head>
+<body>
+    <div class="join-form-wrapper">
+        <div>개인정보를 입력해주세요.</div>
+        <form action="/join.do" method="post" class="member-input">
+            <div>
+                <div>이메일 주소</div>
+                <input type="text" name="memberEmail" required>
+            </div>
+            <div>
+                <div>이름</div>
+                <input type="text" name="memberName" required>
+            </div>
+            <div>
+                <div>휴대폰 번호</div>
+                <input type="text" name="memberPhone" required>
+            </div>
+            <div>
+                <div>비밀번호</div>
+                <input type="text" name="memberPw" required>
+            </div>
+            <div>
+                <div>비밀번호 재입력</div>
+                <input type="text" name="memberPw" required>
+                <div>
+                    <div>8자 이상 ~ 16자 이하로 입력하세요</div>
+                    <div>영문, 숫자, 특수문자 사용 가능합니다</div>
+                    <div>안전도가 사용불가, 위험일 경우 변경이 불가합니다</div>
+                </div>
+            </div>
+            <input type="submit" value="완료">
+        </form>
+    </div>
+</body>
+</html>

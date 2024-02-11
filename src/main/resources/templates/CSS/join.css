@@ -1,0 +1,23 @@
+.join-wrapper{
+    width: 100%;
+    height: 100%;
+    max-width: 800PX;
+    max-height: 800PX;
+    margin: 0 auto;
+    padding-top: 10%;
+}   
+.join-box{
+max-width: 800PX;
+max-height: 800PX;
+}
+.join-header{
+border-bottom: black solid 1px;
+text-align: center;
+font-size: large;
+font-weight: bold;
+}
+#Choose-box{
+ border: 1px solid #EEEE;
+}
+
+
