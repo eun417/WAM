@@ -101,6 +101,10 @@
     border-radius: 7px;
 
 }
+.right-box button:hover{
+    font-weight: 700;
+    
+}
 .button-join{
     background-color: #445D48;
     color: white;
