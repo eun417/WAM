@@ -106,4 +106,10 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
+//        return auth.build();
+//    }
+
 }

@@ -28,13 +28,11 @@ spring:
     ansi:
       enabled: always
 
+  config:
+    import:
+      - application-h2.yml
+      - application-jwt.yml
+
 logging:
   level:
     com.springsecurity: DEBUG
-
-jwt:
-  #HS512 알고리즘을 사용할 것이기 때문에 Secret Key는 512bit, 즉 64byte 이상이어야 함
-  #Secret Key를 Base64로 인코딩한 값
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64*
-  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
-  #secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK*`

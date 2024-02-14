@@ -18,15 +18,6 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 회원가입
-     * */
-    @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody MemberDto memberDto) {
-        memberService.signUp(memberDto);
-        return new ResponseEntity<>("success", HttpStatus.OK);
-    }
-
-    /**
      * Id로 회원 조회
      * */
     @GetMapping("/{memberId}")
