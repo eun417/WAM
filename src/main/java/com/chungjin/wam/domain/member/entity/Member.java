@@ -3,12 +3,12 @@ package com.chungjin.wam.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Member {
 
     @Id
@@ -28,5 +28,8 @@ public class Member {
 
     @Column(name = "create_date")
     private String createDate;
+
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
 }
