@@ -5,6 +5,8 @@ import com.chungjin.wam.domain.support.entity.Support;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,10 +23,8 @@ public class Qna {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qnaId;
 
-    @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
-    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
     @Column(name = "create_date", updatable = false)
@@ -35,7 +35,7 @@ public class Qna {
 
     private String answer;
 
-    @Column(name = "answer_date", updatable = false)
+    @Column(name = "answer_date")
     private String answerDate;
 
     @Column(name = "qna_check")
@@ -49,13 +49,16 @@ public class Qna {
     @PrePersist
     protected void onCreate() {
         //엔터티가 영속화되기 전에 현재 날짜로 초기화
-        createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 
     @PreUpdate
     protected void onAnswer() {
-        //엔터티가 영속화되기 전에 현재 날짜로 초기화
-        answerDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        //answer 필드가 업데이트되면 현재 시간으로 answer_date를 설정
+        if (this.answer != null) {
+            this.answerDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+            this.qnaCheck = QnaCheck.ANSWERED;
+        }
     }
 
 }
