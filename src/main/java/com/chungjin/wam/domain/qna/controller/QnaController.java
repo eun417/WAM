@@ -2,10 +2,14 @@ package com.chungjin.wam.domain.qna.controller;
 
 import com.chungjin.wam.domain.qna.dto.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
+import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +23,11 @@ public class QnaController {
 
     /**
      * QnA 생성
-     * */
+     */
     @PostMapping("/")
-    public ResponseEntity<String> createQna(@RequestBody QnaDto qnaDto) {
-        qnaService.createQna(qnaDto);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+    public ResponseEntity<String> createQna(@AuthenticationPrincipal User user, @RequestBody @Valid QnaRequestDto qnaReq) {
+        qnaService.createQna(user.getUsername(), qnaReq);
+        return ResponseEntity.ok("success");
     }
 
     /**

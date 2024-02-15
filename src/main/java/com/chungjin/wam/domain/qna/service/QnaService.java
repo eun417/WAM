@@ -1,10 +1,15 @@
 package com.chungjin.wam.domain.qna.service;
 
+import com.chungjin.wam.domain.member.entity.Member;
+import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.qna.dto.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
+import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
+import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
+import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +27,25 @@ import java.util.List;
 public class QnaService {
 
     private final QnaRepository qnaRepository;
+    private final MemberRepository memberRepository;
     private final QnaMapper qnaMapper;
 
     /**
      * QnA 생성
-     * */
-    public void createQna(QnaDto qnaDto) {
-        Qna qna = qnaMapper.toEntity(qnaDto);
+     */
+    public void createQna(String email, QnaRequestDto qnaReq) {
+        //이메일로 사용자 확인
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+        //Dto -> Entity
+        Qna qna = Qna.builder()
+                .title(qnaReq.getTitle())
+                .content(qnaReq.getContent())
+                .qnaCheck(QnaCheck.CHECKING)
+                .member(member)
+                .build();
+
+        //DB에 저장
         qnaRepository.save(qna);
     }
 
