@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.support.entity;
 
+import com.chungjin.wam.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,17 +16,13 @@ public class Support {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long supportId;
 
-    //member FK
-    private String email;
-
-    //animal FK
-    @Column(name = "animal_id")
-    private Long animalId;
+    @Enumerated(EnumType.STRING)
+    private AnimalSubjects animalSubjects;
 
     private String title;
 
     @Column(name = "goal_amount")
-    private Long goalAmount;
+    private int goalAmount;
 
     @Column(name = "support_status")
     @Enumerated(EnumType.STRING)
@@ -40,18 +37,22 @@ public class Support {
     @Column(name = "first_img")
     private String firstImg;
 
-    @Column(name = "comment_check")
-    @Enumerated(EnumType.STRING)
-    private CommentCheck commentCheck;
-
     private String subheading;
 
     private String content;
 
+    @Column(name = "comment_check")
+    @Enumerated(EnumType.STRING)
+    private CommentCheck commentCheck;
+
     @Column(name = "support_like")
-    private Long supportLike;
+    private int supportLike;
 
     @Column(name = "support_amount")
-    private Long supportAmount;
+    private int supportAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
 }
