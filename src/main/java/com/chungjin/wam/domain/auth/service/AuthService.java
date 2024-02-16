@@ -28,12 +28,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 @Transactional//(readOnly = true)
 public class AuthService {
 
     private final MemberRepository memberRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -43,7 +47,7 @@ public class AuthService {
      */
     public void signUp(SignUpRequestDto signUpReq) {
         //이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다");
+        if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
 
         //Dto -> Entity 변환 후 저장
         memberRepository.save(Member.builder()
@@ -61,7 +65,7 @@ public class AuthService {
      */
     public TokenDto login(LoginRequest loginReq) {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
-        if(!memberRepository.existsByEmail(loginReq.getEmail())) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다.");
+        if(!memberRepository.existsByEmail(loginReq.getEmail())) throw new ResponseStatusException(NOT_FOUND, "존재하지 않는 회원입니다.");
 
         //Login Email/PW를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginReq.toAuthentication();
