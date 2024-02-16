@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.support.dto.request;
+package com.chungjin.wam.domain.comment.dto.request;
 
 import lombok.*;
 

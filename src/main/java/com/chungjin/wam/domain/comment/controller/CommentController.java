@@ -1,7 +1,7 @@
-package com.chungjin.wam.domain.support.controller;
+package com.chungjin.wam.domain.comment.controller;
 
-import com.chungjin.wam.domain.support.dto.request.CommentRequestDto;
-import com.chungjin.wam.domain.support.service.CommentService;
+import com.chungjin.wam.domain.comment.dto.request.CommentRequestDto;
+import com.chungjin.wam.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

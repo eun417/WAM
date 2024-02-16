@@ -1,8 +1,7 @@
 package com.chungjin.wam.domain.support.dto;
 
-import com.chungjin.wam.domain.support.entity.CommentCheck;
+import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;

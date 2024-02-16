@@ -1,7 +1,7 @@
 package com.chungjin.wam.domain.support.dto.request;
 
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
-import com.chungjin.wam.domain.support.entity.CommentCheck;
+import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

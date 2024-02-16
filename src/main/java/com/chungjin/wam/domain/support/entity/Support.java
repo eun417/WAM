@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.support.entity;
 
+import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import com.chungjin.wam.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
