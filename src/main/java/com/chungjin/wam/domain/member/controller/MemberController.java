@@ -1,45 +1,47 @@
 package com.chungjin.wam.domain.member.controller;
 
-import com.chungjin.wam.domain.member.dto.MemberDto;
-import com.chungjin.wam.domain.member.entity.Member;
+import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
+import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.service.MemberService;
-import com.chungjin.wam.domain.qna.entity.Qna;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
 
     /**
-     * Id로 회원 조회
-     * */
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberDto> getMemberById(@PathVariable(value = "memberId") Long memberId) {
-        return ResponseEntity.ok().body(memberService.getMemberById(memberId));
+     * 로그인 회원의 email로 회원 정보 조회
+     */
+    @GetMapping("/mypage/profile")
+    public ResponseEntity<MemberDto> getMemberProfile(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(memberService.getMemberProfile(user.getUsername()));
     }
 
     /**
      * 회원 수정
-     * */
-    @PutMapping("/")
-    public ResponseEntity<String> updateMember(@RequestBody MemberDto updateMembmerDto) {
-        memberService.updateMember(updateMembmerDto);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+     */
+    @PutMapping("/mypage/profile")
+    public ResponseEntity<String> updateMember(@AuthenticationPrincipal User user,
+                                               @RequestBody @Valid UpdateMemberRequestDto updateMembmerDto) {
+        memberService.updateMember(user.getUsername(), updateMembmerDto);
+        return ResponseEntity.ok("success");
     }
 
     /**
-     * 회원 삭제
-     * */
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<String> deleteUser(@PathVariable(value = "memberId") Long memberId) {
-        memberService.deleteMember(memberId);
+     * 회원 탈퇴
+     */
+    @DeleteMapping("/mypage/leave")
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal User user) {
+        memberService.deleteMember(user.getUsername());
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 

@@ -5,12 +5,9 @@ import com.chungjin.wam.domain.auth.dto.request.FindEmailRequestDto;
 import com.chungjin.wam.domain.auth.dto.request.LoginRequest;
 import com.chungjin.wam.domain.auth.dto.request.SignUpRequestDto;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
-import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
-import com.chungjin.wam.domain.member.dto.MemberDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
