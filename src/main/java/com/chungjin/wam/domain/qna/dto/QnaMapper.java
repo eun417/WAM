@@ -4,12 +4,9 @@ import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.global.util.GenericMapper;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QnaMapper extends GenericMapper<QnaDto, Qna> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
