@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/QnA.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
     <title>QnAList</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
@@ -22,14 +24,27 @@
                 <!-- 검색창 action 값 지정필요-->
                 <form action="#" method="post">
                     <div class="QnAlist-searchBox">
-                        <div class="drop-menu"></div>
+                        <select class="select">
+                            <option value="Title">제목</option>
+                            <option value="Writer">작성자</option>
+                            <option value="Number">게시글번호</option>
+                        </select>
                         <!-- QnA 검색창 name : QnAsearch -->
-                        <input type="text" name="QnAsearch"> 
+                        <input type="text" class="QnAsearch" name="QnAsearch" placeholder="내용을 입력해주세요."> 
+                        <input type="submit" value="Search" id="search-btn"/>
+                        <button class="writer-btn" href="#"><span class="material-symbols-outlined" style="font-size: 19px; margin-right: 3px;">edit</span><span>글쓰기</span></span></button>
                     </div>
                 </form>
-                <div class="QnAList-write">
-                    <a href="#">글쓰기</a>
-                </div>
+            </div>
+            <div class="list-header">
+                <ul class="header-list">
+                    <li class="list-No">No</li>
+                    <li class="list-title">제목</li>
+                    <li class="list-writer">작성자</li>
+                    <li class="list-date">작성일</li>
+                    <li class="list-viewNo">조회수</li>
+                    <li class="list-state">답변상태</li>
+                </ul>
             </div>
         </div>
     </div>
