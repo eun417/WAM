@@ -21,20 +21,6 @@ public class MemberService {
     private final MemberMapper memberMapper;
 
     /**
-     * 회원가입
-     * */
-    public void signUp(MemberDto memberDto) {
-        // 이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(memberDto.getEmail())) throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다");
-
-        //Dto를 Entity로 변환
-        Member member = memberMapper.toEntity(memberDto);
-
-        //회원 저장
-        memberRepository.save(member);
-    }
-
-    /**
      * Id로 회원 조회
      * */
     public MemberDto getMemberById(Long memberId) {

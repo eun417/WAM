@@ -1,9 +1,6 @@
 package com.chungjin.wam.domain.support.dto.response;
 
-import com.chungjin.wam.domain.support.dto.SupportDto;
-import com.chungjin.wam.domain.support.entity.Comment;
-import com.chungjin.wam.domain.support.entity.CommentCheck;
-import com.chungjin.wam.domain.support.entity.Support;
+import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,9 +18,9 @@ import java.util.List;
 public class SupportDetailDto {
 
     private Long supportId;
-    private Long animalId;
+    private AnimalSubjects animalSubjects;
     private String title;
-    private Long goalAmount;
+    private int goalAmount;
     @Enumerated(EnumType.STRING)
     private SupportStatus supportStatus;
     private String startDate;
@@ -31,8 +28,8 @@ public class SupportDetailDto {
     private String firstImg;
     private String subheading;
     private String content;
-    private Long supportLike;
-    private Long supportAmount;
+    private int supportLike;
+    private int supportAmount;
 
     private List<CommentDto> comments;
 
