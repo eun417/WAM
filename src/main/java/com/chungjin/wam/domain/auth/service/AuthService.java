@@ -50,7 +50,7 @@ public class AuthService {
                 .name(signUpReq.getName())
                 .phoneNumber(signUpReq.getPhoneNumber())
                 .authority(Authority.ROLE_USER)
-//                .nickname(signUpReq.getNickname())
+                .nickname(signUpReq.getNickname())
                 .build());
     }
 
