@@ -2,14 +2,17 @@ package com.chungjin.wam.domain.member.controller;
 
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
+import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.service.MemberService;
+import com.chungjin.wam.domain.support.dto.SupportDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +45,16 @@ public class MemberController {
     @DeleteMapping("/mypage/leave")
     public ResponseEntity<String> deleteUser(@AuthenticationPrincipal User user) {
         memberService.deleteMember(user.getUsername());
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 자신이 작성한 QnA List 조회 (Pagination)
+     */
+    @GetMapping("/mypage/qna/{page}")
+    public ResponseEntity<List<MyQnaResponseDto>> getMyQna(@AuthenticationPrincipal User user,
+                                                           @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(memberService.getMyQna(user.getUsername(), page));
     }
 
 }
