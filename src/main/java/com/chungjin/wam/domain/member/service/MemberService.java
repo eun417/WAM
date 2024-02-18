@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.member.service;
 
 import com.chungjin.wam.domain.member.dto.MemberMapper;
+import com.chungjin.wam.domain.member.dto.MemberSupportIdDto;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
@@ -106,6 +107,24 @@ public class MemberService {
         Pageable pageable = PageRequest.of(page, 10);
         //후원을 페이지별 조회
         Page<Support> supportPage = supportRepository.findByMemberId(member.getMemberId(), pageable);
+        //현재 페이지의 후원 목록
+        List<Support> supports = supportPage.getContent();
+
+        //EntityList -> DtoList
+        return supportMapper.toMySupportDtoList(supports);
+    }
+
+    /**
+     * 자신이 추가한 좋아요 조회 (Pagination)
+     */
+    public List<MySupportResponseDto> getMyLike(String email, int page) {
+        //email로 memberId 가져오기
+        Long memberId = memberRepository.findMemberIdByEmail(email);
+
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //후원을 페이지별 조회
+        Page<Support> supportPage = supportLikeRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
         List<Support> supports = supportPage.getContent();
 

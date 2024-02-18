@@ -66,4 +66,13 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getMySupport(user.getUsername(), page));
     }
 
+    /**
+     * 자신이 추가한 좋아요 조회 (Pagination)
+     */
+    @GetMapping("/mypage/like/{page}")
+    public ResponseEntity<List<MySupportResponseDto>> getMyLike(@AuthenticationPrincipal User user,
+                                                                @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(memberService.getMyLike(user.getUsername(), page));
+    }
+
 }
