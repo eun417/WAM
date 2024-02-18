@@ -3,8 +3,8 @@ package com.chungjin.wam.domain.member.controller;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
+import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
 import com.chungjin.wam.domain.member.service.MemberService;
-import com.chungjin.wam.domain.support.dto.SupportDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +55,15 @@ public class MemberController {
     public ResponseEntity<List<MyQnaResponseDto>> getMyQna(@AuthenticationPrincipal User user,
                                                            @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(memberService.getMyQna(user.getUsername(), page));
+    }
+
+    /**
+     * 자신이 작성한 후원 List 조회 (Pagination)
+     */
+    @GetMapping("/mypage/support/{page}")
+    public ResponseEntity<List<MySupportResponseDto>> getMySupport(@AuthenticationPrincipal User user,
+                                                                   @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(memberService.getMySupport(user.getUsername(), page));
     }
 
 }
