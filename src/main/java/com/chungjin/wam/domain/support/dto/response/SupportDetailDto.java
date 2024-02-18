@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.support.dto.response;
 
+import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import jakarta.persistence.EnumType;

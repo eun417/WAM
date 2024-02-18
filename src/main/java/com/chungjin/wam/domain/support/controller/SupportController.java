@@ -69,4 +69,25 @@ public class SupportController {
         return ResponseEntity.ok("success");
     }
 
+    /**
+     * 좋아요 생성
+     */
+    @PostMapping("/{supportId}/like")
+    public ResponseEntity<String> createLike(@AuthenticationPrincipal User user,
+                                             @PathVariable(value = "supportId") Long supportId) {
+        supportService.createLike(user.getUsername(), supportId);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 좋아요 삭제
+     */
+    @DeleteMapping("/{supportId}/like/{supportLikeId}")
+    public ResponseEntity<String> deleteLike(@AuthenticationPrincipal User user,
+                                             @PathVariable(value = "supportId") Long supportId,
+                                             @PathVariable(value = "supportLikeId") Long supportLikeId) {
+        supportService.deleteLike(user.getUsername(), supportId, supportLikeId);
+        return ResponseEntity.ok("success");
+    }
+
 }

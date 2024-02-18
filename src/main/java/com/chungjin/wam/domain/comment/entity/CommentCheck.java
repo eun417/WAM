@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.support.entity;
+package com.chungjin.wam.domain.comment.entity;
 
 public enum CommentCheck {
     FORBID, ACCESS

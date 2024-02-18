@@ -1,5 +1,6 @@
-package com.chungjin.wam.domain.support.dto.request;
+package com.chungjin.wam.domain.comment.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class CommentRequestDto {
 
-    private Long commentId;
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    private String createDate;
-    private Long memberId;
 
 }

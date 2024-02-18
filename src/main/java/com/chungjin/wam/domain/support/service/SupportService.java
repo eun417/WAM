@@ -1,15 +1,18 @@
 package com.chungjin.wam.domain.support.service;
 
+import com.chungjin.wam.domain.comment.service.CommentService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.support.dto.SupportDto;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
-import com.chungjin.wam.domain.support.dto.response.CommentDto;
+import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
+import com.chungjin.wam.domain.support.entity.SupportLike;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
+import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +34,7 @@ public class SupportService {
 
     private final SupportRepository supportRepository;
     private final MemberRepository memberRepository;
+    private final SupportLikeRepository supportLikeRepository;
     private final CommentService commentService;
     private final SupportMapper supportMapper;
 
@@ -38,8 +42,8 @@ public class SupportService {
      * 후원 생성
      */
     public void createSupport(String email, SupportRequestDto supportReq) {
-        //이메일로 사용자 확인
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        //email로 Member 객체 가져오기
+        Member member = getMember(email);
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -123,6 +127,50 @@ public class SupportService {
 
         //DB에서 영구 삭제
         supportRepository.delete(support);
+    }
+
+    /**
+     * 좋아요 생성
+     */
+    public void createLike(String email, Long supportId) {
+        //email로 Member 객체 가져오기
+        Member member = getMember(email);
+        //supportId로 support 객체 가져오기
+        Support support = getSupport(supportId);
+
+        //Entity 생성
+        SupportLike like = SupportLike.builder()
+                .support(support)
+                .member(member)
+                .build();
+
+        //DB에 저장
+        supportLikeRepository.save(like);
+    }
+
+    /**
+     * 좋아요 삭제
+     */
+    public void deleteLike(String email, Long supportId, Long supportLikeId) {
+        //supportId로 support 객체 가져오기
+        Support support = getSupport(supportId);
+        //supportLikeId로 supportLike 객체 가져오기
+        SupportLike supportLike = supportLikeRepository.findById(supportLikeId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 좋아요 입니다."));
+
+        //로그인한 사용자가 좋아요 생성한 사람이 아닌 경우 에러 발생
+        if(!email.equals(support.getMember().getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+
+        //DB에서 영구 삭제
+        supportLikeRepository.delete(supportLike);
+    }
+
+    /**
+     * email로 Member 객체 조회
+     */
+    private Member getMember (String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
     /**

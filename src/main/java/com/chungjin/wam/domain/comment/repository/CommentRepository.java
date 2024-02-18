@@ -1,6 +1,6 @@
-package com.chungjin.wam.domain.support.repository;
+package com.chungjin.wam.domain.comment.repository;
 
-import com.chungjin.wam.domain.support.entity.Comment;
+import com.chungjin.wam.domain.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

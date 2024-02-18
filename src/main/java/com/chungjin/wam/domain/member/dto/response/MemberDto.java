@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.member.dto;
+package com.chungjin.wam.domain.member.dto.response;
 
 import com.chungjin.wam.domain.member.entity.Member;
 import lombok.*;
@@ -12,7 +12,7 @@ public class MemberDto {
 
     private Long memberId;
     private String email;
-    private String password;
+//    private String password;
     private String nickname;
     private String name;
     private String phoneNumber;
