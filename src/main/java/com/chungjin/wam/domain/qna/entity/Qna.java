@@ -57,4 +57,9 @@ public class Qna {
         }
     }
 
+    //조회수 증가
+    public void updateViewCount(int viewCount) {
+        this.viewCount++;
+    }
+
 }

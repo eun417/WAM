@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class QnaController {
      * QnA 조회
      */
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
+    public ResponseEntity<QnaDetailDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
         return ResponseEntity.ok().body(qnaService.readQna(qnaId));
     }
 

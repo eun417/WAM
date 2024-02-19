@@ -7,6 +7,7 @@ import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
@@ -54,11 +55,26 @@ public class QnaService {
     /**
      * QnA 조회
      */
-    public QnaDto readQna(Long qnaId) {
-        //qnaId로 QnA 확인
+    public QnaDetailDto readQna(Long qnaId) {
+        //qnaId로 QnA 객체 가져오기
         Qna qna = getQna(qnaId);
+
+        //조회수 증가
+        qna.updateViewCount(qna.getViewCount());
+
         //Entity -> Dto
-        return qnaMapper.toDto(qna);
+        return QnaDetailDto.builder()
+                .qnaId(qna.getQnaId())
+                .email(qna.getMember().getEmail())
+                .title(qna.getTitle())
+                .content(qna.getContent())
+                .createDate(qna.getCreateDate())
+                .viewCount(qna.getViewCount())
+                .viewCount(qna.getViewCount())
+                .answer(qna.getAnswer())
+                .answerDate(qna.getAnswerDate())
+                .qnaCheck(qna.getQnaCheck())
+                .build();
     }
 
     /**
