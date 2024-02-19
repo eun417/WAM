@@ -1,9 +1,7 @@
 package com.chungjin.wam.domain.auth.controller;
 
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.dto.request.FindEmailRequestDto;
-import com.chungjin.wam.domain.auth.dto.request.LoginRequest;
-import com.chungjin.wam.domain.auth.dto.request.SignUpRequestDto;
+import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -34,6 +32,14 @@ public class AuthController {
     public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest loginReq) {
         TokenDto token = authService.login(loginReq);
         return ResponseEntity.ok(token);
+    }
+
+    /**
+     * Refresh
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDto> refresh(@RequestBody @Valid TokenRequestDto tokenReq) {
+        return ResponseEntity.ok(authService.refresh(tokenReq));
     }
 
     /**

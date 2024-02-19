@@ -57,11 +57,11 @@ public class JwtTokenProvider {
         //Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())       // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
-                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
-                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
-                .compact();
+                .setSubject(authentication.getName())       // payload "sub": "name" ... 사용자 이름
+                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER" ... 사용자 권한 정보
+                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022(예시) ... 액세스 토큰 만료 시간
+                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512" ... JWT에 서명 추가
+                .compact(); //JWT를 문자로 직렬화하여 반환
 
         //Refresh Token 생성
         String refreshToken = Jwts.builder()

@@ -1,11 +1,10 @@
 package com.chungjin.wam.domain.auth.service;
 
-import com.chungjin.wam.domain.auth.dto.RefreshTokenDto;
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.dto.request.FindEmailRequestDto;
-import com.chungjin.wam.domain.auth.dto.request.LoginRequest;
-import com.chungjin.wam.domain.auth.dto.request.SignUpRequestDto;
+import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
+import com.chungjin.wam.domain.auth.entity.RefreshToken;
+import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -31,6 +28,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class AuthService {
 
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -68,7 +66,50 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         //인증 정보를 기반으로 JWT 토큰 생성, 발급
-        return jwtTokenProvider.generateTokenDto(authentication);
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        //RefreshToken을 DB에 저장
+        RefreshToken refreshToken = RefreshToken.builder()
+                .email(authentication.getName())  //email
+                .value(tokenDto.getRefreshToken())  //RefreshToken 값
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        //토큰 발급
+        return tokenDto;
+    }
+
+    /**
+     * Refresh
+     */
+    public TokenDto refresh(TokenRequestDto tokenReq) {
+        //Refresh 토큰 검증
+        if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+        }
+
+        //Access Token에서 email 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
+
+        //저장소에서 email을 기반으로 Refresh Token 값 가져옴
+        RefreshToken refreshToken = refreshTokenRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+
+        //Refresh Token 일치하는지 검사
+        if (!refreshToken.getValue().equals(tokenReq.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        //새로운 토큰 생성
+        TokenDto newTokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        //저장소 정보 업데이트
+        RefreshToken newRefreshToken = refreshToken.updateValue(newTokenDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
+
+        //토큰 발급
+        return newTokenDto;
     }
 
     /**
