@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.comment.controller;
 
+import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import com.chungjin.wam.domain.comment.dto.request.CommentRequestDto;
 import com.chungjin.wam.domain.comment.service.CommentService;
 import jakarta.validation.Valid;
@@ -20,10 +21,10 @@ public class CommentController {
      * 댓글 생성
      */
     @PostMapping("/support/{supportId}/comment")
-    public ResponseEntity<String> createComment(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> createComment(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
                                                 @RequestBody @Valid CommentRequestDto commentReq) {
-        commentService.createComment(user.getUsername(), supportId, commentReq);
+        commentService.createComment(userDetails.getMember().getMemberId(), supportId, commentReq);
         return ResponseEntity.ok("success");
     }
 
@@ -31,10 +32,10 @@ public class CommentController {
      * 댓글 삭제
      */
     @DeleteMapping("/support/{supportId}/comment/{commentId}")
-    public ResponseEntity<String> deleteComment(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> deleteComment(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
                                                 @PathVariable(value = "commentId") Long commentId) {
-        commentService.deleteComment(user.getUsername(), supportId, commentId);
+        commentService.deleteComment(userDetails.getMember().getMemberId(), supportId, commentId);
         return ResponseEntity.ok("success");
     }
 

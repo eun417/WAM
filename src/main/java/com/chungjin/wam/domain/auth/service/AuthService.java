@@ -11,6 +11,7 @@ import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,9 +58,15 @@ public class AuthService {
      */
     public TokenDto login(LoginRequest loginReq) {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
-        if(!memberRepository.existsByEmail(loginReq.getEmail())) throw new ResponseStatusException(NOT_FOUND, "존재하지 않는 회원입니다.");
+        Member member = memberRepository.findByEmail(loginReq.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
 
-        //Login Email/PW를 기반으로 AuthenticationToken 생성
+        //비밀번호 체크
+        if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        //로그인 이메일, 비밀번호를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginReq.toAuthentication();
 
         //검증(사용자 비밀번호 체크)
@@ -70,7 +77,7 @@ public class AuthService {
 
         //RefreshToken을 DB에 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .email(authentication.getName())  //email
+                .memberId(Long.parseLong(authentication.getName()))  //memberId
                 .value(tokenDto.getRefreshToken())  //RefreshToken 값
                 .build();
 
@@ -93,7 +100,7 @@ public class AuthService {
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
 
         //저장소에서 email을 기반으로 Refresh Token 값 가져옴
-        RefreshToken refreshToken = refreshTokenRepository.findByEmail(authentication.getName())
+        RefreshToken refreshToken = refreshTokenRepository.findById(Long.parseLong(authentication.getName()))
                 .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
         //Refresh Token 일치하는지 검사

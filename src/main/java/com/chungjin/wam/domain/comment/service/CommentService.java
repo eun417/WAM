@@ -31,9 +31,9 @@ public class CommentService {
     /**
      * 댓글 생성
      */
-    public void createComment(String email, Long supportId, CommentRequestDto commentReq) {
+    public void createComment(Long memberId, Long supportId, CommentRequestDto commentReq) {
         //email로 Member 객체 가져오기
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         //supportId로 Support 객체 가져오기
         Support support = supportRepository.findById(supportId).orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
 
@@ -73,14 +73,14 @@ public class CommentService {
     /**
      * 댓글 삭제
      */
-    public void deleteComment(String email, Long supportId, Long commentId) {
+    public void deleteComment(Long memberId, Long supportId, Long commentId) {
         //supportId로 Support 객체 가져오기
         Support support = supportRepository.findById(supportId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 후원 입니다."));
         //commentId로 Comment 객체 가져오기
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 댓글 입니다."));
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!email.equals(support.getMember().getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(support.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
 
         //DB에서 영구 삭제
         commentRepository.delete(comment);

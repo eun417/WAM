@@ -35,9 +35,9 @@ public class QnaService {
     /**
      * QnA 생성
      */
-    public void createQna(String email, QnaRequestDto qnaReq) {
+    public void createQna(Long memberId, QnaRequestDto qnaReq) {
         //이메일로 사용자 확인
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         //Dto -> Entity
         Qna qna = Qna.builder()
@@ -78,12 +78,12 @@ public class QnaService {
     /**
      * QnA 수정
      */
-    public void updateQna(String email, Long qnaId, UpdateQnaRequestDto updateQnaReq) {
+    public void updateQna(Long memberId, Long qnaId, UpdateQnaRequestDto updateQnaReq) {
         //qnaId로 QnA 확인
         Qna qna = getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!email.equals(qna.getMember().getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(qna.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
 
         //MapStruct로 수정
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
@@ -92,12 +92,12 @@ public class QnaService {
     /**
      * QnA 삭제
      */
-    public void deleteQna(String email, Long qnaId) {
+    public void deleteQna(Long memberId, Long qnaId) {
         //qnaId로 QnA 확인
         Qna qna = getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!email.equals(qna.getMember().getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(qna.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
 
         //DB에서 영구 삭제
         qnaRepository.delete(qna);

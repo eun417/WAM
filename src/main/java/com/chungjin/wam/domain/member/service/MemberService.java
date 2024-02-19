@@ -43,9 +43,9 @@ public class MemberService {
     /**
      * 로그인 회원의 email로 회원 정보 조회
      */
-    public MemberDto getMemberProfile(String email) {
+    public MemberDto getMemberProfile(Long memberId) {
         //email로 Member 객체 가져오기
-        Member member = getMember(email);
+        Member member = getMember(memberId);
         //Entity -> Dto
         return memberMapper.toDto(member);
     }
@@ -53,12 +53,12 @@ public class MemberService {
     /**
      * 회원 수정
      */
-    public void updateMember(String email, UpdateMemberRequestDto updateMembmerDto) {
+    public void updateMember(Long memberId, UpdateMemberRequestDto updateMembmerDto) {
         //email로 Member 객체 가져오기
-        Member member = getMember(email);
+        Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!email.equals(member.getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(member.getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
 
         //MapStruct로 수정
         memberMapper.updateFromDto(updateMembmerDto, member);
@@ -67,12 +67,12 @@ public class MemberService {
     /**
      * 회원 탈퇴
      */
-    public void deleteMember(String email) {
+    public void deleteMember(Long memberId) {
         //email로 Member 객체 가져오기
-        Member member = getMember(email);
+        Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!email.equals(member.getEmail())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(member.getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
 
         //DB에서 영구 삭제
         memberRepository.delete(member);
@@ -81,14 +81,11 @@ public class MemberService {
     /**
      * 자신이 작성한 QnA List 조회 (Pagination)
      */
-    public List<MyQnaResponseDto> getMyQna(String email, int page) {
-        //email로 Member 객체 가져오기
-        Member member = getMember(email);
-
+    public List<MyQnaResponseDto> getMyQna(Long memberId, int page) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(page, 10);
         //Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findByMemberId(member.getMemberId(), pageable);
+        Page<Qna> qnaPage = qnaRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 Qna 목록
         List<Qna> qnas = qnaPage.getContent();
 
@@ -99,14 +96,11 @@ public class MemberService {
     /**
      * 자신이 작성한 후원 List 조회 (Pagination)
      */
-    public List<MySupportResponseDto> getMySupport(String email, int page) {
-        //email로 Member 객체 가져오기
-        Member member = getMember(email);
-
+    public List<MySupportResponseDto> getMySupport(Long memberId, int page) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(page, 10);
         //후원을 페이지별 조회
-        Page<Support> supportPage = supportRepository.findByMemberId(member.getMemberId(), pageable);
+        Page<Support> supportPage = supportRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
         List<Support> supports = supportPage.getContent();
 
@@ -117,10 +111,7 @@ public class MemberService {
     /**
      * 자신이 추가한 좋아요 조회 (Pagination)
      */
-    public List<MySupportResponseDto> getMyLike(String email, int page) {
-        //email로 memberId 가져오기
-        Long memberId = memberRepository.findMemberIdByEmail(email);
-
+    public List<MySupportResponseDto> getMyLike(Long memberId, int page) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(page, 10);
         //후원을 페이지별 조회
@@ -133,10 +124,10 @@ public class MemberService {
     }
 
     /**
-     * 로그인 회원의 email로 Member 객체 조회
+     * memberId로 Member 객체 조회
      */
-    private Member getMember (String email) {
-        return memberRepository.findByEmail(email)
+    private Member getMember (Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
