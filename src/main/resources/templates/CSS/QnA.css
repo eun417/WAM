@@ -83,38 +83,25 @@
   'GRAD' 0,
   'opsz' 15
 }
+
 .list-header{
     margin-top: 30px;
-    width: 99.7%;
+    min-width: 1150px;
+    height: 50px;
+/*
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border: 2px solid #F5F5F5;
+*/
+}
+
+.header-list{
+    min-width: 1150px;
     height: 50px;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     border: 2px solid #F5F5F5;
 }
-
-.header-list{
-    list-style:none;
-}
-
-.header-list li{
-    float:left;
-}
-
-.list-No{
-    width: 50px;
-}
-.list-title{
-    width: 600px;
-}
-.list-writer{
-    width: 70px;
-}
-.list-date{
-    width: 200px;
-}
-.list-viewNo{
-    width: 50px;
-}
-.list-state{
-    width: 140px;
+.header-list tr{
+    height: 50px;
 }
