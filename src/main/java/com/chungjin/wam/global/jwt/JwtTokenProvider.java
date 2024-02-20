@@ -100,6 +100,7 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
+        System.out.println("claims.getSubject(): "+claims.getSubject());
         //클레임에서 주체(subject)로 사용자 정보를 추출하고, 사용자 상세 정보를 불러오는 UserDetails 가져오기
         UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
 

@@ -120,6 +120,17 @@ public class AuthService {
     }
 
     /**
+     * 로그아웃
+     */
+    public void logout(Long memberId) {
+        //memberId로 RefreshToken 객체 조회
+        RefreshToken token = refreshTokenRepository.findByMemberId(memberId);
+
+        //DB에서 해당 RefreshToken 삭제
+        refreshTokenRepository.deleteById(token.getMemberId());
+    }
+
+    /**
      * 이메일 찾기
      */
     public FindEmailResponseDto findEmail(FindEmailRequestDto findEmailReq) {

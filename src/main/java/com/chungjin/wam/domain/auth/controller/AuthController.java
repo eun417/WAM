@@ -4,9 +4,11 @@ import com.chungjin.wam.domain.auth.dto.TokenDto;
 import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
+import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,6 +41,15 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenDto> refresh(@RequestBody @Valid TokenRequestDto tokenReq) {
         return ResponseEntity.ok(authService.refresh(tokenReq));
+    }
+
+    /**
+     * 로그아웃
+     */
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        authService.logout(userDetails.getMember().getMemberId());
+        return ResponseEntity.ok("success");
     }
 
     /**
