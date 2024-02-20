@@ -10,6 +10,7 @@ import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
+
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -28,12 +31,26 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Transactional//(readOnly = true)
 public class AuthService {
 
+    private final EmailService emailService;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+
+
+    /**
+     * 회원가입 - 인증코드 메일 발송
+     */
+    public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException {
+        //사용자가 입력한 이메일로 사용자가 있는지 확인
+        Member member = memberRepository.findByEmail(emailReq.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+
+        //인증코드 전송
+        emailService.sendMail(emailReq.getEmail());
+    }
 
     /**
      * 회원가입

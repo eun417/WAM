@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
 import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
+    /**
+     * 회원가입 - 인증코드 메일 발송
+     */
+    @PostMapping("/signup/email/send")
+    public ResponseEntity<String> sendMessage(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException {
+        authService.sendCodeToEmail(emailReq);
+        return ResponseEntity.ok("success");
+    }
 
     /**
      * 회원가입

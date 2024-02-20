@@ -32,7 +32,7 @@ public class SecurityConfig {
 
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
-            "/", "/auth/**", "/qna/**", "/support/**", "/members/**",
+            "/", "/auth/**", "/qna/**", "/support/**", "/members/**", "/email/**",
             "/h2-console/**", "/resources/**"
     };
 
