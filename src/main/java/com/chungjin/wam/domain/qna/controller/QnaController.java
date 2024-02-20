@@ -1,9 +1,11 @@
 package com.chungjin.wam.domain.qna.controller;
 
+import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +28,9 @@ public class QnaController {
      * QnA 생성
      */
     @PostMapping("/")
-    public ResponseEntity<String> createQna(@AuthenticationPrincipal User user, @RequestBody @Valid QnaRequestDto qnaReq) {
-        qnaService.createQna(user.getUsername(), qnaReq);
+    public ResponseEntity<String> createQna(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @RequestBody @Valid QnaRequestDto qnaReq) {
+        qnaService.createQna(userDetails.getMember().getMemberId(), qnaReq);
         return ResponseEntity.ok("success");
     }
 
@@ -35,7 +38,7 @@ public class QnaController {
      * QnA 조회
      */
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
+    public ResponseEntity<QnaDetailDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
         return ResponseEntity.ok().body(qnaService.readQna(qnaId));
     }
 
@@ -51,10 +54,10 @@ public class QnaController {
      * QnA 수정
      */
     @PutMapping("/{qnaId}")
-    public ResponseEntity<String> updateQna(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> updateQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(value = "qnaId") Long qnaId,
                                             @RequestBody @Valid  UpdateQnaRequestDto updateQnaReq) {
-        qnaService.updateQna(user.getUsername(), qnaId, updateQnaReq);
+        qnaService.updateQna(userDetails.getMember().getMemberId(), qnaId, updateQnaReq);
         return ResponseEntity.ok("success");
     }
 
@@ -62,9 +65,9 @@ public class QnaController {
      * QnA 삭제
      */
     @DeleteMapping("/{qnaId}")
-    public ResponseEntity<String> deleteQna(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(value = "qnaId") Long qnaId) {
-        qnaService.deleteQna(user.getUsername(), qnaId);
+        qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
         return ResponseEntity.ok("success");
     }
 

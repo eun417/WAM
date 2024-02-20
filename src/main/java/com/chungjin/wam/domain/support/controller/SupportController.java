@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.support.controller;
 
+import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import com.chungjin.wam.domain.support.dto.SupportDto;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
@@ -25,9 +26,9 @@ public class SupportController {
      * 후원 생성
      */
     @PostMapping("/")
-    public ResponseEntity<String> createSupport(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> createSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @RequestBody @Valid SupportRequestDto supportReq) {
-        supportService.createSupport(user.getUsername(), supportReq);
+        supportService.createSupport(userDetails.getMember().getMemberId(), supportReq);
         return ResponseEntity.ok("success");
     }
 
@@ -51,11 +52,10 @@ public class SupportController {
      * 후원 수정
      */
     @PutMapping("/{supportId}")
-    public ResponseEntity<String> updateSupport(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> updateSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
                                                 @RequestBody @Valid UpdateSupportRequestDto updateSupportReq) {
-        System.out.println(user.getUsername());
-        supportService.updateSupport(user.getUsername(), supportId, updateSupportReq);
+        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, updateSupportReq);
         return ResponseEntity.ok("success");
     }
 
@@ -63,9 +63,30 @@ public class SupportController {
      * 후원 삭제
      */
     @DeleteMapping("/{supportId}")
-    public ResponseEntity<String> deleteSupport(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> deleteSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId) {
-        supportService.deleteSupport(user.getUsername(), supportId);
+        supportService.deleteSupport(userDetails.getMember().getMemberId(), supportId);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 좋아요 생성
+     */
+    @PostMapping("/{supportId}/like")
+    public ResponseEntity<String> createLike(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @PathVariable(value = "supportId") Long supportId) {
+        supportService.createLike(userDetails.getMember().getMemberId(), supportId);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 좋아요 삭제
+     */
+    @DeleteMapping("/{supportId}/like/{supportLikeId}")
+    public ResponseEntity<String> deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @PathVariable(value = "supportId") Long supportId,
+                                             @PathVariable(value = "supportLikeId") Long supportLikeId) {
+        supportService.deleteLike(userDetails.getMember().getMemberId(), supportId, supportLikeId);
         return ResponseEntity.ok("success");
     }
 

@@ -1,17 +1,15 @@
 package com.chungjin.wam.domain.auth.controller;
 
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.dto.request.FindEmailRequestDto;
-import com.chungjin.wam.domain.auth.dto.request.LoginRequest;
-import com.chungjin.wam.domain.auth.dto.request.SignUpRequestDto;
+import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
-import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
-import com.chungjin.wam.domain.member.dto.MemberDto;
+import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,12 +20,21 @@ public class AuthController {
     private final AuthService authService;
 
     /**
+     * 회원가입 - 인증코드 메일 발송
+     */
+    @PostMapping("/signup/email/send")
+    public ResponseEntity<String> sendMessage(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException {
+        authService.sendCodeToEmail(emailReq);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
      * 회원가입
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignUpRequestDto signUpReq) {
+    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpReq) {
         authService.signUp(signUpReq);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return ResponseEntity.ok("success");
     }
 
     /**
@@ -35,8 +42,24 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest loginReq) {
-        TokenDto token = authService.login(loginReq);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(authService.login(loginReq));
+    }
+
+    /**
+     * Refresh
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDto> refresh(@RequestBody @Valid TokenRequestDto tokenReq) {
+        return ResponseEntity.ok(authService.refresh(tokenReq));
+    }
+
+    /**
+     * 로그아웃
+     */
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        authService.logout(userDetails.getMember().getMemberId());
+        return ResponseEntity.ok("success");
     }
 
     /**

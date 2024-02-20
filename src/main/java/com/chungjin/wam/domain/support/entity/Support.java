@@ -1,8 +1,12 @@
 package com.chungjin.wam.domain.support.entity;
 
+import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import com.chungjin.wam.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -51,8 +55,17 @@ public class Support {
     @Column(name = "support_amount")
     private int supportAmount;
 
+    @Column(name = "create_date", updatable = false)
+    private String createDate;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @PrePersist
+    protected void onCreate() {
+        //엔터티가 영속화되기 전에 현재 날짜로 초기화
+        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    }
 
 }

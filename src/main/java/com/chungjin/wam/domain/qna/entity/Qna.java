@@ -1,12 +1,8 @@
 package com.chungjin.wam.domain.qna.entity;
 
 import com.chungjin.wam.domain.member.entity.Member;
-import com.chungjin.wam.domain.support.entity.Support;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -59,6 +55,11 @@ public class Qna {
             this.answerDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
             this.qnaCheck = QnaCheck.ANSWERED;
         }
+    }
+
+    //조회수 증가
+    public void updateViewCount(int viewCount) {
+        this.viewCount++;
     }
 
 }

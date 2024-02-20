@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    // 이미 가입되어 있는 사용자 확인
+    //이미 가입되어 있는 사용자 확인
     boolean existsByEmail(String email);
 
     //이메일로 사용자 찾기
@@ -17,5 +17,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //name, phoneNumber로 email 찾기
     Member findByNameAndPhoneNumber(String name, String phoneNumber);
+
+    //이메일로 memberId 찾기
+    @Query("select m.memberId from Member m where m.email = :email")
+    Long findMemberIdByEmail(@Param("email") String email);
 
 }

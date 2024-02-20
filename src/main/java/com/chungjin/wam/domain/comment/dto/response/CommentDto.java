@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.support.dto.response;
+package com.chungjin.wam.domain.comment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

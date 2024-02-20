@@ -1,49 +1,63 @@
 package com.chungjin.wam.domain.auth.service;
 
-import com.chungjin.wam.domain.auth.dto.RefreshTokenDto;
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.dto.request.FindEmailRequestDto;
-import com.chungjin.wam.domain.auth.dto.request.LoginRequest;
-import com.chungjin.wam.domain.auth.dto.request.SignUpRequestDto;
+import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
-import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
-import com.chungjin.wam.domain.member.dto.MemberDto;
-import com.chungjin.wam.domain.member.dto.MemberMapper;
+import com.chungjin.wam.domain.auth.entity.RefreshToken;
+import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
+import java.time.Duration;
+
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 @Transactional//(readOnly = true)
 public class AuthService {
 
+    private final EmailService emailService;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+
+
+    /**
+     * 회원가입 - 인증코드 메일 발송
+     */
+    public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException {
+        //사용자가 입력한 이메일로 사용자가 있는지 확인
+        Member member = memberRepository.findByEmail(emailReq.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+
+        //인증코드 전송
+        emailService.sendMail(emailReq.getEmail());
+    }
 
     /**
      * 회원가입
      */
     public void signUp(SignUpRequestDto signUpReq) {
         //이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다");
+        if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
 
         //Dto -> Entity 변환 후 저장
         memberRepository.save(Member.builder()
@@ -52,7 +66,7 @@ public class AuthService {
                 .name(signUpReq.getName())
                 .phoneNumber(signUpReq.getPhoneNumber())
                 .authority(Authority.ROLE_USER)
-//                .nickname(signUpReq.getNickname())
+                .nickname(signUpReq.getNickname())
                 .build());
     }
 
@@ -61,16 +75,76 @@ public class AuthService {
      */
     public TokenDto login(LoginRequest loginReq) {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
-        if(!memberRepository.existsByEmail(loginReq.getEmail())) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다.");
+        Member member = memberRepository.findByEmail(loginReq.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
 
-        //Login Email/PW를 기반으로 AuthenticationToken 생성
+        //비밀번호 체크
+        if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        //로그인 이메일, 비밀번호를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginReq.toAuthentication();
 
         //검증(사용자 비밀번호 체크)
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         //인증 정보를 기반으로 JWT 토큰 생성, 발급
-        return jwtTokenProvider.generateTokenDto(authentication);
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        //RefreshToken을 DB에 저장
+        RefreshToken refreshToken = RefreshToken.builder()
+                .memberId(Long.parseLong(authentication.getName()))  //memberId
+                .value(tokenDto.getRefreshToken())  //RefreshToken 값
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        //토큰 발급
+        return tokenDto;
+    }
+
+    /**
+     * Refresh
+     */
+    public TokenDto refresh(TokenRequestDto tokenReq) {
+        //Refresh 토큰 검증
+        if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+        }
+
+        //Access Token에서 email 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
+
+        //저장소에서 email을 기반으로 Refresh Token 값 가져옴
+        RefreshToken refreshToken = refreshTokenRepository.findById(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+
+        //Refresh Token 일치하는지 검사
+        if (!refreshToken.getValue().equals(tokenReq.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        //새로운 토큰 생성
+        TokenDto newTokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        //저장소 정보 업데이트
+        RefreshToken newRefreshToken = refreshToken.updateValue(newTokenDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
+
+        //토큰 발급
+        return newTokenDto;
+    }
+
+    /**
+     * 로그아웃
+     */
+    public void logout(Long memberId) {
+        //memberId로 RefreshToken 객체 조회
+        RefreshToken token = refreshTokenRepository.findByMemberId(memberId);
+
+        //DB에서 해당 RefreshToken 삭제
+        refreshTokenRepository.deleteById(token.getMemberId());
     }
 
     /**
