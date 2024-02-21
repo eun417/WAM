@@ -8,9 +8,12 @@ import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class AuthController {
      * 회원가입 - 인증코드 메일 발송
      */
     @PostMapping("/signup/email/send")
-    public ResponseEntity<String> sendMessage(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException {
+    public ResponseEntity<String> sendMessage(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
         authService.sendCodeToEmail(emailReq);
         return ResponseEntity.ok("success");
     }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -43,13 +44,13 @@ public class AuthService {
     /**
      * 회원가입 - 인증코드 메일 발송
      */
-    public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException {
+    public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
         Member member = memberRepository.findByEmail(emailReq.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
 
         //인증코드 전송
-        emailService.sendMail(emailReq.getEmail());
+        emailService.sendCodeMail(emailReq.getEmail());
     }
 
     /**
