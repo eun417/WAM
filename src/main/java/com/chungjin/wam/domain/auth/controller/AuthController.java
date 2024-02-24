@@ -26,9 +26,18 @@ public class AuthController {
      * 회원가입 - 인증코드 메일 발송
      */
     @PostMapping("/signup/email/send")
-    public ResponseEntity<String> sendMessage(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> sendMail(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
         authService.sendCodeToEmail(emailReq);
         return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 회원가입 - 인증코드 검증
+     */
+    @GetMapping("/signup/email/verify")
+    public ResponseEntity<Boolean> verifyEmail(@RequestBody @Valid VerifyEmailRequestDto verifyEmailReq) {
+        boolean authResult = authService.verifiedCode(verifyEmailReq);
+        return ResponseEntity.ok(authResult);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
+import com.chungjin.wam.global.common.RedisService;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
 import jakarta.mail.MessagingException;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -33,6 +35,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class AuthService {
 
     private final EmailService emailService;
+    private final RedisService redisService;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -45,13 +48,27 @@ public class AuthService {
      * 회원가입 - 인증코드 메일 발송
      */
     public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
-        //사용자가 입력한 이메일로 사용자가 있는지 확인
-        Member member = memberRepository.findByEmail(emailReq.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+        //이미 가입되어 있는 사용자 확인
+        if(memberRepository.existsByEmail(emailReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
 
         //인증코드 전송
         emailService.sendCodeMail(emailReq.getEmail());
     }
+
+    /**
+     * 회원가입 - 인증코드 검증
+     */
+    public boolean verifiedCode(VerifyEmailRequestDto verifyEmailReq) {
+        //이미 가입되어 있는 사용자 확인
+        if(memberRepository.existsByEmail(verifyEmailReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
+
+        //Redis에 저장된 인증코드 가져오기
+        String redisAuthCode = redisService.getData(verifyEmailReq.getEmail());
+
+        //입력받은 인증코드와 Redis에 저장된 인증코드 비교 후 반환
+        return redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(verifyEmailReq.getAuthCode());
+    }
+
 
     /**
      * 회원가입

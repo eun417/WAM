@@ -10,6 +10,6 @@ public class VerifyEmailRequestDto {
     private String email;
 
     @NotBlank(message = "인증코드를 입력해주세요.")
-    private String verifyCode;
+    private String authCode;
 
 }

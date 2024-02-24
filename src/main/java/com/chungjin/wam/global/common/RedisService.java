@@ -44,4 +44,11 @@ public class RedisService {
         template.delete(key);
     }
 
+    /**
+     * 입력받은 값과 저장된 데이터 비교
+     */
+    public boolean checkExistsValue(String value) {
+        return !value.equals("false");
+    }
+
 }
