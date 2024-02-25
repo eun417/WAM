@@ -8,7 +8,6 @@ import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +79,25 @@ public class AuthController {
     @GetMapping("/find-account")
     public ResponseEntity<FindEmailResponseDto> findEmail(@RequestBody @Valid FindEmailRequestDto findEmailReq) {
         return ResponseEntity.ok().body(authService.findEmail(findEmailReq));
+    }
+
+    /**
+     * 비밀번호 재설정 - 링크 메일 전송
+     */
+    @PostMapping("/change-pw/email/send")
+    public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwLinkRequestDto changePwReq) throws MessagingException, UnsupportedEncodingException {
+        authService.sendLinkToEmail(changePwReq);
+        return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 비밀번호 재설정
+     */
+    @PutMapping("change-pw/{authCode}")
+    public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwRequestDto changePwReq,
+                                           @PathVariable(value = "authCode") String authCode) {
+        authService.changePw(changePwReq, authCode);
+        return ResponseEntity.ok("success");
     }
 
 }

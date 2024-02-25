@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인증코드 발급</title>
+    <style>
+        .mail-box {
+            margin: 0;
+            padding: 15px;
+        }
+
+        .table {
+            max-width: 660px;
+            width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .table-in {
+            padding: 20px 20px 40px 20px;
+            background-color: white;
+            border: 1px solid #e5e8eb;
+        }
+
+        .header {
+            padding: 0 0 20px 0;
+            display: flex;
+            border-bottom: 1px solid #e5e8eb;
+        }
+
+        /* div.logo-title {
+            padding: 20px 0 0 0 ;
+            font-size: 30px;
+            font-weight: 1000;
+        } */
+
+        div.content {
+            padding: 30px 0px;
+            max-width: 490px;
+            width: 100%;
+            margin: 0 auto;
+            font-size: 13px;
+            color: #2f343d;
+            line-height: 1.8em;
+            border-bottom: 1px solid #e5e8eb;
+        }
+
+        h1 {
+            padding: 0 0 20px 0;
+            margin: 0 auto;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2f343d;
+            text-align: center;
+            line-height: 1.4em;
+        }
+
+        p {
+            font-size: 14px;
+            color: #2f343d;
+            line-height: 1.8em;
+            margin: 10px 0 15px 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        strong {
+            font-size: 16px;
+        }
+
+        span.brand1 {
+            color: #445D48;
+            font-weight: 600;
+        }
+
+        span.brand2 {
+            color: #996F5E;
+            font-weight: 600;
+        }
+
+        span.brand3 {
+            color: #BFB374;
+            font-weight: 600;
+        }
+
+        a.change-pw-btn {
+            width: 30%;
+            display: block;
+            text-decoration-line: none;
+            border-radius: 10px;
+            color: #fff;
+            background-color: #445D48;
+            padding: 15px 45px;
+            margin: 0 auto;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        p.thanks {
+            font-size: 14px;
+            color: #2f343d;
+            line-height: 1.8em;
+            margin: 15px 0 0 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        p.notice {
+            font-size: 10px;
+            color: #b8b8b8;
+        }
+    </style>
+</head>
+<body>
+<div class="searchPwMailContent-wrap">
+    <div class="mail-box">
+        <div class="table">
+            <div class="table-in">
+                <div class="header">
+                    <img class="logo-img" src="https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png" width="55" height="55"/>
+                    <!-- <div class="logo-title">WAM</div> -->
+                </div>
+                <div class="content">
+                    <h1>비밀번호 재설정 링크입니다.</h1>
+                    <p>
+                        <strong>회원님 안녕하세요!</strong><br>
+                        야생동물들을 위한 플랫폼 <span class="brand1">W</span><span class="brand2">A</span><span class="brand3">M</span>입니다.<br><br>
+                        비밀번호 재설정 버튼을 눌러 비밀번호를 변경해주세요.
+                    </p>
+                    <a class="change-pw-btn" th:href="${changePwLink}">비밀번호 재설정</a>
+                    <p class="thanks">
+                        항상 사랑해주시는 회원님께 감사드리며,<br>
+                        보다 나은 <span class="brand1">W</span><span class="brand2">A</span><span class="brand3">M</span>이 되기 위해 최선을 다하겠습니다.
+                    </p>
+                </div>
+                <div class="footer">
+                    <p class="notice">※ 본 메일은 법령에 따른 통지 및 고지 의무사항으로 수신 동의 여부와 상관없이 회원에게 발송됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

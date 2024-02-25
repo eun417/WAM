@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.member.entity;
 
+import com.chungjin.wam.domain.auth.dto.request.ChangePwRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,6 +40,11 @@ public class Member {
     protected void onCreate() {
         //엔터티가 영속화되기 전에 현재 날짜로 초기화
         createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    }
+
+    //비밀번호 변경
+    public void updatePw(String newPassword) {
+        this.password = newPassword;
     }
 
 }

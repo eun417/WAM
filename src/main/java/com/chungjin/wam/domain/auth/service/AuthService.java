@@ -23,11 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
-import java.time.Duration;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -178,6 +175,37 @@ public class AuthService {
         String maskedEmail = DataMasking.emailMasking(member.getEmail());
 
         return FindEmailResponseDto.builder().findEmail(maskedEmail).build();
+    }
+
+    /**
+     * 비밀번호 재설정 - 링크 메일 전송
+     */
+    public void sendLinkToEmail(ChangePwLinkRequestDto changePwReq) throws MessagingException, UnsupportedEncodingException {
+        //이름, 이메일로 사용자 확인
+        if(!memberRepository.existsByNameAndEmail(changePwReq.getName(), changePwReq.getEmail())) throw new IllegalArgumentException("회원을 찾을 수 없습니다.");
+
+        //링크 메일 전송
+        emailService.sendLinkMail(changePwReq.getEmail());
+    }
+
+    /**
+     * 비밀번호 재설정
+     */
+    public void changePw(ChangePwRequestDto changePwReq, String authCode) {
+        //Redis에 저장된 인증코드 가져오기
+        String redisAuthCode = redisService.getData(changePwReq.getEmail());
+
+        //사용자가 입력한 인증코드와 Redis에서 가져온 인증코드가 일치하는지 확인
+        if (redisAuthCode == null || !redisAuthCode.equals(authCode)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "인증코드가 만료되었거나 존재하지 않습니다.");
+        }
+
+        //사용자가 입력한 이메일로 사용자 가져오기
+        Member member = memberRepository.findByEmail(changePwReq.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+
+        //비밀번호 암호화 후 변경
+        member.updatePw(passwordEncoder.encode(changePwReq.getNewPassword()));
     }
 
 }
