@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface QnaRepository extends JpaRepository<Qna, Long> {
 
     //memberId를 기준으로 해당 회원이 작성한 QnA를 페이지별로 조회
-    @Query("select q from Qna q where q.member.memberId = :memberId")
+    @Query("SELECT q FROM Qna q WHERE q.member.memberId = :memberId")
     Page<Qna> findByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
     //제목+내용을 기준으로 QnA를 페이지별로 조회

@@ -3,7 +3,7 @@ package com.chungjin.wam.domain.admin.controller;
 import com.chungjin.wam.domain.auth.service.CustomUserDetails;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.service.MemberService;
-import com.chungjin.wam.domain.qna.dto.QnaDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import com.chungjin.wam.domain.support.dto.SupportDto;
 import com.chungjin.wam.domain.support.service.SupportService;
@@ -47,7 +47,7 @@ public class AdminController {
      * 모든 QnA 조회
      */
     @GetMapping("/qna/page={page}")
-    public ResponseEntity<List<QnaDto>> readAllQna(@PathVariable(value = "page") int page) {
+    public ResponseEntity<List<QnaResponseDto>> readAllQna(@PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(qnaService.readAllQna(page));
     }
 

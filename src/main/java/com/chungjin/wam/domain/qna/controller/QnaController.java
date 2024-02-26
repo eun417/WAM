@@ -1,20 +1,17 @@
 package com.chungjin.wam.domain.qna.controller;
 
 import com.chungjin.wam.domain.auth.service.CustomUserDetails;
-import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
-import com.chungjin.wam.domain.qna.entity.Qna;
+import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +45,7 @@ public class QnaController {
      * QnA List 조회 (Pagination)
      */
     @GetMapping("/page={page}")
-    public ResponseEntity<List<QnaDto>> readAllQna(@PathVariable(value = "page") int page) {
+    public ResponseEntity<List<QnaResponseDto>> readAllQna(@PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(qnaService.readAllQna(page));
     }
 
@@ -88,8 +85,8 @@ public class QnaController {
      * 검색 - 제목+내용
      */
     @GetMapping("/search/page={page}")
-    public ResponseEntity<List<QnaDto>> searchQna(@RequestParam("keyword") String keyword,
-                                                  @PathVariable(value = "page") int page) {
+    public ResponseEntity<List<QnaResponseDto>> searchQna(@RequestParam("keyword") String keyword,
+                                                          @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(qnaService.searchQna(keyword, page));
     }
 
@@ -97,8 +94,8 @@ public class QnaController {
      * 검색 - 작성자
      */
     @GetMapping("/search/writer/page={page}")
-    public ResponseEntity<List<QnaDto>> searchQnaWriter(@RequestParam("keyword") String keyword,
-                                                        @PathVariable(value = "page") int page) {
+    public ResponseEntity<List<QnaResponseDto>> searchQnaWriter(@RequestParam("keyword") String keyword,
+                                                                @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, page));
     }
 

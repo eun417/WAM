@@ -1,14 +1,15 @@
 package com.chungjin.wam.domain.qna.service;
 
+import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.domain.qna.dto.QnaDto;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -81,7 +84,7 @@ public class QnaService {
     /**
      * QnA List 조회 (Pagination)
      */
-    public List<QnaDto> readAllQna(int page) {
+    public List<QnaResponseDto> readAllQna(int page) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(page, 10);
         //Qna를 페이지별 조회
@@ -89,7 +92,7 @@ public class QnaService {
         //현재 페이지의 Qna 목록
         List<Qna> qnas = qnaPage.getContent();
         //EntityList -> DtoList
-        return qnaMapper.toDtoList(qnas);
+        return convertToDtoList(qnas);
     }
 
     /**
@@ -138,6 +141,35 @@ public class QnaService {
     }
 
     /**
+     * 검색 - 제목+내용
+     */
+    public List<QnaResponseDto> searchQna(String keyword, int page) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //검색 키워드를 바탕으로 Qna를 페이지별 조회
+        Page<Qna> qnaPage = qnaRepository.findByTitleOrContentContaining(keyword, pageable);
+        //현재 페이지의 Qna 목록
+        List<Qna> qnas = qnaPage.getContent();
+        //EntityList -> DtoList
+        return convertToDtoList(qnas);
+    }
+
+    /**
+     * 검색 - 작성자
+     */
+    public List<QnaResponseDto> searchQnaWriter(String keyword, int page) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //검색 키워드를 바탕으로 Qna를 페이지별 조회
+        Page<Qna> qnaPage = qnaRepository.findByNicknameContaining(keyword, pageable);
+        //현재 페이지의 Qna 목록
+        List<Qna> qnas = qnaPage.getContent();
+        //EntityList -> DtoList
+        return convertToDtoList(qnas);
+    }
+
+
+    /**
      * qnaId로 Qna 객체 조회
      */
     private Qna getQna (long qnaId) {
@@ -146,30 +178,21 @@ public class QnaService {
     }
 
     /**
-     * 검색 - 제목+내용
+     * EntityList -> DtoList
+     * map()으로 각 QnA를 QnaResponseDto로 변환
+     * collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
      */
-    public List<QnaDto> searchQna(String keyword, int page) {
-        //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
-        //검색 키워드를 바탕으로 Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findByTitleOrContentContaining(keyword, pageable);
-        //현재 페이지의 Qna 목록
-        List<Qna> qnas = qnaPage.getContent();
-        //EntityList -> DtoList
-        return qnaMapper.toDtoList(qnas);
+    public List<QnaResponseDto> convertToDtoList(List<Qna> qnas) {
+        return qnas.stream()
+                .map(qna -> QnaResponseDto.builder()
+                        .qnaId(qna.getQnaId())
+                        .title(qna.getTitle())
+                        .nickname(qna.getMember().getNickname())
+                        .createDate(qna.getCreateDate())
+                        .viewCount(qna.getViewCount())
+                        .qnaCheck(qna.getQnaCheck())
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    /**
-     * 검색 - 작성자
-     */
-    public List<QnaDto> searchQnaWriter(String keyword, int page) {
-        //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
-        //검색 키워드를 바탕으로 Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findByNicknameContaining(keyword, pageable);
-        //현재 페이지의 Qna 목록
-        List<Qna> qnas = qnaPage.getContent();
-        //EntityList -> DtoList
-        return qnaMapper.toDtoList(qnas);
-    }
 }

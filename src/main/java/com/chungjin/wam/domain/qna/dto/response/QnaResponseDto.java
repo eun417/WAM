@@ -1,27 +1,21 @@
-package com.chungjin.wam.domain.qna.dto;
+package com.chungjin.wam.domain.qna.dto.response;
 
-import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QnaDto {
+public class QnaResponseDto {
 
     private Long qnaId;
-    private String email;
-    private String nickname;
     private String title;
-    private String content;
+    private String nickname;
     private String createDate;
     private int viewCount;
-    private String answer;
-    private String answerDate;
     @Enumerated(EnumType.STRING)
     private QnaCheck qnaCheck;
 
