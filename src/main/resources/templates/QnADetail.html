@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/QnA.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <title>QnADetail</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#header").load("/header.html");
+        });
+        
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+    <div class="QnADetail-wrapper wrapper">
+        <div class="QnAHeader-wrapper"> 
+            <div class="D-left-box">이미지</div>
+            <div class="D-right-box">
+                <div class="D-top">작성자</div>
+                <div class="D-bottom"><span>날짜</span><span>조회수</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
