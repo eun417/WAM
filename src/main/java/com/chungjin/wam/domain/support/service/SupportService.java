@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.comment.service.CommentService;
+import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.support.dto.SupportDto;
@@ -122,12 +123,18 @@ public class SupportService {
     public void deleteSupport(Long memberId, Long supportId) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
+        //memberId로 Member 객체 가져오기
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
-        //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
-
-        //DB에서 영구 삭제
-        supportRepository.delete(support);
+        //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
+        if(memberId.equals(support.getMember().getMemberId()) || member.getAuthority().equals(Authority.ROLE_ADMIN)) {
+            //DB에서 영구 삭제
+            supportRepository.delete(support);
+        } else {
+            //그 외 에러 발생
+            throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        }
     }
 
     /**

@@ -43,9 +43,10 @@ public class MemberController {
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/mypage/leave")
-    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        memberService.deleteMember(userDetails.getMember().getMemberId());
+    @DeleteMapping("/mypage/leave/{memberId}")
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @PathVariable(value = "memberId") Long selectedMemberId) {
+        memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
         return ResponseEntity.ok("success");
     }
 

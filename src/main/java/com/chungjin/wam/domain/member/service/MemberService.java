@@ -6,6 +6,7 @@ import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
+import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
@@ -44,7 +45,7 @@ public class MemberService {
      * 로그인 회원의 email로 회원 정보 조회
      */
     public MemberDto getMemberProfile(Long memberId) {
-        //email로 Member 객체 가져오기
+        //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
         //Entity -> Dto
         return memberMapper.toDto(member);
@@ -54,7 +55,7 @@ public class MemberService {
      * 회원 수정
      */
     public void updateMember(Long memberId, UpdateMemberRequestDto updateMembmerDto) {
-        //email로 Member 객체 가져오기
+        //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
@@ -67,15 +68,18 @@ public class MemberService {
     /**
      * 회원 탈퇴
      */
-    public void deleteMember(Long memberId) {
-        //email로 Member 객체 가져오기
+    public void deleteMember(Long memberId, Long selectedMemberId) {
+        //memberId로 로그인 한 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!memberId.equals(member.getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
-
-        //DB에서 영구 삭제
-        memberRepository.delete(member);
+        //로그인한 사용자가 마이페이지 회원인 경우 또는 관리자인 경우 탈퇴 가능
+        if(memberId.equals(selectedMemberId) || member.getAuthority().equals(Authority.ROLE_ADMIN)) {
+            //DB에서 영구 삭제
+            memberRepository.deleteById(selectedMemberId);
+        } else {
+            //그 외 에러 발생
+            throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        }
     }
 
     /**
@@ -129,6 +133,20 @@ public class MemberService {
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+    }
+
+    /**
+     * 모든 회원 조회
+     */
+    public List<MemberDto> readAllMember(int page) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //Member를 페이지별 조회
+        Page<Member> memberPage = memberRepository.findAll(pageable);
+        //현재 페이지의 Member 목록
+        List<Member> members = memberPage.getContent();
+        //EntityList -> DtoList
+        return memberMapper.toDtoList(members);
     }
 
 }
