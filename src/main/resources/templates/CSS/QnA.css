@@ -105,7 +105,9 @@
     height: 50px;
     display: ;
 }
-
+.tableBox{
+    min-height: 500px;
+}
 .w3-center{
     margin-top: 30px;
 }
@@ -134,4 +136,25 @@
 .w3-green,.w3-hover-green:hover {
     color: #fff!important;
     background-color: #445D48!important
+}
+.answer-comp{
+    border-radius: 8px;
+    font-weight: 700;
+    background-color: #DBC244;
+    color: #ffffff;
+    padding: 6px;
+}
+.answer-nyet{
+    border-radius: 8px;
+    font-weight: 700;
+    background-color: #BFBFBF;
+    color: #ffffff;
+    padding: 6px;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+a:hover{
+    font-weight: 700;
 }
