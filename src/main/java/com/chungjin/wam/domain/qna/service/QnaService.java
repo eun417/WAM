@@ -138,4 +138,31 @@ public class QnaService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 Qna 입니다."));
     }
 
+    /**
+     * 검색 - 제목+내용
+     */
+    public List<QnaDto> searchQna(String keyword, int page) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //검색 키워드를 바탕으로 Qna를 페이지별 조회
+        Page<Qna> qnaPage = qnaRepository.findByTitleOrContentContaining(keyword, pageable);
+        //현재 페이지의 Qna 목록
+        List<Qna> qnas = qnaPage.getContent();
+        //EntityList -> DtoList
+        return qnaMapper.toDtoList(qnas);
+    }
+
+    /**
+     * 검색 - 작성자
+     */
+    public List<QnaDto> searchQnaWriter(String keyword, int page) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(page, 10);
+        //검색 키워드를 바탕으로 Qna를 페이지별 조회
+        Page<Qna> qnaPage = qnaRepository.findByNicknameContaining(keyword, pageable);
+        //현재 페이지의 Qna 목록
+        List<Qna> qnas = qnaPage.getContent();
+        //EntityList -> DtoList
+        return qnaMapper.toDtoList(qnas);
+    }
 }

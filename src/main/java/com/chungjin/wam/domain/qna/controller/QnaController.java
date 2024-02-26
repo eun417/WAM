@@ -6,9 +6,11 @@ import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
+import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -80,6 +82,24 @@ public class QnaController {
                                                   @RequestBody @Valid QnaAnswerRequestDto qnaAnswerReq) {
         qnaService.updateQnaAnswer(qnaId, qnaAnswerReq);
         return ResponseEntity.ok("success");
+    }
+
+    /**
+     * 검색 - 제목+내용
+     */
+    @GetMapping("/search/page={page}")
+    public ResponseEntity<List<QnaDto>> searchQna(@RequestParam("keyword") String keyword,
+                                                  @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(qnaService.searchQna(keyword, page));
+    }
+
+    /**
+     * 검색 - 작성자
+     */
+    @GetMapping("/search/writer/page={page}")
+    public ResponseEntity<List<QnaDto>> searchQnaWriter(@RequestParam("keyword") String keyword,
+                                                        @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, page));
     }
 
 }

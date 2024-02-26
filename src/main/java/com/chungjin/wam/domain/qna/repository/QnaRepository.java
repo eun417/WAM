@@ -15,4 +15,12 @@ public interface QnaRepository extends JpaRepository<Qna, Long> {
     @Query("select q from Qna q where q.member.memberId = :memberId")
     Page<Qna> findByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
+    //제목+내용을 기준으로 QnA를 페이지별로 조회
+    @Query("SELECT q FROM Qna q WHERE q.title LIKE %:keyword% OR q.content LIKE %:keyword%")
+    Page<Qna> findByTitleOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
+
+    //닉네임을 기준으로 QnA를 페이지별로 조회
+    @Query("SELECT q FROM Qna q WHERE q.member.nickname LIKE %:keyword%")
+    Page<Qna> findByNicknameContaining(@Param("keyword") String keyword, Pageable pageable);
+
 }
