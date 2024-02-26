@@ -90,4 +90,22 @@ public class SupportController {
         return ResponseEntity.ok("success");
     }
 
+    /**
+     * 검색 - 제목+내용
+     */
+    @GetMapping("/search/page={page}")
+    public ResponseEntity<List<SupportDto>> searchSupport(@RequestParam("keyword") String keyword,
+                                                          @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(supportService.searchSupport(keyword, page));
+    }
+
+    /**
+     * 검색 - 태그(동물 분류)
+     */
+    @GetMapping("/search/tag/page={page}")
+    public ResponseEntity<List<SupportDto>> searchSupportTag(@RequestParam("keyword") String keyword,
+                                                             @PathVariable(value = "page") int page) {
+        return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, page));
+    }
+
 }

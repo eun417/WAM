@@ -9,6 +9,7 @@ import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
+import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.SupportLike;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
@@ -181,4 +182,23 @@ public class SupportService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 후원 입니다."));
     }
 
+    /**
+     * 검색 - 제목+내용
+     */
+    public List<SupportDto> searchSupport(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Support> supportPage = supportRepository.findByTitleOrContentContaining(keyword, pageable);
+        List<Support> supports = supportPage.getContent();
+        return supportMapper.toDtoList(supports);
+    }
+
+    /**
+     * 검색 - 태그
+     */
+    public List<SupportDto> searchSupportTag(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Support> supportPage = supportRepository.findByAnimalSubjectsContaining(keyword, pageable);
+        List<Support> supports = supportPage.getContent();
+        return supportMapper.toDtoList(supports);
+    }
 }
