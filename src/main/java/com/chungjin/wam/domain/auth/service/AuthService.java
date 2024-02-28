@@ -12,6 +12,7 @@ import com.chungjin.wam.global.common.RedisService;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,7 +71,7 @@ public class AuthService {
     /**
      * 회원가입
      */
-    public void signUp(SignUpRequestDto signUpReq) {
+    public void signUp(@Valid SignUpRequestDto signUpReq) {
         //이미 가입되어 있는 사용자 확인
         if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
 
