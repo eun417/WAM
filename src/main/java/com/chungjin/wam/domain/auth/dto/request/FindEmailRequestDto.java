@@ -14,7 +14,7 @@ import static com.chungjin.wam.global.util.RegExp.PHONE_NUMBER_REGEXP;
 public class FindEmailRequestDto {
 
     @NotBlank(message = "휴대폰 번호를 입력해주세요.")
-    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "휴대폰 번호는 10 ~ 11 자리의 숫자만 입력 가능합니다.")
+    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "숫자만 입력하세요.")
     private String phoneNumber;
 
     @NotBlank

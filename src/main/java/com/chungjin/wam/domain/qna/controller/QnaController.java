@@ -30,7 +30,7 @@ public class QnaController {
     public ResponseEntity<String> createQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @RequestBody @Valid QnaRequestDto qnaReq) {
         qnaService.createQna(userDetails.getMember().getMemberId(), qnaReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("QnA 게시물이 작성되었습니다.");
     }
 
     /**
@@ -57,7 +57,7 @@ public class QnaController {
                                             @PathVariable(value = "qnaId") Long qnaId,
                                             @RequestBody @Valid  UpdateQnaRequestDto updateQnaReq) {
         qnaService.updateQna(userDetails.getMember().getMemberId(), qnaId, updateQnaReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("QnA 게시물이 수정되었습니다.");
     }
 
     /**
@@ -67,7 +67,7 @@ public class QnaController {
     public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(value = "qnaId") Long qnaId) {
         qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("QnA 게시물이 삭제되었습니다.");
     }
 
     /**
@@ -78,7 +78,7 @@ public class QnaController {
     public ResponseEntity<String> updateQnaAnswer(@PathVariable(value = "qnaId") Long qnaId,
                                                   @RequestBody @Valid QnaAnswerRequestDto qnaAnswerReq) {
         qnaService.updateQnaAnswer(qnaId, qnaAnswerReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("QnA 답변이 등록되었습니다.");
     }
 
     /**

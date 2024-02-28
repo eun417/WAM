@@ -21,7 +21,7 @@ public class SupportDetailDto {
     private Long supportId;
     private AnimalSubjects animalSubjects;
     private String title;
-    private int goalAmount;
+    private Long goalAmount;
     @Enumerated(EnumType.STRING)
     private SupportStatus supportStatus;
     private String startDate;
@@ -29,8 +29,8 @@ public class SupportDetailDto {
     private String firstImg;
     private String subheading;
     private String content;
-    private int supportLike;
-    private int supportAmount;
+    private Long supportLike;
+    private Long supportAmount;
 
     private List<CommentDto> comments;
 

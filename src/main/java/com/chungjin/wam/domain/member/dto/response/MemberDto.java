@@ -1,7 +1,6 @@
 package com.chungjin.wam.domain.member.dto.response;
 
 import com.chungjin.wam.domain.member.entity.Authority;
-import com.chungjin.wam.domain.member.entity.Member;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -19,7 +18,7 @@ public class MemberDto {
     private String nickname;
     private String name;
     private String phoneNumber;
-    private String createDate;
+//    private String createDate;
     @Enumerated(EnumType.STRING)
     private Authority authority;
 

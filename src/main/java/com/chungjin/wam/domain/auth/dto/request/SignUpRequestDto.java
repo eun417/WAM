@@ -22,7 +22,7 @@ public class SignUpRequestDto {
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;
     @NotBlank(message = "휴대폰 번호를 입력해주세요.")
-    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "'-' 는 입력하지 마세요.")
+    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "숫자만 입력하세요.")
     private String phoneNumber;
 
 }

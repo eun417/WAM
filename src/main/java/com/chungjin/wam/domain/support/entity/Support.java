@@ -26,7 +26,7 @@ public class Support {
     private String title;
 
     @Column(name = "goal_amount")
-    private int goalAmount;
+    private Long goalAmount;
 
     @Column(name = "support_status")
     @Enumerated(EnumType.STRING)
@@ -50,10 +50,10 @@ public class Support {
     private CommentCheck commentCheck;
 
     @Column(name = "support_like")
-    private int supportLike;
+    private Long supportLike;
 
     @Column(name = "support_amount")
-    private int supportAmount;
+    private Long supportAmount;
 
     @Column(name = "create_date", updatable = false)
     private String createDate;

@@ -37,7 +37,7 @@ public class MemberController {
     public ResponseEntity<String> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @RequestBody @Valid UpdateMemberRequestDto updateMembmerDto) {
         memberService.updateMember(userDetails.getMember().getMemberId(), updateMembmerDto);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("회원 정보가 수정되었습니다.");
     }
 
     /**
@@ -47,7 +47,7 @@ public class MemberController {
     public ResponseEntity<String> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @PathVariable(value = "memberId") Long selectedMemberId) {
         memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
     /**

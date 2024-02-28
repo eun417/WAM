@@ -16,7 +16,7 @@ public class SupportRequestDto {
     private String title;
     private AnimalSubjects animalSubjects;
     @NotNull(message = "목표 금액을 입력해주세요.")
-    private int goalAmount;
+    private Long goalAmount;
     @NotBlank(message = "시작일을 선택해주세요.")
     private String startDate;
     @NotBlank(message = "종료일을 선택해주세요.")

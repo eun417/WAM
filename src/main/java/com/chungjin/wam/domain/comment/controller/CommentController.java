@@ -25,7 +25,7 @@ public class CommentController {
                                                 @PathVariable(value = "supportId") Long supportId,
                                                 @RequestBody @Valid CommentRequestDto commentReq) {
         commentService.createComment(userDetails.getMember().getMemberId(), supportId, commentReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("댓글을 작성되었습니다.");
     }
 
     /**
@@ -36,7 +36,7 @@ public class CommentController {
                                                 @PathVariable(value = "supportId") Long supportId,
                                                 @PathVariable(value = "commentId") Long commentId) {
         commentService.deleteComment(userDetails.getMember().getMemberId(), supportId, commentId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("댓글이 삭제되었습니다.");
     }
 
 }

@@ -1,7 +1,6 @@
 package com.chungjin.wam.domain.member.service;
 
 import com.chungjin.wam.domain.member.dto.MemberMapper;
-import com.chungjin.wam.domain.member.dto.MemberSupportIdDto;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
@@ -16,17 +15,16 @@ import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +57,7 @@ public class MemberService {
         Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!memberId.equals(member.getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(member.getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
 
         //MapStruct로 수정
         memberMapper.updateFromDto(updateMembmerDto, member);
@@ -78,7 +76,7 @@ public class MemberService {
             memberRepository.deleteById(selectedMemberId);
         } else {
             //그 외 에러 발생
-            throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+            throw new CustomException(ErrorCodeType.FORBIDDEN);
         }
     }
 
@@ -92,7 +90,6 @@ public class MemberService {
         Page<Qna> qnaPage = qnaRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 Qna 목록
         List<Qna> qnas = qnaPage.getContent();
-
         //EntityList -> DtoList
         return qnaMapper.toMyQnaDtoList(qnas);
     }
@@ -107,7 +104,6 @@ public class MemberService {
         Page<Support> supportPage = supportRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
         List<Support> supports = supportPage.getContent();
-
         //EntityList -> DtoList
         return supportMapper.toMySupportDtoList(supports);
     }
@@ -122,7 +118,6 @@ public class MemberService {
         Page<Support> supportPage = supportLikeRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
         List<Support> supports = supportPage.getContent();
-
         //EntityList -> DtoList
         return supportMapper.toMySupportDtoList(supports);
     }
@@ -132,7 +127,7 @@ public class MemberService {
      */
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
     }
 
     /**

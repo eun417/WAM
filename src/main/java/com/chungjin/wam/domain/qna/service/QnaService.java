@@ -13,6 +13,8 @@ import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +44,7 @@ public class QnaService {
      */
     public void createQna(Long memberId, QnaRequestDto qnaReq) {
         //이메일로 사용자 확인
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Member member = getMember(memberId);
 
         //Dto -> Entity
         Qna qna = Qna.builder()
@@ -57,7 +59,7 @@ public class QnaService {
     }
 
     /**
-     * QnA 조회
+     * QnA 상세 조회
      */
     public QnaDetailDto readQna(Long qnaId) {
         //qnaId로 QnA 객체 가져오기
@@ -103,7 +105,7 @@ public class QnaService {
         Qna qna = getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(qna.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(qna.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
 
         //MapStruct로 수정
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
@@ -116,8 +118,7 @@ public class QnaService {
         //qnaId로 QnA 확인
         Qna qna = getQna(qnaId);
         //memberId로 Member 객체 가져오기
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Member member = getMember(memberId);
 
         //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
         if(memberId.equals(qna.getMember().getMemberId()) || member.getAuthority().equals(Authority.ROLE_ADMIN)) {
@@ -125,7 +126,7 @@ public class QnaService {
             qnaRepository.delete(qna);
         } else {
             //그 외 에러 발생
-            throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+            throw new CustomException(ErrorCodeType.FORBIDDEN);
         }
     }
 
@@ -168,13 +169,20 @@ public class QnaService {
         return convertToDtoList(qnas);
     }
 
+    /**
+     * memberId로 Member 객체 조회
+     */
+    private Member getMember (Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+    }
 
     /**
      * qnaId로 Qna 객체 조회
      */
     private Qna getQna (long qnaId) {
         return qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 Qna 입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCodeType.QNA_NOT_FOUND));
     }
 
     /**

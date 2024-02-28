@@ -5,7 +5,7 @@ import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
-import com.chungjin.wam.domain.support.dto.SupportDto;
+import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class AdminController {
     public ResponseEntity<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @PathVariable(value = "memberId") Long selectedMemberId) {
         memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
     /**
@@ -58,14 +58,14 @@ public class AdminController {
     public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(value = "qnaId") Long qnaId) {
         qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("QnA 게시물이 삭제되었습니다.");
     }
 
     /**
      * 모든 후원 조회
      */
     @GetMapping("/support/page={page}")
-    public ResponseEntity<List<SupportDto>> readAllSupport(@PathVariable(value = "page") int page) {
+    public ResponseEntity<List<SupportResponseDto>> readAllSupport(@PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(supportService.readAllSupport(page));
     }
 
@@ -76,7 +76,7 @@ public class AdminController {
     public ResponseEntity<String> deleteSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId) {
         supportService.deleteSupport(userDetails.getMember().getMemberId(), supportId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("후원이 삭제되었습니다.");
     }
 
 }

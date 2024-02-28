@@ -15,14 +15,12 @@ import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
 
@@ -126,7 +124,7 @@ public class AuthService {
     public TokenDto refresh(TokenRequestDto tokenReq) {
         //Refresh 토큰 검증
         if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+            throw new CustomException(ErrorCodeType.TOKEN_EXPIRED);
         }
 
         //Access Token에서 email 가져오기
@@ -134,21 +132,21 @@ public class AuthService {
 
         //저장소에서 email을 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findById(Long.parseLong(authentication.getName()))
-                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCodeType.UNAUTHORIZED));
 
         //Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenReq.getRefreshToken())) {
-            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+            throw new CustomException(ErrorCodeType.TOKEN_USER_MISMATCH);
         }
 
         //새로운 토큰 생성
         TokenDto newTokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
-        //저장소 정보 업데이트
+        //새로운 RefreshToken 저장
         RefreshToken newRefreshToken = refreshToken.updateValue(newTokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
-        //토큰 발급
+        //새로운 토큰 발급
         return newTokenDto;
     }
 
@@ -170,6 +168,7 @@ public class AuthService {
         String phoneNumber = findEmailReq.getPhoneNumber();
         String name = findEmailReq.getName();
 
+        //이름, 휴대폰 번호로 Member 객체 조회
         Member member = memberRepository.findByNameAndPhoneNumber(name, phoneNumber);
 
         //이메일 마스킹
@@ -183,7 +182,7 @@ public class AuthService {
      */
     public void sendLinkToEmail(ChangePwLinkRequestDto changePwReq) throws MessagingException, UnsupportedEncodingException {
         //이름, 이메일로 사용자 확인
-        if(!memberRepository.existsByNameAndEmail(changePwReq.getName(), changePwReq.getEmail())) throw new IllegalArgumentException("회원을 찾을 수 없습니다.");
+        if(!memberRepository.existsByNameAndEmail(changePwReq.getName(), changePwReq.getEmail())) throw new CustomException(ErrorCodeType.MEMBER_NOT_FOUND);
 
         //링크 메일 전송
         emailService.sendLinkMail(changePwReq.getEmail());
@@ -196,14 +195,14 @@ public class AuthService {
         //Redis에 저장된 인증코드 가져오기
         String redisAuthCode = redisService.getData(changePwReq.getEmail());
 
-        //사용자가 입력한 인증코드와 Redis에서 가져온 인증코드가 일치하는지 확인
+        //인증코드가 만료되었거나, 사용자가 입력한 인증코드와 Redis에서 가져온 인증코드가 일치하지 않는 경우
         if (redisAuthCode == null || !redisAuthCode.equals(authCode)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "인증코드가 만료되었거나 존재하지 않습니다.");
+            throw new CustomException(ErrorCodeType.INCORRECT_VERIFICATION_CODE);
         }
 
         //사용자가 입력한 이메일로 사용자 가져오기
         Member member = memberRepository.findByEmail(changePwReq.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
 
         //비밀번호 암호화 후 변경
         member.updatePw(passwordEncoder.encode(changePwReq.getNewPassword()));
