@@ -68,4 +68,14 @@ public class Support {
         this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 
+    //좋아요 증가
+    public void upLike(Long supportLike) {
+        this.supportLike++;
+    }
+
+    //좋아요 감소
+    public void downLike(Long supportLike) {
+        this.supportLike--;
+    }
+
 }

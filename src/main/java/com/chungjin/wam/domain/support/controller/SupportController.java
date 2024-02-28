@@ -69,27 +69,6 @@ public class SupportController {
     }
 
     /**
-     * 좋아요 생성
-     */
-    @PostMapping("/{supportId}/like")
-    public ResponseEntity<String> createLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                             @PathVariable(value = "supportId") Long supportId) {
-        supportService.createLike(userDetails.getMember().getMemberId(), supportId);
-        return ResponseEntity.ok("좋아요가 생성되었습니다.");
-    }
-
-    /**
-     * 좋아요 삭제
-     */
-    @DeleteMapping("/{supportId}/like/{supportLikeId}")
-    public ResponseEntity<String> deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                             @PathVariable(value = "supportId") Long supportId,
-                                             @PathVariable(value = "supportLikeId") Long supportLikeId) {
-        supportService.deleteLike(userDetails.getMember().getMemberId(), supportId, supportLikeId);
-        return ResponseEntity.ok("좋아요가 삭제되었습니다.");
-    }
-
-    /**
      * 검색 - 제목+내용
      */
     @GetMapping("/search/page={page}")

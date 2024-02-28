@@ -10,10 +10,8 @@ import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
-import com.chungjin.wam.domain.support.entity.SupportLike;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
-import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
@@ -34,7 +32,6 @@ public class SupportService {
 
     private final SupportRepository supportRepository;
     private final MemberRepository memberRepository;
-    private final SupportLikeRepository supportLikeRepository;
     private final CommentService commentService;
     private final SupportMapper supportMapper;
 
@@ -132,42 +129,6 @@ public class SupportService {
             //그 외 에러 발생
             throw new CustomException(ErrorCodeType.FORBIDDEN);
         }
-    }
-
-    /**
-     * 좋아요 생성
-     */
-    public void createLike(Long memberId, Long supportId) {
-        //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
-        //supportId로 support 객체 가져오기
-        Support support = getSupport(supportId);
-
-        //Entity 생성
-        SupportLike like = SupportLike.builder()
-                .support(support)
-                .member(member)
-                .build();
-
-        //DB에 저장
-        supportLikeRepository.save(like);
-    }
-
-    /**
-     * 좋아요 삭제
-     */
-    public void deleteLike(Long memberId, Long supportId, Long supportLikeId) {
-        //supportId로 support 객체 가져오기
-        Support support = getSupport(supportId);
-        //supportLikeId로 supportLike 객체 가져오기
-        SupportLike supportLike = supportLikeRepository.findById(supportLikeId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_LIKE_NOT_FOUND));
-
-        //로그인한 사용자가 좋아요 생성한 사람이 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
-
-        //DB에서 영구 삭제
-        supportLikeRepository.delete(supportLike);
     }
 
     /**
