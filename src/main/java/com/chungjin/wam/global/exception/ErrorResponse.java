@@ -1,4 +1,4 @@
-package com.chungjin.wam.global.error.exception;
+package com.chungjin.wam.global.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

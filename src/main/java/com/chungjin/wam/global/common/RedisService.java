@@ -48,7 +48,8 @@ public class RedisService {
      * 입력받은 값과 저장된 데이터 비교
      */
     public boolean checkExistsValue(String value) {
-        return !value.equals("false");
+//        return !value.equals("false");
+        return value != null && !value.isEmpty();
     }
 
 }

@@ -27,16 +27,16 @@ public class AuthController {
     @PostMapping("/signup/email/send")
     public ResponseEntity<String> sendMail(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
         authService.sendCodeToEmail(emailReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
     }
 
     /**
      * 회원가입 - 인증코드 검증
      */
     @GetMapping("/signup/email/verify")
-    public ResponseEntity<Boolean> verifyEmail(@RequestBody @Valid VerifyEmailRequestDto verifyEmailReq) {
-        boolean authResult = authService.verifiedCode(verifyEmailReq);
-        return ResponseEntity.ok(authResult);
+    public ResponseEntity<String> verifyEmail(@RequestBody @Valid VerifyEmailRequestDto verifyEmailReq) {
+        authService.verifyCode(verifyEmailReq);
+        return ResponseEntity.ok("인증되었습니다.");
     }
 
     /**
@@ -45,7 +45,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpReq) {
         authService.signUp(signUpReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     /**
@@ -70,7 +70,7 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
         authService.logout(userDetails.getMember().getMemberId());
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("로그아웃");
     }
 
     /**
@@ -87,7 +87,7 @@ public class AuthController {
     @PostMapping("/change-pw/email/send")
     public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwLinkRequestDto changePwReq) throws MessagingException, UnsupportedEncodingException {
         authService.sendLinkToEmail(changePwReq);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("비밀번호 재설정 링크 메일이 발송되었습니다.");
     }
 
     /**
@@ -97,7 +97,7 @@ public class AuthController {
     public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwRequestDto changePwReq,
                                            @PathVariable(value = "authCode") String authCode) {
         authService.changePw(changePwReq, authCode);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("비밀번호가 재설정되었습니다.");
     }
 
 }

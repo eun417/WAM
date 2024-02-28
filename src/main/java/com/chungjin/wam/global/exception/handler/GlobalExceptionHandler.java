@@ -1,9 +1,9 @@
-package com.chungjin.wam.global.error.handler;
+package com.chungjin.wam.global.exception.handler;
 
-import com.chungjin.wam.global.error.exception.CommonErrorCode;
-import com.chungjin.wam.global.error.exception.CustomException;
-import com.chungjin.wam.global.error.exception.ErrorCode;
-import com.chungjin.wam.global.error.exception.ErrorResponse;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCode;
+import com.chungjin.wam.global.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
         //IllegalArgumentException 발생 시 로그를 기록하고 예외 코드와 메시지를 반환
         log.warn("handleIllegalArgument", e);
-        return handleExceptionInternal(CommonErrorCode.INVALID_PARAMETER, e.getMessage());
+        return handleExceptionInternal(ErrorCodeType.INVALID_PARAMETER, e.getMessage());
     }
 
     /**
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleBindException(BindException e) {
         //@Valid 어노테이션으로 넘어오는 에러를 처리하고, 해당 에러에 대한 응답을 반환
         log.warn("handleBindException", e);
-        return handleExceptionInternal(e, CommonErrorCode.INVALID_PARAMETER);
+        return handleExceptionInternal(e, ErrorCodeType.INVALID_PARAMETER);
     }
 
     /**
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleAllException(Exception ex) {
         //모든 예외를 처리하고, 내부 서버 오류에 대한 응답을 반환
         log.warn("handleAllException", ex);
-        return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR);
+        return handleExceptionInternal(ErrorCodeType.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
      * 에러 처리 내부 메소드둘
      */
 
-    //BusinessException, 기타 에러 처리 메세지를 보내는 메소드
+    //CustomException, 기타 에러 처리 메세지를 보내는 메소드
     private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
         //예외 코드에 따른 응답을 생성하여 반환
         return ResponseEntity.status(errorCode.getHttpStatus())

@@ -1,5 +1,6 @@
-package com.chungjin.wam.global.error.exception;
+package com.chungjin.wam.global.exception;
 
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomException extends RuntimeException {
 
-    private final CommonErrorCode errorCode;
+    private final ErrorCodeType errorCode;
 
 }

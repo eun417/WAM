@@ -9,10 +9,11 @@ import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.common.RedisService;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
 import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
-
-import static org.springframework.http.HttpStatus.CONFLICT;
 
 @Service
 @RequiredArgsConstructor
@@ -43,38 +42,33 @@ public class AuthService {
 
 
     /**
-     * 회원가입 - 인증코드 메일 발송
+     * 회원가입 - 1. 인증코드 메일 발송
      */
     public void sendCodeToEmail(EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
         //이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(emailReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
+        checkEmailExists(emailReq.getEmail());
 
         //인증코드 전송
         emailService.sendCodeMail(emailReq.getEmail());
     }
 
     /**
-     * 회원가입 - 인증코드 검증
+     * 회원가입 - 2. 인증코드 검증
      */
-    public boolean verifiedCode(VerifyEmailRequestDto verifyEmailReq) {
-        //이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(verifyEmailReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
-
+    public void verifyCode(VerifyEmailRequestDto verifyEmailReq) {
         //Redis에 저장된 인증코드 가져오기
         String redisAuthCode = redisService.getData(verifyEmailReq.getEmail());
 
-        //입력받은 인증코드와 Redis에 저장된 인증코드 비교 후 반환
-        return redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(verifyEmailReq.getAuthCode());
+        //Redis에 저장된 인증코드가 존재하지 않거나, 입력받은 인증코드와 일치하지 않을 때 에러 발생
+        if(!redisService.checkExistsValue(redisAuthCode) || !redisAuthCode.equals(verifyEmailReq.getAuthCode())) {
+            throw new CustomException(ErrorCodeType.INCORRECT_VERIFICATION_CODE);
+        }
     }
 
-
     /**
-     * 회원가입
+     * 회원가입 - 3. 정보 입력
      */
-    public void signUp(@Valid SignUpRequestDto signUpReq) {
-        //이미 가입되어 있는 사용자 확인
-        if(memberRepository.existsByEmail(signUpReq.getEmail())) throw new ResponseStatusException(CONFLICT, "이미 가입되어 있는 회원입니다");
-
+    public void signUp(SignUpRequestDto signUpReq) {
         //Dto -> Entity 변환 후 저장
         memberRepository.save(Member.builder()
                 .email(signUpReq.getEmail())
@@ -87,33 +81,39 @@ public class AuthService {
     }
 
     /**
+     * 중복 이메일 확인
+     */
+    public void checkEmailExists(String email) {
+        if(memberRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCodeType.DUPLICATE_EMAIL);
+        }
+    }
+
+    /**
      * 로그인
      */
     public TokenDto login(LoginRequest loginReq) {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
         Member member = memberRepository.findByEmail(loginReq.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCodeType.EMAIL_NOT_FOUND));
 
-        //비밀번호 체크
+        //비밀번호 확인
         if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCodeType.INVALID_PASSWORD);
         }
 
-        //로그인 이메일, 비밀번호를 기반으로 AuthenticationToken 생성
+        //로그인 이메일, 비밀번호로 인증 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginReq.toAuthentication();
-
-        //검증(사용자 비밀번호 체크)
+        //인증 수행
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-        //인증 정보를 기반으로 JWT 토큰 생성, 발급
+        //인증 정보를 기반으로 JWT 토큰 생성, 반환
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
-        //RefreshToken을 DB에 저장
+        //RefreshToken을 생성하고 DB에 저장
         RefreshToken refreshToken = RefreshToken.builder()
                 .memberId(Long.parseLong(authentication.getName()))  //memberId
                 .value(tokenDto.getRefreshToken())  //RefreshToken 값
                 .build();
-
         refreshTokenRepository.save(refreshToken);
 
         //토큰 발급

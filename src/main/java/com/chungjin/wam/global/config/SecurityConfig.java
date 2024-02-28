@@ -28,7 +28,7 @@ public class SecurityConfig {
 //    private final CustomUserDetailService customUserDetailService;
     private final JwtTokenProvider jwtTokenProvider;
 //    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-//    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
@@ -67,9 +67,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 //exception을 핸들링할 때, 만들었던 클래스 추가
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
+                .exceptionHandling(exceptionHandling -> exceptionHandling
 //                        .accessDeniedHandler(jwtAccessDeniedHandler)
-//                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
 
                 //HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
