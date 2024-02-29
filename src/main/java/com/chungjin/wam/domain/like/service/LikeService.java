@@ -3,7 +3,7 @@ package com.chungjin.wam.domain.like.service;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.support.entity.Support;
-import com.chungjin.wam.domain.support.entity.SupportLike;
+import com.chungjin.wam.domain.like.entity.SupportLike;
 import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;

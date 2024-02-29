@@ -1,7 +1,7 @@
 package com.chungjin.wam.domain.support.repository;
 
 import com.chungjin.wam.domain.support.entity.Support;
-import com.chungjin.wam.domain.support.entity.SupportLike;
+import com.chungjin.wam.domain.like.entity.SupportLike;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
