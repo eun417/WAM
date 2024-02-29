@@ -8,6 +8,8 @@ import com.chungjin.wam.domain.comment.entity.Comment;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.comment.repository.CommentRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +35,9 @@ public class CommentService {
      */
     public void createComment(Long memberId, Long supportId, CommentRequestDto commentReq) {
         //email로 Member 객체 가져오기
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
         //supportId로 Support 객체 가져오기
-        Support support = supportRepository.findById(supportId).orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
+        Support support = getSupport(supportId);
 
         //Dto -> Entity
         Comment comment = Comment.builder()
@@ -75,15 +77,23 @@ public class CommentService {
      */
     public void deleteComment(Long memberId, Long supportId, Long commentId) {
         //supportId로 Support 객체 가져오기
-        Support support = supportRepository.findById(supportId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 후원 입니다."));
+        Support support = getSupport(supportId);
         //commentId로 Comment 객체 가져오기
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "존재하지 않는 댓글 입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCodeType.COMMENT_NOT_FOUND));
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new ResponseStatusException(FORBIDDEN, "접근권한이 없습니다.");
+        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
 
         //DB에서 영구 삭제
         commentRepository.delete(comment);
+    }
+
+    /**
+     * supportId로 Support 객체 조회
+     */
+    private Support getSupport (long supportId) {
+        return supportRepository.findById(supportId)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
     }
 
 }

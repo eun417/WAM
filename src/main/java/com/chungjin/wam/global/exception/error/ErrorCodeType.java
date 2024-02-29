@@ -37,6 +37,9 @@ public enum ErrorCodeType implements ErrorCode {
     //Support
     SUPPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 후원입니다."),
     SUPPORT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 좋아요입니다."),
+
+    //Comment
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
     ;
 
     private final HttpStatus httpStatus;
