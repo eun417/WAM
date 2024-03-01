@@ -73,7 +73,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(signUpReq.getPassword()))
                 .name(signUpReq.getName())
                 .phoneNumber(signUpReq.getPhoneNumber())
-                .authority(Authority.ROLE_USER)
+                .authority(Authority.USER)
                 .nickname(signUpReq.getNickname())
                 .build());
     }

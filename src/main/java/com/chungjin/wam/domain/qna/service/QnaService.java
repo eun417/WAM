@@ -121,7 +121,7 @@ public class QnaService {
         Member member = getMember(memberId);
 
         //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
-        if(memberId.equals(qna.getMember().getMemberId()) || member.getAuthority().equals(Authority.ROLE_ADMIN)) {
+        if(memberId.equals(qna.getMember().getMemberId()) || member.getAuthority().equals(Authority.ADMIN)) {
             //DB에서 영구 삭제
             qnaRepository.delete(qna);
         } else {

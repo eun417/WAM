@@ -5,12 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Authority {
+public enum LoginType {
 
-    ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER"),
-    GUEST("ROLE_GUEST");
-
-    private final String key;
+    GOOGLE, KAKAO, LOCAL, NAVER
 
 }

@@ -1,12 +1,14 @@
 package com.chungjin.wam.global.config;
 
+import com.chungjin.wam.domain.auth.handler.OAuth2LoginFailureHandler;
+import com.chungjin.wam.domain.auth.handler.OAuth2LoginSuccessHandler;
+import com.chungjin.wam.domain.auth.service.CustomOAuth2UserService;
 import com.chungjin.wam.global.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,14 +27,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private final CustomUserDetailService customUserDetailService;
     private final JwtTokenProvider jwtTokenProvider;
 //    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
-            "/", "/auth/**", "/qna/**", "/support/**", "/members/**", "/email/**",
+            "/index.html", "/favicon.ico",
+            "/", "/auth/**", "/oauth/**",
+            "/qna/**", "/support/**", "/members/**", "/email/**",
             "/h2-console/**", "/resources/**"
     };
 
@@ -88,13 +95,15 @@ public class SecurityConfig {
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
                 //JwtFilter를 addFilterBefore()로 등록했던 JwtSecurityConfig 클래스도 적용
-                .with(new JwtSecurityConfig(jwtTokenProvider), customizer -> {});
+                .with(new JwtSecurityConfig(jwtTokenProvider), customizer -> {})
 
-//                .formLogin(login -> login
-//                        .loginPage("/login")
-//                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/"))
-//                        .permitAll()
-//                );
+                //소셜 로그인 설정
+                .oauth2Login(configure -> configure
+                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                                .successHandler(oAuth2LoginSuccessHandler)
+                                .failureHandler(oAuth2LoginFailureHandler)
+                )
+        ;
 
         return http.build();
     }

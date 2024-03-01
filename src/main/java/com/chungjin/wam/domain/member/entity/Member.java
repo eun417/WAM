@@ -1,6 +1,5 @@
 package com.chungjin.wam.domain.member.entity;
 
-import com.chungjin.wam.domain.auth.dto.request.ChangePwRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +18,8 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    private String oauthId; //로그인한 소셜 타입의 식별자 값 (일반 로그인인 경우 null)
+
     private String email;
 
     private String password;
@@ -35,6 +36,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
 
     @PrePersist
     protected void onCreate() {

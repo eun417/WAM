@@ -71,7 +71,7 @@ public class MemberService {
         Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지 회원인 경우 또는 관리자인 경우 탈퇴 가능
-        if(memberId.equals(selectedMemberId) || member.getAuthority().equals(Authority.ROLE_ADMIN)) {
+        if(memberId.equals(selectedMemberId) || member.getAuthority().equals(Authority.ADMIN)) {
             //DB에서 영구 삭제
             memberRepository.deleteById(selectedMemberId);
         } else {
