@@ -64,6 +64,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
+    /**
+     * registrationId("naver", "kakao", "google")로 분기 처리하여 맞는 소셜 타입 반환하는 메소드
+     */
     private LoginType getLoginType(String registrationId) {
         if(NAVER.equals(registrationId)) {
             return LoginType.NAVER;

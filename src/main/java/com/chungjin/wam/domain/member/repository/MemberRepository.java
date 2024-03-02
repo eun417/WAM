@@ -35,4 +35,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      */
     Optional<Member> findByLoginTypeAndOauthId(LoginType loginType, String oauthId);
 
+    //소셜의 식별값(oauthId)로 회원 찾기
+    Member findByOauthId(String oauthId);
+
 }

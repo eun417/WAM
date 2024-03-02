@@ -8,6 +8,11 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
         super(attributes);
     }
 
+    /**
+     * 유저 정보가 감싸져 있지 않기 때문에
+     * 바로 get으로 유저 정보 Key를 사용해서 꺼내면 됨
+     */
+
     @Override
     public String getId() {
         return (String) attributes.get("sub");

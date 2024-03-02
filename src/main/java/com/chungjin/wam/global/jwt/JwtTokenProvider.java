@@ -1,10 +1,14 @@
 package com.chungjin.wam.global.jwt;
 
 import com.chungjin.wam.domain.auth.dto.TokenDto;
+import com.chungjin.wam.domain.auth.entity.RefreshToken;
+import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +34,7 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private final CustomUserDetailsService userDetailsService;
+//    private final RefreshTokenRepository refreshTokenRepository;
 
     private final Key key;
 
@@ -37,7 +42,7 @@ public class JwtTokenProvider {
      * 주어진 시크릿 키를 사용하여 JwtTokenProvider 인스턴스를 생성하고 초기화
      * 시크릿 키는 JWT 토큰의 생성 및 검증에 사용
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService, RefreshTokenRepository refreshTokenRepository) {
         //Base64로 인코딩된 시크릿 키를 디코딩
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
@@ -45,6 +50,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
 
         this.userDetailsService = userDetailsService;
+//        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     /**
@@ -73,7 +79,7 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        //TokenDto 생성: 클라이언트에게 제공되어야 하는 토큰 정보 담고 있음
+            //TokenDto 생성: 클라이언트에게 제공되어야 하는 토큰 정보 담고 있음
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
