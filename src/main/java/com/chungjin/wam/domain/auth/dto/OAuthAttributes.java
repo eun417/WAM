@@ -2,6 +2,7 @@ package com.chungjin.wam.domain.auth.dto;
 
 import com.chungjin.wam.domain.auth.dto.userinfo.GoogleOAuth2UserInfo;
 import com.chungjin.wam.domain.auth.dto.userinfo.KakaoOAuth2UserInfo;
+import com.chungjin.wam.domain.auth.dto.userinfo.NaverOAuth2UserInfo;
 import com.chungjin.wam.domain.auth.dto.userinfo.OAuth2UserInfo;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
@@ -32,9 +33,9 @@ public class OAuthAttributes {
      */
     public static OAuthAttributes of(LoginType loginType, String userNameAttributeName, Map<String, Object> attributes) {
 
-//        if (loginType == LoginType.NAVER) {
-//            return ofNaver(userNameAttributeName, attributes);
-//        }
+        if (loginType == LoginType.NAVER) {
+            return ofNaver(userNameAttributeName, attributes);
+        }
         if (loginType == LoginType.KAKAO) {
             return ofKakao(userNameAttributeName, attributes);
         }
@@ -55,12 +56,12 @@ public class OAuthAttributes {
                 .build();
     }
 
-//    public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
-//        return OAuthAttributes.builder()
-//                .nameAttributeKey(userNameAttributeName)
-//                .oauth2UserInfo(new NaverOAuth2UserInfo(attributes))
-//                .build();
-//    }
+    public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nameAttributeKey(userNameAttributeName)
+                .oauth2UserInfo(new NaverOAuth2UserInfo(attributes))
+                .build();
+    }
 
     /**
      * of 메소드로 OAuthAttributes 객체가 생성되어, 유저 정보들이 담긴 OAuth2UserInfo가 소셜 타입별로 주입된 상태

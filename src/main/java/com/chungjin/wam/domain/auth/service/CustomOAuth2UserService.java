@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.auth.service;
 
+import com.chungjin.wam.domain.auth.dto.CustomOAuth2User;
 import com.chungjin.wam.domain.auth.dto.OAuthAttributes;
 import com.chungjin.wam.domain.member.entity.LoginType;
 import com.chungjin.wam.domain.member.entity.Member;
@@ -56,11 +57,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Member createdMember = getMember(extractAttributes, loginType);
 
-        //DefaultOAuth2User 객체 생성 후 반환
-        return new DefaultOAuth2User(
+        //DefaultOAuth2User를 구현한 CustomOAuth2User 객체 생성 후 반환
+        return new CustomOAuth2User(
                 Collections.singletonList(new SimpleGrantedAuthority(createdMember.getAuthority().getKey())),
                 attributes,
-                extractAttributes.getNameAttributeKey()
+                extractAttributes.getNameAttributeKey(),
+                createdMember.getMemberId(),
+                createdMember.getOauthId()
         );
     }
 
