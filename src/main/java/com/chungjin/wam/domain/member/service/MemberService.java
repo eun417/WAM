@@ -35,6 +35,7 @@ public class MemberService {
     private final QnaRepository qnaRepository;
     private final SupportRepository supportRepository;
     private final SupportLikeRepository supportLikeRepository;
+
     private final MemberMapper memberMapper;
     private final QnaMapper qnaMapper;
     private final SupportMapper supportMapper;
@@ -58,6 +59,11 @@ public class MemberService {
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
         if(!memberId.equals(member.getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+
+        //이름, 휴대폰 번호 입력하면 GUEST인 사용자의 권한을 USER로 변경
+        if (member.getAuthority() == Authority.GUEST) {
+            member.updateAuthority(Authority.USER);
+        }
 
         //MapStruct로 수정
         memberMapper.updateFromDto(updateMembmerDto, member);

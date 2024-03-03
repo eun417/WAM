@@ -51,4 +51,10 @@ public class Member {
         this.password = newPassword;
     }
 
+    //권한 변경
+    public void updateAuthority(Authority authority) {
+        this.authority = authority;
+    }
+
+
 }
