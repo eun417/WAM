@@ -37,7 +37,7 @@ public class SecurityConfig {
 
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
-            "/index.html", "/favicon.ico",
+            "/index.html",
             "/", "/auth/**", "/oauth/**",
             "/qna/**", "/support/**", "/members/**", "/email/**",
             "/h2-console/**", "/resources/**"
@@ -51,11 +51,11 @@ public class SecurityConfig {
      * 정적 자원에 대해 보안을 적용하지 않도록 설정
      * 정적 자원은 보통 HTML, CSS, JavaScript, 이미지 파일 등을 의미, 이들에 대해 보안을 적용하지 않음으로써 성능을 향상시킬 수 있음
      */
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring()
+//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//    }
 
     /**
      * PasswordEncoder: Spring Security에서 사용자의 비밀번호를 안전하게 저장하기 위해 사용

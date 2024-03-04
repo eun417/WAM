@@ -16,13 +16,22 @@ import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,12 +44,18 @@ public class SupportService {
     private final CommentService commentService;
     private final SupportMapper supportMapper;
 
+    @Value("${file.path}")
+    private String filePath;    //파일 저장 경로
+
     /**
      * 후원 생성
      */
-    public void createSupport(Long memberId, SupportRequestDto supportReq) {
+    public void createSupport(Long memberId, SupportRequestDto supportReq) throws IOException {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
+
+        //파일 업로드
+        String filePath = uploadFile(supportReq.getFirstImg());
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -49,7 +64,7 @@ public class SupportService {
                 .goalAmount(supportReq.getGoalAmount())
                 .startDate(supportReq.getStartDate())
                 .endDate(supportReq.getEndDate())
-                .firstImg(supportReq.getFirstImg())
+                .firstImg(filePath)
                 .subheading(supportReq.getSubheading())
                 .content(supportReq.getContent())
                 .commentCheck(supportReq.getCommentCheck())
@@ -59,6 +74,25 @@ public class SupportService {
 
         //DB에 저장
         supportRepository.save(support);
+    }
+
+    //파일 업로드를 위한 메서드
+    public String uploadFile(MultipartFile file) throws IOException {
+        //업로드할 디렉토리 생성 (없는 경우)
+        Path uploadPath = Paths.get(filePath);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        //파일 이름을 고유한 UUID로 생성
+        String fileName = UUID.randomUUID() + ".jpg";
+
+        //파일을 지정된 경로에 저장
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(file.getInputStream(), filePath);
+
+        //저장된 파일의 경로를 리턴
+        return fileName;
     }
 
     /**

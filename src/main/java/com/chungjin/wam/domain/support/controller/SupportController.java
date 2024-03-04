@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,9 @@ public class SupportController {
      */
     @PostMapping("/")
     public ResponseEntity<String> createSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @RequestBody @Valid SupportRequestDto supportReq) {
+                                                @RequestPart("file") MultipartFile file,
+                                                @RequestPart("supportReq") @Valid SupportRequestDto supportReq) throws IOException {
+        supportReq.setFirstImg(file);
         supportService.createSupport(userDetails.getMember().getMemberId(), supportReq);
         return ResponseEntity.ok("후원이 생성되었습니다.");
     }
