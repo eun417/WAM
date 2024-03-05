@@ -24,6 +24,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	//Thymeleaf 적용
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	//Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -52,9 +55,6 @@ dependencies {
 	//Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-
-	//Thymeleaf 적용
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	//Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'

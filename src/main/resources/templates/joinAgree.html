@@ -6,18 +6,25 @@
     <title>회원가입 동의</title>
 </head>
 <body>
-    <div class="join-agree-wrapper">
-        <div>다음 내용에 동의해주세요.</div>
+<div class="join-agree-wrapper">
+    <div>다음 내용에 동의해주세요.</div>
+    <div>
         <div>
-            <div>
-                <div><div><input type="checkbox">모두 동의</div><span>필수 및 선택 항목 동의 포함</span></div>
-            </div>
-            <div>
-                <div><input type="checkbox">통합 서비스 이용약관 동의(필수)</div>
-                <div><input type="checkbox">개인정보 수집 및 이용 동의(필수)</div>
-            </div>
+            <div><div><input type="checkbox">모두 동의</div><span>필수 및 선택 항목 동의 포함</span></div>
         </div>
-        <button>다음</button>
+        <div>
+            <div><input type="checkbox">통합 서비스 이용약관 동의(필수)</div>
+            <div><input type="checkbox">개인정보 수집 및 이용 동의(필수)</div>
+        </div>
     </div>
+    <button id="nextButton">다음</button>
+</div>
+
+<script>
+    //joinEmail로 이동
+    document.getElementById("nextButton").addEventListener("click", function() {
+        window.location.href = "email";
+    });
+</script>
 </body>
 </html>

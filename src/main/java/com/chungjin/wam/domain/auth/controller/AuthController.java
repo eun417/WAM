@@ -33,7 +33,7 @@ public class AuthController {
     /**
      * 회원가입 - 인증코드 검증
      */
-    @GetMapping("/signup/email/verify")
+    @PostMapping("/signup/email/verify")
     public ResponseEntity<String> verifyEmail(@RequestBody @Valid VerifyEmailRequestDto verifyEmailReq) {
         authService.verifyCode(verifyEmailReq);
         return ResponseEntity.ok("인증되었습니다.");
@@ -43,7 +43,7 @@ public class AuthController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpReq) {
+    public ResponseEntity<String> signUp(@ModelAttribute @Valid SignUpRequestDto signUpReq) {
         authService.signUp(signUpReq);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }

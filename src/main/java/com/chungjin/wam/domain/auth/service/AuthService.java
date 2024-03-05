@@ -6,6 +6,7 @@ import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
 import com.chungjin.wam.domain.auth.entity.RefreshToken;
 import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.member.entity.Authority;
+import com.chungjin.wam.domain.member.entity.LoginType;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.common.RedisService;
@@ -75,6 +76,7 @@ public class AuthService {
                 .phoneNumber(signUpReq.getPhoneNumber())
                 .authority(Authority.USER)
                 .nickname(signUpReq.getNickname())
+                .loginType(LoginType.LOCAL)
                 .build());
     }
 

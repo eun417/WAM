@@ -8,26 +8,30 @@
 <body>
     <div class="join-form-wrapper">
         <div>개인정보를 입력해주세요.</div>
-        <form action="/join.do" method="post" class="member-input">
+        <form action="/auth/signup" method="post" class="member-input">
             <div>
                 <div>이메일 주소</div>
-                <input type="text" name="memberEmail" required>
+                <input type="text" name="email" required>
             </div>
             <div>
                 <div>이름</div>
-                <input type="text" name="memberName" required>
+                <input type="text" name="name" required>
+            </div>
+            <div>
+                <div>닉네임</div>
+                <input type="text" name="nickname" required>
             </div>
             <div>
                 <div>휴대폰 번호</div>
-                <input type="text" name="memberPhone" required>
+                <input type="text" name="phoneNumber" required>
             </div>
             <div>
                 <div>비밀번호</div>
-                <input type="text" name="memberPw" required>
+                <input type="text" name="password" required>
             </div>
             <div>
                 <div>비밀번호 재입력</div>
-                <input type="text" name="memberPw" required>
+                <input type="text" name="checkPassword" required>
                 <div>
                     <div>8자 이상 ~ 16자 이하로 입력하세요</div>
                     <div>영문, 숫자, 특수문자 사용 가능합니다</div>
