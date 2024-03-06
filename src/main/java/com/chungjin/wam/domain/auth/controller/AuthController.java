@@ -52,7 +52,7 @@ public class AuthController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@ModelAttribute @Valid LoginRequest loginReq) {
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest loginReq) {
         return ResponseEntity.ok(authService.login(loginReq));
     }
 
