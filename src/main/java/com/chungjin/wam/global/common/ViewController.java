@@ -9,6 +9,8 @@ public class ViewController {
     /**
      * Auth
      */
+
+    //회원가입
     @GetMapping("/auth/signup/main")
     public String signupMain() {
         return "join";
@@ -27,6 +29,24 @@ public class ViewController {
     @GetMapping("/auth/signup/form")
     public String signupForm() {
         return "joinForm";
+    }
+
+    //로그인
+    @GetMapping("/auth/login")
+    public String login() {
+        return "login";
+    }
+
+    //이메일 찾기
+    @GetMapping("/auth/find-account")
+    public String findEmail() {
+        return "loginFindEmail";
+    }
+
+    //비밀번호 재설정
+    @GetMapping("/auth/change-pw")
+    public String changePw() {
+        return "loginFindPassword";
     }
 
 }

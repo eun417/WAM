@@ -52,7 +52,7 @@ public class AuthController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest loginReq) {
+    public ResponseEntity<TokenDto> login(@ModelAttribute @Valid LoginRequest loginReq) {
         return ResponseEntity.ok(authService.login(loginReq));
     }
 
@@ -76,7 +76,7 @@ public class AuthController {
     /**
      * 이메일 찾기
      */
-    @GetMapping("/find-account")
+    @PostMapping("/find-account")
     public ResponseEntity<FindEmailResponseDto> findEmail(@RequestBody @Valid FindEmailRequestDto findEmailReq) {
         return ResponseEntity.ok().body(authService.findEmail(findEmailReq));
     }

@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
-    <link rel="stylesheet" href="CSS/login.css">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
     <div class="login-wrapper"> <!--outermost box -->
         
         <div class="login-box"> <!-- Funtion box -->
             <div class="login-header">로그인</div>
-            <form action="/login.do" method="post" class="member-input">
+            <form action="/auth/login" method="post" class="member-input">
                 <div class="typing-box">
                     <div class="empx"><span>이메일</span></div>
                     <div class="typing-email dass1">
-                        <input type="text" name="memberEmail" required>
+                        <input type="text" name="email" required>
                     </div>
                     <div class="typing-password dass1">
                         <div class="empx"><span>비밀번호</span></div>
-                        <div><input type="password" name="memberPw" required></div>
+                        <div><input type="password" name="password" required></div>
                     </div>
                 </div>
                 <div class="find-box">
-                    <a href="#">아이디 찾기</a> | <a href="#">비밀번호 찾기</a>
+                    <a href="/auth/find-account">아이디 찾기</a> | <a href="/auth/change-pw">비밀번호 찾기</a>
                 </div>
                 <div class="submit-box">
                     <input class="submit" type="submit" value="로그인">
@@ -35,7 +35,11 @@
                     <div class="login-line">소셜 아이디로 로그인</div>
                 </div>
                 <div class="login-bottom socal-login">
-                    <div><a id="login-kakao" href="#">카카오</a> <a id="login-naver"href="#">네이버</a> <a id="login-google"href="#">구글</a></div>
+                    <div>
+                        <a id="login-kakao" href="/oauth2/authorization/kakao">카카오</a>
+                        <a id="login-naver" href="/oauth2/authorization/naver">네이버</a>
+                        <a id="login-google" href="/oauth2/authorization/google">구글</a>
+                    </div>
                 </div>
             </form>
         </div>

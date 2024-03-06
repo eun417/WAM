@@ -37,10 +37,11 @@ public class SecurityConfig {
 
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
-            "/**",
+//            "/**",
             "/auth/**", "/oauth/**",
             "/qna/**", "/support/**", "/members/**", "/email/**",
-            "/h2-console/**", "/resources/**"
+            "/h2-console/**",
+            "/css/**", "/js/**"
     };
 
     private static final String[] ADMIN_URLS = {
