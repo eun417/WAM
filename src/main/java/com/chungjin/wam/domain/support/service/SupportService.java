@@ -215,6 +215,7 @@ public class SupportService {
                         .supportStatus(support.getSupportStatus())
                         .firstImg(support.getFirstImg())
                         .supportAmount(support.getSupportAmount())
+                        .createDate(support.getCreateDate())
                         .build())
                 .collect(Collectors.toList());
     }

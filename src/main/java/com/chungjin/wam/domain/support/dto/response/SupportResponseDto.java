@@ -19,5 +19,6 @@ public class SupportResponseDto {
     private SupportStatus supportStatus;
     private String firstImg;
     private Long supportAmount;
+    private String createDate;
 
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="adminMenu">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- jquery -->
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <!-- 아이콘 -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+        <!-- 로고 폰트 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <!-- css -->
+        <link rel="stylesheet" href="/css/admin/common.css">
+        <link rel="stylesheet" href="/css/admin/adminMenu.css">
+        <link rel="stylesheet" href="/css/admin/adminTable.css">
+        <!-- axios -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+
+    <div class="admin-menu-wrapper">
+        <div class="left-menu">
+            <div class="left-menu-title">
+                <a href="/">
+                    <div class="waveEffect">
+                        <p class="menu-title" style="font-family: 'Righteous', cursive;">WAM</p>
+                    </div>
+                </a>
+            </div>
+            <div class="left-menu-content">
+                <ul class="left-menu-list">
+                    <li>
+                        <div class="menu-detail-title" style="font-size:10px; padding-top:30px; padding-bottom:0; font-weight:400; color: rgb(173, 173, 173);">ADMIN MENU</div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined">group</span>
+                            <a href="/admin/member">회원 관리</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined">inventory</span>
+                            <a href="/admin/support">후원 관리</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined">help</span>
+                            <a href="/admin/qna">QnA 관리</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined">fact_check</span>
+                            <a href="/admin/animal-map">야생동물 지도</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="link-box" style="display:none">
+            <div class="box-top">
+                <div>
+                    <span class="material-symbols-outlined admin-icon2" style="color:rgba(255, 255, 255, 0.9);">admin_panel_settings</span>
+                    <div>
+                        <div style="color:rgba(255, 255, 255, 0.9);"><span>닉네임</span> 관리자</div>
+                        <div style="color:rgba(255, 255, 255, 0.9);">xxx@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-bottom">
+                <div>
+                    <span class="material-symbols-outlined link-icon" style="color:#445D48">home</span>
+                    <a href="/">홈으로 이동</a>
+                </div>
+                <div>
+                    <span class="material-symbols-outlined link-icon" style="color:#445D48">inventory</span>
+                    <a href="#">후원 페이지로 이동</a>
+                </div>
+                <div>
+                    <span class="material-symbols-outlined link-icon" style="color:#445D48">help</span>
+                    <a href="#">QnA로 이동</a>
+                </div>
+                <a href="/auth/logout" class="logout-btn btn-m bc2">로그아웃</a>
+            </div>
+        </div>
+        <div class="top-menu">
+            <div class="top-menu-background">
+                <div class="top-menu-title"></div>
+                <div class="admin-icon" style="cursor:pointer"><span class="material-symbols-outlined" style="cursor:pointer">link</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /*admin-icon 클릭*/
+        $(".admin-icon").on("click",function(){
+            $(".link-box").fadeToggle(200);
+            $(this).toggleClass("active-admin-icon");
+        });
+    </script>
+</div>
+</html>

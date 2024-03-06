@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- adminMenu 영역 참조 -->
+<div th:insert="~{admin/adminMenu :: adminMenu}"></div>
+
+<div class="supportList-wrapper admin-content">
+    <div class="list-wrapper">
+        <div class="supportList-top list-top">
+            <div class="list-title">모든 후원 목록</div>
+            <table id="supportTable">
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>목표 금액</th>
+                    <th>모인 금액</th>
+                    <th>작성일</th>
+                    <th></th>
+                </tr>
+                <tbody id="supportTableBody">
+            </table>
+            <div id="pageNavi">
+            </div>
+        </div>
+        <div class="list-bottom">
+        </div>
+    </div>
+</div>
+<script>
+    //페이지 로드 시 Support 목록을 테이블에 표시하는 함수
+    function loadSupportList(page) {
+        axios.get(`/admin/support/page=${page}`)
+            .then(function(response) {
+                //서버로부터 받은 데이터를 테이블에 추가
+                var supportList = response.data;
+                var tableBody = document.querySelector('#supportTableBody');
+                tableBody.innerHTML = ''; //테이블 내용 초기화
+
+                supportList.forEach(function(support) {
+                    var row = `<tr>
+                                <td>${support.supportId}</td>
+                                <td>${support.title}</td>
+                                <td>${support.nickname}</td>
+                                <td>${support.goalAmount}</td>
+                                <td>${support.supportAmount}</td>
+                                <td>${support.createDate}</td>
+                                <td><button class="deleteSupport-btn btn-s bc4">삭제</button></td>
+                            </tr>`;
+                    tableBody.innerHTML += row; // 행 추가
+                });
+
+                //삭제 버튼에 이벤트 리스너 추가
+                tableBody.querySelectorAll('.deleteSupport-btn').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var supportId = this.parentNode.parentNode.firstElementChild.textContent;
+                        console.log(supportId);
+
+                        if (confirm("정말로 후원을 탈퇴시키겠습니까?")) {
+                            //사용자가 확인을 누르면 컨트롤러 호출
+                            axios.delete('/support/' + supportId)
+                                .then(function(response) {
+                                    //요청이 성공한 경우
+                                    console.log(response);
+                                    alert("후원 삭제가 완료되었습니다.");
+                                })
+                                .catch(function(error) {
+                                    //요청이 실패한 경우
+                                    console.error(error);
+                                    alert("후원 삭제에 실패하였습니다.");
+                                });
+                        }
+                    });
+                });
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    }
+
+    //페이지 로드 시 첫 번째 페이지 Member 목록을 불러옴
+    loadSupportList(0);
+</script>
+</body>
+</html>

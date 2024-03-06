@@ -1,0 +1,138 @@
+/*전체 적용*/
+*{
+    text-decoration-line: none;
+    color:#25382f;
+}
+
+*:not(a){
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    cursor: default;
+    font-size: 16px;
+}
+
+/*본문*/
+.admin-content>div{
+    padding-left: 300px;
+    padding-top: 120px;
+    padding-bottom: 150px;
+}
+
+/*버튼*/
+.btn-s{
+    display: inline-block;
+    outline: none;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 16px;
+}
+
+.btn-m{
+    height: 50px;
+    display: inline-block;
+    outline: none;
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 5px;
+}
+
+.btn-l{
+    width: 100%;
+    height: 50px;
+    display: inline-block;
+    outline: none;
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 5px;
+}
+
+.bc1{
+    background-color: #BFB374;
+    border-radius: 0.25rem;
+    border: 1px solid #BFB374;
+    color: #fff;
+    transition: 0.2s;
+}
+/*.bc1:hover {
+    background-color: #ded086;
+    border-color: #ded086;
+}*/
+
+.bc2{
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: #996F5E;
+    border-color: #996F5E;
+    background-color: #fff;
+}
+.bc2:hover {
+    color: #fff;
+    background-color: #996F5E;
+    border-color: #996F5E;
+}
+
+.bc3{
+    border: 1px solid transparent;
+    background-color: #fff;
+    transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+    padding: 0 18px;
+}
+
+.bc3:hover {
+    color: #fff;
+    background-color: #E8DFCA;
+}
+
+.bc4{
+    border: 1px solid transparent;
+    color: #fff;
+    background-color: #996F5E;
+    border-radius: .25rem;
+    transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+    padding: 0 18px;
+}
+.bc4:hover {
+    background-color: #be917f;
+}
+
+.btn-r{
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 500px;
+    text-transform: uppercase;
+    white-space: normal;
+    font-weight: 700;
+    text-align: center;
+    height: 40px;
+    width: 140px;
+    line-height: 40PX;
+}
+
+.bc5{
+
+    transition-property: background-color,border-color,color,box-shadow,filter;
+    transition-duration: .3s;
+    border: 1px solid transparent;
+    letter-spacing: 2px;
+    color: #fff;
+    background-color: #83888a;
+}
+.bc5:hover{
+    background-color: #D8D7C3;
+}

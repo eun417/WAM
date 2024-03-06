@@ -39,6 +39,7 @@ public class SecurityConfig {
             //추후 수정 필요
 //            "/**",
             "/auth/**", "/oauth/**",
+            "/admin/**",
             "/qna/**", "/support/**", "/members/**", "/email/**",
             "/h2-console/**",
             "/css/**", "/js/**"

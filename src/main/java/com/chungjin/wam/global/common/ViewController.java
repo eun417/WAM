@@ -2,6 +2,7 @@ package com.chungjin.wam.global.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ViewController {
@@ -47,6 +48,34 @@ public class ViewController {
     @GetMapping("/auth/change-pw")
     public String changePw() {
         return "loginFindPassword";
+    }
+
+    /**
+     * Admin
+     */
+
+    //모든 Member 조회
+    @GetMapping("/admin/member")
+    public String readAllMember() {
+        return "admin/memberList";
+    }
+
+    //모든 QnA 조회
+    @GetMapping("/admin/qna")
+    public String readAllQna() {
+        return "admin/qnaList";
+    }
+
+    //모든 Support 조회
+    @GetMapping("/admin/support")
+    public String readAllSupport() {
+        return "admin/supportList";
+    }
+
+    //모든 야생동물 지도 파일 조회
+    @GetMapping("/admin/animal-map")
+    public String readAllAnimalMap() {
+        return "admin/animalMap";
     }
 
 }

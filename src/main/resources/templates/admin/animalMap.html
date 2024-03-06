@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- adminMenu 영역 참조 -->
+<div th:insert="~{admin/adminMenu :: adminMenu}"></div>
+
+<div class="animalMap-wrapper admin-content">
+    <div class="list-wrapper">
+        <div class="supportList-top list-top">
+            <div class="list-title">모든 파일 목록</div>
+            <table id="animalMapTable">
+                <tr>
+                    <th>No</th>
+                    <th>파일 이름</th>
+                    <th>파일 버전</th>
+                    <th>업로드 일자</th>
+                </tr>
+                <tbody id="animalMapTableBody">
+                <tr>
+                    <td>1</td>
+                    <td>23.12.XX - 최종본</td>
+                    <td>23.12.XX</td>
+                    <td>2024.03.02</td>
+                </tr>
+            </table>
+            <div id="pageNavi">
+            </div>
+        </div>
+        <div class="list-bottom">
+        </div>
+    </div>
+</div>
+</body>
+</html>

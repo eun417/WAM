@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- adminMenu 영역 참조 -->
+<div th:insert="~{admin/adminMenu :: adminMenu}"></div>
+
+<div class="qnaList-wrapper admin-content">
+    <div class="list-wrapper">
+        <div class="qnaList-top list-top">
+            <div class="list-title">모든 QnA 목록</div>
+            <table id="qnaTable">
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                    <th>답변여부</th>
+                    <th></th>
+                </tr>
+                <tbody id="qnaTableBody">
+            </table>
+            <div id="pageNavi">
+            </div>
+        </div>
+        <div class="list-bottom">
+        </div>
+    </div>
+</div>
+
+<script>
+    //페이지 로드 시 QnA 목록을 테이블에 표시하는 함수
+    function loadQnaList(page) {
+        axios.get(`/admin/qna/page=${page}`)
+            .then(function(response) {
+                //서버로부터 받은 데이터를 테이블에 추가
+                var qnaList = response.data;
+                var tableBody = document.querySelector('#qnaTableBody');
+                tableBody.innerHTML = ''; //테이블 내용 초기화
+
+                qnaList.forEach(function(qna) {
+                    var row = `<tr>
+                                <td>${qna.qnaId}</td>
+                                <td>${qna.title}</td>
+                                <td>${qna.nickname}</td>
+                                <td>${qna.createDate}</td>
+                                <td>${qna.viewCount}</td>
+                                <td><button class="answer-btn btn-s bc1" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                                <td><button class="deleteQna-btn btn-s bc4">삭제</button></td>
+                            </tr>`;
+                    tableBody.innerHTML += row; // 행 추가
+                });
+
+                //삭제 버튼에 이벤트 리스너 추가
+                tableBody.querySelectorAll('.deleteQna-btn').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var qnaId = this.parentNode.parentNode.firstElementChild.textContent;
+                        console.log(qnaId);
+
+                        if (confirm("정말로 QnA를 탈퇴시키겠습니까?")) {
+                            //사용자가 확인을 누르면 컨트롤러 호출
+                            axios.delete('/qna/' + qnaId)
+                                .then(function(response) {
+                                    //요청이 성공한 경우
+                                    console.log(response);
+                                    alert("QnA 삭제가 완료되었습니다.");
+                                })
+                                .catch(function(error) {
+                                    //요청이 실패한 경우
+                                    console.error(error);
+                                    alert("QnA 삭제에 실패하였습니다.");
+                                });
+                        }
+                    });
+                });
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    }
+
+    //페이지 로드 시 첫 번째 페이지 QnA 목록을 불러옴
+    loadQnaList(0);
+</script>
+</body>
+</html>

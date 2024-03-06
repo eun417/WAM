@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- adminMenu 영역 참조 -->
+<div th:insert="~{admin/adminMenu :: adminMenu}"></div>
+
+<div class="memberList-wrapper admin-content">
+    <div class="list-wrapper">
+        <div class="memberList-top list-top">
+            <div class="list-title">모든 회원 목록</div>
+            <table id="memberTable">
+                <tr>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>닉네임</th>
+                    <th>가입일</th>
+                    <th>권한</th>
+                    <th></th>
+                </tr>
+                <tbody id="memberTableBody">
+            </table>
+            <div id="pageNavi">
+            </div>
+        </div>
+        <div class="list-bottom">
+        </div>
+    </div>
+</div>
+
+<script>
+    //페이지 로드 시 Member 목록을 테이블에 표시하는 함수
+    function loadMemberList(page) {
+        axios.get(`/admin/member/page=${page}`)
+            .then(function(response) {
+                //서버로부터 받은 데이터를 테이블에 추가
+                var memberList = response.data;
+                var tableBody = document.querySelector('#memberTableBody');
+                tableBody.innerHTML = ''; //테이블 내용 초기화
+
+                memberList.forEach(function(member) {
+                    var row = `<tr>
+                                <td>${member.memberId}</td>
+                                <td>${member.name}</td>
+                                <td>${member.email}</td>
+                                <td>${member.nickname}</td>
+                                <td>${member.createDate}</td>
+                                <td>${member.authority == 'ADMIN' ? '관리자' : (member.authority == 'USER' ? '사용자' : '임시회원')}</td>
+                                <td><button class="deleteMember-btn btn-s bc4">회원 탈퇴</button></td>
+                            </tr>`;
+                    tableBody.innerHTML += row; // 행 추가
+                });
+
+                //회원 탈퇴 버튼에 이벤트 리스너 추가
+                tableBody.querySelectorAll('.deleteMember-btn').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var memberId = this.parentNode.parentNode.firstElementChild.textContent;
+                        console.log(memberId);
+
+                        if (confirm("정말로 회원을 탈퇴시키겠습니까?")) {
+                            //사용자가 확인을 누르면 컨트롤러 호출
+                            axios.delete('/member/leave/' + memberId)
+                                .then(function(response) {
+                                    //요청이 성공한 경우
+                                    console.log(response);
+                                    alert("회원 탈퇴가 완료되었습니다.");
+                                })
+                                .catch(function(error) {
+                                    //요청이 실패한 경우
+                                    console.error(error);
+                                    alert("회원 탈퇴에 실패하였습니다.");
+                                });
+                        }
+                    });
+                });
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    }
+
+    //페이지 로드 시 첫 번째 페이지 Member 목록을 불러옴
+    loadMemberList(0);
+</script>
+</body>
+</html>

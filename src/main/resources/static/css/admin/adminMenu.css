@@ -1,0 +1,143 @@
+/*admin 메뉴 전체*/
+.admin-menu-wrapper{
+    position: relative;
+    color: #fff;
+}
+
+/*메뉴 상단*/
+.top-menu-background{
+    width: 100%;
+    height: 70px;
+    background-color: #445D48;
+    overflow: hidden;
+    position: fixed;
+    box-shadow: 0 2px 2px 2px rgba(233, 233, 233, 0.19), 0 1px 1px 1px rgba(223, 223, 223, 0.23);
+}
+.top-menu-title{
+    font-size: 24px;
+    font-weight: 600;
+    position: absolute;
+    left: 280px;
+    line-height: 70px;
+    color:#f3faf1;
+}
+.admin-icon{
+    float: right;
+    background-color: #fff;
+    border-radius:40px;
+    width: 40px;
+    height: 40px;
+    margin: 15px;
+    margin-right: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+.admin-icon>span{
+    line-height: 40px;
+    color: black;
+}
+
+/*링크 박스*/
+.admin-menu-wrapper>.link-box{
+    width: 300px;
+    position: absolute;
+    z-index: 1;
+    top: 60px;
+    right: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 5px rgba(170, 170, 170, 0.25), 0 5px 5px rgba(194, 194, 194, 0.22);
+    background-color: #fff;
+}
+.admin-icon2{
+    font-size: 40px;
+    margin-right: 10px;
+}
+.box-top{
+    padding: 20px;
+    padding-top: 25px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #242e27;
+}
+.box-top>div:first-child{
+    display: flex;
+}
+.box-top>div>div>div:first-of-type {
+    font-weight: 900;
+}
+.box-top>div>div>div:first-of-type>span{
+    color: #e9d98c;
+}
+.box-top>div>div>div:last-of-type {
+    font-size: 14px;
+}
+.box-bottom{
+    height: 150px;
+    padding: 20px;
+    position: relative;
+}
+.box-bottom>div{
+    margin-bottom: 8px;
+    font-size: 16px;
+    display: flex;
+}
+.box-bottom>div>a{
+    margin-left: 5px;
+}
+.box-bottom>div>a:hover{
+    color: #888888;
+}
+.link-icon {
+    color: #303030;
+}
+.logout-btn{
+    width: 227px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/*왼쪽 메뉴*/
+.left-menu{
+    background-color: #242e27;
+    width: 250px;
+    z-index: 1;
+    height: 100%;
+    overflow: auto;
+    position: fixed;
+}
+.left-menu-title{
+    font-size: 24px;
+    font-weight: 900;
+    padding: 70px 25px 25px 25px ;
+
+}
+.menu-title{
+    color: #f7f7f7;
+    font-size: 2.5em;
+}
+.left-menu-list *{
+    cursor: pointer;
+}
+.left-menu-list>li>div{
+    display: flex;
+    font-size: 18px;
+    font-weight: 900;
+}
+.menu-detail-title{
+    padding: 15px;
+    padding-left: 30px;
+    position: relative;
+    color: #e4f0e1;
+}
+.menu-detail-title>span{
+    color: rgb(173, 173, 173);
+}
+.menu-detail-title>a{
+    display: block;
+    margin-left: 10px;
+    color: rgb(173, 173, 173);
+}
+.menu-detail-title:hover>a{
+    color:rgba(255, 255, 255, 0.9);
+}

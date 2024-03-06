@@ -1,0 +1,99 @@
+.product-wrapper{
+    position: relative;
+}
+
+.list-wrapper{
+    width: 80%;
+}
+
+/*테이블 내용 디테일*/
+.list-title{
+    font-weight: 900;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+th:first-child, td:first-child{
+    width: 80px;
+
+}
+
+.list-top>table{
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    border-spacing: 0;
+    margin-bottom: 25px;
+}
+table th{
+    background-color: #F6F1F1;
+    color: #333536;
+}
+table th:first-child{
+    border-top-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+table th:last-child{
+    border-top-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+table td:nth-child(3){
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+table th, td{
+    height: 70px;
+    border-bottom: 1px solid rgb(202, 202, 202);
+    word-break:break-all;
+}
+table tr:hover{
+    background-color: #fafafa;
+}
+
+.list-top>table td:nth-child(4)>a:hover{
+	color: #83888a;
+}
+
+.list-top>table td:nth-child(3)>a:hover{
+	color: #83888a;
+}
+
+.list-top{
+    padding: 35px;
+    border: 2px solid rgb(238, 238, 238);
+    border-bottom: none;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+.list-bottom{
+    background-color: rgb(241, 241, 241);
+    height: 150px;
+    box-sizing: border-box;
+    text-align: right;
+    position: relative;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.list-bottom>div{
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+}
+
+/*select*/
+.grade-change {
+    height: 30px;
+}
+
+/*조회된 정보 없을때*/
+table .noInfo-wrapper>div{
+    text-align: center;
+    padding: 80px;
+    color: #b6b6b6;
+}
+table .noInfo-icon{
+    font-size: 40px;
+}
+table .noInfo-text{
+    padding: 10px;
+}

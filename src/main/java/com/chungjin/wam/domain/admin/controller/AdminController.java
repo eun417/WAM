@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ROLE_ADMIN')")  //관리자만 가능
+//@PreAuthorize("hasRole('ROLE_ADMIN')")  //관리자만 가능
 public class AdminController {
 
     private final MemberService memberService;
