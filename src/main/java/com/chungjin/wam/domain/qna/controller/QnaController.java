@@ -7,6 +7,7 @@ import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
+import com.chungjin.wam.global.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,8 @@ public class QnaController {
      * QnA List 조회 (Pagination)
      */
     @GetMapping("/page={page}")
-    public ResponseEntity<List<QnaResponseDto>> readAllQna(@PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(qnaService.readAllQna(page));
+    public ResponseEntity<PageResponse> readAllQna(@PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
     }
 
     /**

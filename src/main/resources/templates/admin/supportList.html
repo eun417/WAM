@@ -25,20 +25,24 @@
                 </tr>
                 <tbody id="supportTableBody">
             </table>
-            <div id="pageNavi">
+            <div id="pagination">
             </div>
         </div>
         <div class="list-bottom">
         </div>
     </div>
 </div>
+
 <script>
+    //현재 페이지 번호를 저장할 변수
+    var currentPage = 0;
+
     //페이지 로드 시 Support 목록을 테이블에 표시하는 함수
     function loadSupportList(page) {
         axios.get(`/admin/support/page=${page}`)
             .then(function(response) {
                 //서버로부터 받은 데이터를 테이블에 추가
-                var supportList = response.data;
+                var supportList = response.data.content;
                 var tableBody = document.querySelector('#supportTableBody');
                 tableBody.innerHTML = ''; //테이블 내용 초기화
 
@@ -54,6 +58,9 @@
                             </tr>`;
                     tableBody.innerHTML += row; // 행 추가
                 });
+
+                //페이지 내비게이션 업데이트
+                renderPagination('Support', response.data.totalPages, page);
 
                 //삭제 버튼에 이벤트 리스너 추가
                 tableBody.querySelectorAll('.deleteSupport-btn').forEach(function(button) {
@@ -84,7 +91,7 @@
     }
 
     //페이지 로드 시 첫 번째 페이지 Member 목록을 불러옴
-    loadSupportList(0);
+    loadSupportList(currentPage);
 </script>
 </body>
 </html>

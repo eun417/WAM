@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.member.service;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
+import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
 import com.chungjin.wam.domain.member.entity.Authority;
@@ -21,9 +22,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -139,15 +142,26 @@ public class MemberService {
     /**
      * 모든 회원 조회
      */
-    public List<MemberDto> readAllMember(int page) {
+    public PageResponse readAllMember(int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("memberId").ascending());
         //Member를 페이지별 조회
         Page<Member> memberPage = memberRepository.findAll(pageable);
         //현재 페이지의 Member 목록
         List<Member> members = memberPage.getContent();
         //EntityList -> DtoList
-        return memberMapper.toDtoList(members);
+        List<Object> memberDtos = new ArrayList<>();
+        for (Member member : members) {
+            memberDtos.add(memberMapper.toDto(member)); // Member를 MemberDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(memberDtos)	//Member 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(memberPage.getSize()) //페이지당 항목 수
+                .totalElements(memberPage.getTotalElements())   //전체 Member 수
+                .totalPages(memberPage.getTotalPages()) //전체 페이지 수
+                .last(memberPage.isLast())  //마지막 페이지 여부
+                .build();
     }
 
 }

@@ -43,7 +43,7 @@ public class AuthController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@ModelAttribute @Valid SignUpRequestDto signUpReq) {
+    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpReq) {
         authService.signUp(signUpReq);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }

@@ -13,6 +13,7 @@ import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
+import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -125,11 +128,26 @@ public class SupportService {
     /**
      * 후원 List 조회 (Pagination)
      */
-    public List<SupportResponseDto> readAllSupport(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public PageResponse readAllSupport(int pageNo) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").ascending());
+        //Support를 페이지별 조회
         Page<Support> supportPage = supportRepository.findAll(pageable);
+        //현재 페이지의 Support 목록
         List<Support> supports = supportPage.getContent();
-        return convertToDtoList(supports);
+        //EntityList -> DtoList
+        List<Object> supportDtos = new ArrayList<>();
+        for (Support support : supports) {
+            supportDtos.add(convertToDto(support)); // Support를 SupportDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(supportDtos)	//Support 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(supportPage.getSize()) //페이지당 항목 수
+                .totalElements(supportPage.getTotalElements())   //전체 Support 수
+                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
+                .last(supportPage.isLast())  //마지막 페이지 여부
+                .build();
     }
 
     /**
@@ -199,6 +217,22 @@ public class SupportService {
         Page<Support> supportPage = supportRepository.findByAnimalSubjectsContaining(keyword, pageable);
         List<Support> supports = supportPage.getContent();
         return convertToDtoList(supports);
+    }
+
+    /**
+     * Entity -> Dto
+     */
+    public SupportResponseDto convertToDto(Support support) {
+        return SupportResponseDto.builder()
+                .supportId(support.getSupportId())
+                .title(support.getTitle())
+                .firstImg(support.getFirstImg())
+                .goalAmount(support.getGoalAmount())
+                .supportAmount(support.getSupportAmount())
+                .createDate(support.getCreateDate())
+                .nickname(support.getMember().getNickname())
+                .supportStatus(support.getSupportStatus())
+                .build();
     }
 
     /**

@@ -6,6 +6,7 @@ import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.service.SupportService;
+import com.chungjin.wam.global.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +48,8 @@ public class SupportController {
      * 후원 List 조회 (Pagination)
      */
     @GetMapping("/page={page}")
-    public ResponseEntity<List<SupportResponseDto>> readAllSupport(@PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(supportService.readAllSupport(page));
+    public ResponseEntity<PageResponse> readAllSupport(@PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
     }
 
     /**

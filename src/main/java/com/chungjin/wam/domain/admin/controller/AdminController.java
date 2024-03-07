@@ -1,7 +1,7 @@
 package com.chungjin.wam.domain.admin.controller;
 
 import com.chungjin.wam.domain.auth.service.CustomUserDetails;
-import com.chungjin.wam.domain.member.dto.response.MemberDto;
+import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
@@ -9,7 +9,6 @@ import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +28,8 @@ public class AdminController {
      * 모든 회원 조회
      */
     @GetMapping("/member/page={page}")
-    public ResponseEntity<List<MemberDto>> readAllMember(@PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(memberService.readAllMember(page));
+    public ResponseEntity<PageResponse> readAllMember(@PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(memberService.readAllMember(pageNo));
     }
 
     /**
@@ -47,8 +46,8 @@ public class AdminController {
      * 모든 QnA 조회
      */
     @GetMapping("/qna/page={page}")
-    public ResponseEntity<List<QnaResponseDto>> readAllQna(@PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(qnaService.readAllQna(page));
+    public ResponseEntity<PageResponse> readAllQna(@PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
     }
 
     /**
@@ -65,8 +64,8 @@ public class AdminController {
      * 모든 후원 조회
      */
     @GetMapping("/support/page={page}")
-    public ResponseEntity<List<SupportResponseDto>> readAllSupport(@PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(supportService.readAllSupport(page));
+    public ResponseEntity<PageResponse> readAllSupport(@PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
     }
 
     /**

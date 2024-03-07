@@ -18,6 +18,7 @@ public class SupportResponseDto {
     @Enumerated(EnumType.STRING)
     private SupportStatus supportStatus;
     private String firstImg;
+    private Long goalAmount;
     private Long supportAmount;
     private String createDate;
 

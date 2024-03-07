@@ -13,6 +13,7 @@ import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
+import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
@@ -86,15 +87,26 @@ public class QnaService {
     /**
      * QnA List 조회 (Pagination)
      */
-    public List<QnaResponseDto> readAllQna(int page) {
+    public PageResponse readAllQna(int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10);
         //Qna를 페이지별 조회
         Page<Qna> qnaPage = qnaRepository.findAll(pageable);
         //현재 페이지의 Qna 목록
         List<Qna> qnas = qnaPage.getContent();
         //EntityList -> DtoList
-        return convertToDtoList(qnas);
+        List<Object> qnaDtos = new ArrayList<>();
+        for (Qna qna : qnas) {
+            qnaDtos.add(convertToDto(qna)); // Qna를 QnaDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(qnaDtos)	//Qna 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(qnaPage.getSize()) //페이지당 항목 수
+                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
+                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
+                .last(qnaPage.isLast())  //마지막 페이지 여부
+                .build();
     }
 
     /**
@@ -183,6 +195,20 @@ public class QnaService {
     private Qna getQna (long qnaId) {
         return qnaRepository.findById(qnaId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.QNA_NOT_FOUND));
+    }
+
+    /**
+     * Entity -> Dto
+     */
+    public QnaResponseDto convertToDto(Qna qna) {
+        return QnaResponseDto.builder()
+                .qnaId(qna.getQnaId())
+                .title(qna.getTitle())
+                .createDate(qna.getCreateDate())
+                .viewCount(qna.getViewCount())
+                .qnaCheck(qna.getQnaCheck())
+                .nickname(qna.getMember().getNickname())
+                .build();
     }
 
     /**
