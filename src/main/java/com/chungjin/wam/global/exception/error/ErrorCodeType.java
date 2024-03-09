@@ -40,6 +40,11 @@ public enum ErrorCodeType implements ErrorCode {
 
     //Comment
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+
+    //Image
+    UPLOAD_FILE_FAILED(HttpStatus.BAD_REQUEST, "이미지 업로드에 실패했습니다."),
+    INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일입니다."),
+    DELETE_FILE_FAILED(HttpStatus.BAD_REQUEST, "이미지 삭제에 실패했습니다."),
     ;
 
     private final HttpStatus httpStatus;

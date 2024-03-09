@@ -37,6 +37,6 @@ out/
 .vscode/
 
 application.yml
-application-h2.yml
+application-aws.yml
 application-jwt.yml
 src/main/generated/

@@ -31,8 +31,7 @@ public class SupportController {
     public ResponseEntity<String> createSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @RequestPart("file") MultipartFile file,
                                                 @RequestPart("supportReq") @Valid SupportRequestDto supportReq) throws IOException {
-        supportReq.setFirstImg(file);
-        supportService.createSupport(userDetails.getMember().getMemberId(), supportReq);
+        supportService.createSupport(userDetails.getMember().getMemberId(), file, supportReq);
         return ResponseEntity.ok("후원이 생성되었습니다.");
     }
 

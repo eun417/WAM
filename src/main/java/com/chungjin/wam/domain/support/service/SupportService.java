@@ -16,6 +16,7 @@ import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
+import com.chungjin.wam.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -47,18 +48,18 @@ public class SupportService {
     private final CommentService commentService;
     private final SupportMapper supportMapper;
 
-    @Value("${file.path}")
-    private String filePath;    //파일 저장 경로
+    private final S3Service s3Service;
+    private final String S3_FOLDER = "support";
 
     /**
      * 후원 생성
      */
-    public void createSupport(Long memberId, SupportRequestDto supportReq) throws IOException {
+    public void createSupport(Long memberId, MultipartFile file, SupportRequestDto supportReq) throws IOException {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
         //파일 업로드
-        String filePath = uploadFile(supportReq.getFirstImg());
+        String imgPath = uploadFileAtS3(file);
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -67,7 +68,7 @@ public class SupportService {
                 .goalAmount(supportReq.getGoalAmount())
                 .startDate(supportReq.getStartDate())
                 .endDate(supportReq.getEndDate())
-                .firstImg(filePath)
+                .firstImg(imgPath)
                 .subheading(supportReq.getSubheading())
                 .content(supportReq.getContent())
                 .commentCheck(supportReq.getCommentCheck())
@@ -79,23 +80,13 @@ public class SupportService {
         supportRepository.save(support);
     }
 
-    //파일 업로드를 위한 메서드
-    public String uploadFile(MultipartFile file) throws IOException {
-        //업로드할 디렉토리 생성 (없는 경우)
-        Path uploadPath = Paths.get(filePath);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+    //파일 업로드 메소드
+    public String uploadFileAtS3(MultipartFile img) {
+        String imgPath = null;
+        if (img != null) {
+            imgPath = s3Service.uploadFile(img, S3_FOLDER);
         }
-
-        //파일 이름을 고유한 UUID로 생성
-        String fileName = UUID.randomUUID() + ".jpg";
-
-        //파일을 지정된 경로에 저장
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath);
-
-        //저장된 파일의 경로를 리턴
-        return fileName;
+        return imgPath;
     }
 
     /**
