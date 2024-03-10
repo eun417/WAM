@@ -20,12 +20,18 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    /**
+     * Amazon S3 클라이언트를 생성, 빈으로 등록
+     * -> 애플리케이션에서 Amazon S3를 사용 가능
+     */
     @Bean
     public AmazonS3Client amazonS3Client() {
+        //Amazon S3 클라이언트에 사용될 기본 AWS 자격 증명을 생성
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        //Amazon S3 클라이언트를 생성(기본 설정)
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .withRegion(region) //호스팅 지역
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))  //기본 자격 증명 공급자 설정
                 .build();
     }
 

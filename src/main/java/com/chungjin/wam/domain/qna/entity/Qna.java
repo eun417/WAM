@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.qna.entity;
 
 import com.chungjin.wam.domain.member.entity.Member;
+import com.chungjin.wam.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Qna {
+public class Qna extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +23,6 @@ public class Qna {
     private String title;
 
     private String content;
-
-    @Column(name = "create_date", updatable = false)
-    private String createDate;
 
     @Column(name = "view_count")
     private int viewCount;
@@ -42,15 +40,9 @@ public class Qna {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @PrePersist
-    protected void onCreate() {
-        //엔터티가 영속화되기 전에 현재 날짜로 초기화
-        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-    }
-
     @PreUpdate
     protected void onAnswer() {
-        //answer 필드가 업데이트되면 현재 시간으로 answer_date를 설정
+        //answer 필드가 업데이트되면 answer_date를 현재 날짜로 설정
         if (this.answer != null) {
             this.answerDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
             this.qnaCheck = QnaCheck.ANSWERED;
