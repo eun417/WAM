@@ -78,4 +78,9 @@ public class Support {
         this.supportLike--;
     }
 
+    //대표 이미지 수정
+    public void updateFirstImg(String imgPath) {
+        this.firstImg = imgPath;
+    }
+
 }

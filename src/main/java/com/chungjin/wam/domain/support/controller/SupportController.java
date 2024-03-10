@@ -57,8 +57,9 @@ public class SupportController {
     @PutMapping("/{supportId}")
     public ResponseEntity<String> updateSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
-                                                @RequestBody @Valid UpdateSupportRequestDto updateSupportReq) {
-        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, updateSupportReq);
+                                                @RequestPart("file") MultipartFile file,
+                                                @RequestPart("updateSupportReq") @Valid UpdateSupportRequestDto updateSupportReq) {
+        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, file, updateSupportReq);
         return ResponseEntity.ok("후원이 수정되었습니다.");
     }
 

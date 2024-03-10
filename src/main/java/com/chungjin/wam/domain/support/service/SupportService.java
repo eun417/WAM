@@ -80,15 +80,6 @@ public class SupportService {
         supportRepository.save(support);
     }
 
-    //파일 업로드 메소드
-    public String uploadFileAtS3(MultipartFile img) {
-        String imgPath = null;
-        if (img != null) {
-            imgPath = s3Service.uploadFile(img, S3_FOLDER);
-        }
-        return imgPath;
-    }
-
     /**
      * 후원 조회
      */
@@ -144,12 +135,25 @@ public class SupportService {
     /**
      * 후원 수정
      */
-    public void updateSupport(Long memberId, Long supportId, UpdateSupportRequestDto updateSupportReq) {
+    public void updateSupport(Long memberId, Long supportId, MultipartFile file, UpdateSupportRequestDto updateSupportReq) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
         if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+
+        //기존 대표 이미지를 삭제한 경우
+        if (updateSupportReq.getFirstImgDeleted()) {
+            //S3에서 파일 삭제
+            deleteFileAtS3(support.getFirstImg());
+        }
+
+        //새로운 대표 이미지 업로드, 수정
+        if (file != null) {
+            //파일 업로드
+            String newImgPath = uploadFileAtS3(file);
+            support.updateFirstImg(newImgPath);
+        }
 
         //MapStruct로 수정
         supportMapper.updateFromDto(updateSupportReq, support);
@@ -166,11 +170,29 @@ public class SupportService {
 
         //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
         if(memberId.equals(support.getMember().getMemberId()) || member.getAuthority().equals(Authority.ADMIN)) {
+            //S3에서 파일 삭제
+            deleteFileAtS3(support.getFirstImg());
             //DB에서 영구 삭제
             supportRepository.delete(support);
         } else {
             //그 외 에러 발생
             throw new CustomException(ErrorCodeType.FORBIDDEN);
+        }
+    }
+
+    //파일 업로드 메소드
+    public String uploadFileAtS3(MultipartFile img) {
+        String imgPath = null;
+        if (img != null) {
+            imgPath = s3Service.uploadFile(img, S3_FOLDER);
+        }
+        return imgPath;
+    }
+
+    //파일 삭제 메소드
+    public void deleteFileAtS3(String fileName) {
+        if(fileName != null) {
+            s3Service.deleteImage(fileName);
         }
     }
 

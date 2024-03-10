@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -24,8 +25,9 @@ public class UpdateSupportRequestDto {
     private String startDate;
     @NotBlank(message = "종료일을 선택해주세요.")
     private String endDate;
-    @NotBlank(message = "대표이미지를 선택해주세요.")
-    private String firstImg;
+    @NotNull(message = "대표이미지를 선택해주세요.")
+    private Boolean firstImgDeleted;    //기존 대표 이미지 삭제 여부(삭제하면 true / 기본값 false)
+    private MultipartFile newFirstImg;   //새로 업로드할 대표 이미지
     private String subheading;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
