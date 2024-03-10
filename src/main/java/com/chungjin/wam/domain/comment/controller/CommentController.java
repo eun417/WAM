@@ -1,14 +1,12 @@
 package com.chungjin.wam.domain.comment.controller;
 
-import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.comment.dto.request.CommentRequestDto;
 import com.chungjin.wam.domain.comment.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

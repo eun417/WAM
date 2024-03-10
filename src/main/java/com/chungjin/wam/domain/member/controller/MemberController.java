@@ -1,6 +1,6 @@
 package com.chungjin.wam.domain.member.controller;
 
-import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

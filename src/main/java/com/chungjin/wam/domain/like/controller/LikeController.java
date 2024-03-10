@@ -1,6 +1,6 @@
 package com.chungjin.wam.domain.like.controller;
 
-import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

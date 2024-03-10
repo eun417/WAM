@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.auth.service;
 
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

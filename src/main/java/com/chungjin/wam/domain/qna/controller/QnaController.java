@@ -1,6 +1,6 @@
 package com.chungjin.wam.domain.qna.controller;
 
-import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;

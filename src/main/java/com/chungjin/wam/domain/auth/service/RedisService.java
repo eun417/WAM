@@ -1,4 +1,4 @@
-package com.chungjin.wam.global.common;
+package com.chungjin.wam.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.auth.service;
+package com.chungjin.wam.domain.auth.dto;
 
 import com.chungjin.wam.domain.member.entity.Member;
 import lombok.AllArgsConstructor;

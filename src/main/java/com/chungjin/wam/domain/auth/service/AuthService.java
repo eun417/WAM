@@ -9,7 +9,6 @@ import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.LoginType;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.global.common.RedisService;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;

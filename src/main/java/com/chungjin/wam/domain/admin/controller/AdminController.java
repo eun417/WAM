@@ -1,18 +1,14 @@
 package com.chungjin.wam.domain.admin.controller;
 
-import com.chungjin.wam.domain.auth.service.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.service.MemberService;
-import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
-import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

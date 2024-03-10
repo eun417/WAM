@@ -1,6 +1,5 @@
 package com.chungjin.wam.domain.auth.service;
 
-import com.chungjin.wam.global.common.RedisService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
