@@ -45,6 +45,10 @@ public enum ErrorCodeType implements ErrorCode {
     UPLOAD_FILE_FAILED(HttpStatus.BAD_REQUEST, "이미지 업로드에 실패했습니다."),
     INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일입니다."),
     DELETE_FILE_FAILED(HttpStatus.BAD_REQUEST, "이미지 삭제에 실패했습니다."),
+
+    //결제
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "입력한 금액과 실제 결제한 금액이 다릅니다.")
+
     ;
 
     private final HttpStatus httpStatus;

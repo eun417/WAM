@@ -199,7 +199,7 @@ public class SupportService {
     /**
      * supportId로 Support 객체 조회
      */
-    private Support getSupport (long supportId) {
+    private Support getSupport (Long supportId) {
         return supportRepository.findById(supportId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
     }

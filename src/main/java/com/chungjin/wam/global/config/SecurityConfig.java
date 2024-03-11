@@ -40,7 +40,7 @@ public class SecurityConfig {
 //            "/**",
             "/auth/**", "/oauth/**",
             "/admin/**",
-            "/qna/**", "/support/**", "/members/**", "/email/**",
+            "/qna/**", "/support/**", "/members/**", "/email/**", "/payment/**",
             "/h2-console/**",
             "/css/**", "/js/**"
     };

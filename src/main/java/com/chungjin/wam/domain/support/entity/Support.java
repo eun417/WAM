@@ -72,4 +72,9 @@ public class Support extends BaseTimeEntity {
         this.firstImg = imgPath;
     }
 
+    //후원 받은 금액 수정
+    public void updateSupportAmount(Long paymentAmount) {
+        this.supportAmount += paymentAmount;
+    }
+
 }
