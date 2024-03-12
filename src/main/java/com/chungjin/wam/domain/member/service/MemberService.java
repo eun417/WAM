@@ -144,7 +144,7 @@ public class MemberService {
      */
     public PageResponse readAllMember(int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("memberId").ascending());
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("memberId").descending());
         //Member를 페이지별 조회
         Page<Member> memberPage = memberRepository.findAll(pageable);
         //현재 페이지의 Member 목록

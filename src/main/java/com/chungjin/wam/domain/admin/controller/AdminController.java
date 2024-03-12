@@ -1,77 +1,49 @@
 package com.chungjin.wam.domain.admin.controller;
 
-import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
-import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.domain.member.service.MemberService;
-import com.chungjin.wam.domain.qna.service.QnaService;
-import com.chungjin.wam.domain.support.service.SupportService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
-@RequiredArgsConstructor
+@Controller
 @RequestMapping("/admin")
-//@PreAuthorize("hasRole('ROLE_ADMIN')")  //관리자만 가능
 public class AdminController {
 
-    private final MemberService memberService;
-    private final QnaService qnaService;
-    private final SupportService supportService;
-
-    /**
-     * 모든 회원 조회
-     */
-    @GetMapping("/member/page={page}")
-    public ResponseEntity<PageResponse> readAllMember(@PathVariable(value = "page") int pageNo) {
-        return ResponseEntity.ok().body(memberService.readAllMember(pageNo));
+    //테스트 페이지 이동(나중에 삭제 필요)
+    @GetMapping("/test")
+    public String testPage() {
+        return "testPage";
     }
 
     /**
-     * 회원 삭제 (관리자)
+     * Member 목록 조회
      */
-    @DeleteMapping("/member/leave/{memberId}")
-    public ResponseEntity<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                               @PathVariable(value = "memberId") Long selectedMemberId) {
-        memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
-        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+    @GetMapping("/member")
+    public String goMemberList() {
+        return "admin/memberList";
     }
 
     /**
-     * 모든 QnA 조회
+     * QnA 목록 조회
      */
-    @GetMapping("/qna/page={page}")
-    public ResponseEntity<PageResponse> readAllQna(@PathVariable(value = "page") int pageNo) {
-        return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
+    @GetMapping("/qna")
+    public String goQnaList() {
+        return "admin/qnaList";
     }
 
     /**
-     * QnA 삭제 (관리자)
+     * Support 목록 조회
      */
-    @DeleteMapping("/qna/{qnaId}")
-    public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable(value = "qnaId") Long qnaId) {
-        qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
-        return ResponseEntity.ok("QnA 게시물이 삭제되었습니다.");
+    @GetMapping("/support")
+    public String goSupportList() {
+        return "admin/supportList";
     }
 
     /**
-     * 모든 후원 조회
+     * 야생동물 지도 파일 목록 조회
      */
-    @GetMapping("/support/page={page}")
-    public ResponseEntity<PageResponse> readAllSupport(@PathVariable(value = "page") int pageNo) {
-        return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
-    }
-
-    /**
-     * 후원 삭제 (관리자)
-     */
-    @DeleteMapping("/support/{supportId}")
-    public ResponseEntity<String> deleteSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @PathVariable(value = "supportId") Long supportId) {
-        supportService.deleteSupport(userDetails.getMember().getMemberId(), supportId);
-        return ResponseEntity.ok("후원이 삭제되었습니다.");
+    @GetMapping("/animal-map")
+    public String goAnimalMapList() {
+        return "admin/animalMap";
     }
 
 }

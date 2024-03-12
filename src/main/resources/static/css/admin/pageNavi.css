@@ -16,6 +16,7 @@
     font-size: 18px;
     border-radius: 20%;
     margin: 0 5px 0 5px;
+    cursor: pointer;
 }
 .page-num:hover{
     background-color: #e5e5e5;

@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/qna")
-public class QnaController {
+public class QnaApiController {
 
     private final QnaService qnaService;
 
