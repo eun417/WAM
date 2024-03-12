@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -89,7 +90,7 @@ public class QnaService {
      */
     public PageResponse readAllQna(int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(pageNo, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
         //Qna를 페이지별 조회
         Page<Qna> qnaPage = qnaRepository.findAll(pageable);
         //현재 페이지의 Qna 목록

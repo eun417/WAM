@@ -46,12 +46,12 @@ public class SupportService {
     /**
      * 후원 생성
      */
-    public void createSupport(Long memberId, MultipartFile file, SupportRequestDto supportReq) {
+    public void createSupport(Long memberId, SupportRequestDto supportReq) {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
         //파일 업로드
-        String imgPath = uploadFileAtS3(file);
+        String imgPath = uploadFileAtS3(supportReq.getFirstImg());
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -104,7 +104,7 @@ public class SupportService {
      */
     public PageResponse readAllSupport(int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").ascending());
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
         //Support를 페이지별 조회
         Page<Support> supportPage = supportRepository.findAll(pageable);
         //현재 페이지의 Support 목록
@@ -127,7 +127,7 @@ public class SupportService {
     /**
      * 후원 수정
      */
-    public void updateSupport(Long memberId, Long supportId, MultipartFile file, UpdateSupportRequestDto updateSupportReq) {
+    public void updateSupport(Long memberId, Long supportId, UpdateSupportRequestDto updateSupportReq) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
 
@@ -140,10 +140,12 @@ public class SupportService {
             deleteFileAtS3(support.getFirstImg());
         }
 
+        MultipartFile newFirstImg = updateSupportReq.getNewFirstImg();
         //새로운 대표 이미지 업로드, 수정
-        if (file != null) {
+        if (newFirstImg != null) {
             //파일 업로드
-            String newImgPath = uploadFileAtS3(file);
+            String newImgPath = uploadFileAtS3(newFirstImg);
+            //새로운 대표 이미지로 수정
             support.updateFirstImg(newImgPath);
         }
 

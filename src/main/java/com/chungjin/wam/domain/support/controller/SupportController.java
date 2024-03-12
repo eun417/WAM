@@ -29,9 +29,8 @@ public class SupportController {
      */
     @PostMapping("/")
     public ResponseEntity<String> createSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @RequestPart("file") MultipartFile file,
-                                                @RequestPart("supportReq") @Valid SupportRequestDto supportReq) throws IOException {
-        supportService.createSupport(userDetails.getMember().getMemberId(), file, supportReq);
+                                                @RequestPart("supportReq") @Valid SupportRequestDto supportReq) {
+        supportService.createSupport(userDetails.getMember().getMemberId(), supportReq);
         return ResponseEntity.ok("후원이 생성되었습니다.");
     }
 
@@ -57,9 +56,8 @@ public class SupportController {
     @PutMapping("/{supportId}")
     public ResponseEntity<String> updateSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
-                                                @RequestPart("file") MultipartFile file,
                                                 @RequestPart("updateSupportReq") @Valid UpdateSupportRequestDto updateSupportReq) {
-        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, file, updateSupportReq);
+        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, updateSupportReq);
         return ResponseEntity.ok("후원이 수정되었습니다.");
     }
 

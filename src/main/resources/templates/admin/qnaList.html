@@ -68,7 +68,7 @@
                         var qnaId = this.parentNode.parentNode.firstElementChild.textContent;
                         console.log(qnaId);
 
-                        if (confirm("정말로 QnA를 탈퇴시키겠습니까?")) {
+                        if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
                             //사용자가 확인을 누르면 컨트롤러 호출
                             axios.delete('/qna/' + qnaId)
                                 .then(function(response) {

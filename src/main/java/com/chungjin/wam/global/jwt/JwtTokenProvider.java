@@ -1,14 +1,12 @@
 package com.chungjin.wam.global.jwt;
 
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.entity.RefreshToken;
 import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -32,6 +31,9 @@ public class JwtTokenProvider {
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;    // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
 
     private final CustomUserDetailsService userDetailsService;
 //    private final RefreshTokenRepository refreshTokenRepository;
@@ -115,6 +117,20 @@ public class JwtTokenProvider {
         ""(비밀번호): JWT 토큰을 사용하여 사용자를 인증하고 권한을 부여하는 경우에는 이미 인증이 완료되었으며, 사용자의 비밀번호는 필요하지 않음
         */
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+    }
+
+    /**
+     * 필터링하기 위해선 토큰 정보 필요
+     * -> Request Header에서 토큰 정보를 꺼내옴
+     */
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
+        }
+
+        return null;
     }
 
     /**

@@ -68,7 +68,7 @@
                         var supportId = this.parentNode.parentNode.firstElementChild.textContent;
                         console.log(supportId);
 
-                        if (confirm("정말로 후원을 탈퇴시키겠습니까?")) {
+                        if (confirm("정말로 후원을 삭제하시겠습니까?")) {
                             //사용자가 확인을 누르면 컨트롤러 호출
                             axios.delete('/support/' + supportId)
                                 .then(function(response) {
@@ -90,7 +90,7 @@
             });
     }
 
-    //페이지 로드 시 첫 번째 페이지 Member 목록을 불러옴
+    //페이지 로드 시 첫 번째 페이지 Support 목록을 불러옴
     loadSupportList(currentPage);
 </script>
 </body>
