@@ -7,6 +7,13 @@
     text-align: center; /* 텍스트 가운데 정렬 플러스*/
     
 }
+.wrapper{
+    margin-top:150px;
+    width: 100%;
+    align-items: center; 
+    justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
+    text-align: center; /* 텍스트 가운데 정렬 플러스*/
+}
 
 .QnAlist-ContBox{
     max-height: max-content;
@@ -15,7 +22,6 @@
     text-align: center;
     margin: 0 auto;
     padding-bottom: 5px;
-    overflow: hidden;
 }
 .QnAlist-header{
     font-size: 48px;
@@ -104,4 +110,156 @@
 }
 .header-list tr{
     height: 50px;
+    display: ;
+}
+.tableBox{
+    min-height: 500px;
+}
+.w3-center{
+    margin-top: 30px;
+}
+
+.w3-pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0
+}
+
+.w3-pagination li {
+    display: inline
+}
+
+.w3-pagination li a {
+    text-decoration: none;
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+}
+
+.w3-pagination li a:hover {
+    background-color: #f0f0f0;
+}
+
+.w3-green,.w3-hover-green:hover {
+    color: #fff!important;
+    background-color: #445D48!important
+}
+.answer-comp{
+    border-radius: 8px;
+    font-weight: 700;
+    background-color: #DBC244;
+    color: #ffffff;
+    vertical-align: middle;
+    padding: 10px;
+}
+.answer-nyet{
+    border-radius: 8px;
+    font-weight: 700;
+    background-color: #BFBFBF;
+    color: #ffffff;
+    padding: 6px;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+a:hover{
+    font-weight: 700;
+}
+
+/*--------------------Detail 시작----------------------------*/
+
+.QnADetail-wrapper{
+    display: flex!;
+    margin-top: 150px;
+}
+.QnADetail-contBox{
+    max-height: max-content;
+    max-width: max-content;
+    min-height: 800px;
+    margin: 0 auto;
+    padding-bottom: 5px;
+}
+.QnAHeader-wrapper{
+    display: grid;
+    grid-template-columns: 90px 220px;
+    max-height: max-content;
+    max-width: max-content;
+    text-align: center;
+    align-items: center; 
+    justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
+    padding-bottom: 30px;
+}
+
+.D-left-box {
+    float: left; /* 왼쪽으로 정렬 */
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    height: 85px;
+    width: 85px;
+}
+.D-left-box {
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    position: relative;
+}
+
+.D-left-box img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 26%;
+}
+
+.D-right-box {
+    overflow: hidden; /* 자식 요소의 float 속성에 영향을 받지 않도록 처리 */
+    display: grid;
+    align-items: center; 
+    justify-content: center;
+    height: 70px;
+}
+.D-top{
+    font-weight: bold;
+}
+.D-bottom{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+}
+.D-date{
+    color: #7A7A7A;
+}
+.D-title{
+    font-size: 30px;
+    font-weight: bolder;
+}
+.D-titleBox{
+    min-width: 1150px;
+    display: grid;
+    grid-template-columns: 1060px 90px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #f0f0f0;
+}
+.d-textarea{
+    margin-top: 30px;
+    min-height: 600px;
+    border-bottom: 3px solid #f0f0f0;
+    width: 1150px;
+}
+.D-answer{
+    text-align: center;
+    width: 1150px;
+}
+.btn-answer{
+    margin-top: 30px;
+    min-width: 800px;
+    width: 800px;
+    border-radius: 7px;
+    color: white;
+    background-color: #003154;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px;
 }
