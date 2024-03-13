@@ -82,10 +82,8 @@ public class AuthService {
     /**
      * 중복 이메일 확인
      */
-    public void checkEmailExists(String email) {
-        if(memberRepository.existsByEmail(email)) {
-            throw new CustomException(ErrorCodeType.DUPLICATE_EMAIL);
-        }
+    public boolean checkEmailExists(String email) {
+        return memberRepository.existsByEmail(email);
     }
 
     /**
