@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/QnA.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <title>QnAWrite</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+    //헤더
+    $(document).ready(function(){
+        $("#header").load("/header.html");
+    });
+        
+    //에디터
+    $(document).ready(function() {
+	    $('#summernote').summernote({
+		  height: 500,         
+		  minHeight: null,             
+		  maxHeight: null,             
+		  focus: true,                  
+		  lang: "ko-KR",					// 언어 설정
+		  placeholder: '질문을 작성해주세요'	//placeholder 설정
+          
+        });
+    });
+    </script>
+
+</head>
+<body>
+    <div id="header"></div>
+    <div class="QnAWrite-wrapper wrapper">
+        <div class="QnAWrite-ContBox">
+            <div class="QnAWrite-header"><span>질문 작성하기</span></div>
+            <form method="post">
+                <textarea id="summernote" name="editordata"></textarea>
+            </form>
+        </div>
+        <input type="submit" value="작성">
+    </div>
+</body>
+</html>

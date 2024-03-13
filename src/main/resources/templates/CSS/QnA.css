@@ -13,7 +13,6 @@
     align-items: center; 
     justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
     text-align: center; /* 텍스트 가운데 정렬 플러스*/
-    
 }
 
 .QnAlist-ContBox{
@@ -150,7 +149,8 @@
     font-weight: 700;
     background-color: #DBC244;
     color: #ffffff;
-    padding: 6px;
+    vertical-align: middle;
+    padding: 10px;
 }
 .answer-nyet{
     border-radius: 8px;
@@ -170,42 +170,96 @@ a:hover{
 /*--------------------Detail 시작----------------------------*/
 
 .QnADetail-wrapper{
-    background-color: #445D48;
+    display: flex!;
+    margin-top: 150px;
+}
+.QnADetail-contBox{
+    max-height: max-content;
+    max-width: max-content;
     min-height: 800px;
-    display: flex;
+    margin: 0 auto;
+    padding-bottom: 5px;
 }
 .QnAHeader-wrapper{
+    display: grid;
+    grid-template-columns: 90px 220px;
     max-height: max-content;
     max-width: max-content;
     text-align: center;
-    margin: 0 auto;
-    padding-bottom: 5px;
-    background-color: #F0F0F0;
-    width: 300px;
-    height: 100px;
-
-}
-
-
-.header-list{
-    min-width: 1150px;
-    height: 50px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    border: 2px solid #F5F5F5;
+    align-items: center; 
+    justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
+    padding-bottom: 30px;
 }
 
 .D-left-box {
     float: left; /* 왼쪽으로 정렬 */
-    width: calc(100% - 1em); /* 부모 요소에서 1em만큼 뺀 너비로 설정 */
-    margin-right: 1em; /* 오른쪽 여백으로 1em 설정 */
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    height: 85px;
+    width: 85px;
+}
+.D-left-box {
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    position: relative;
+}
+
+.D-left-box img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 26%;
 }
 
 .D-right-box {
     overflow: hidden; /* 자식 요소의 float 속성에 영향을 받지 않도록 처리 */
+    display: grid;
+    align-items: center; 
+    justify-content: center;
+    height: 70px;
 }
-
-.D-top,
-.D-bottom {
-    margin-bottom: 10px; /* 위아래 여백을 10px로 설정 (조절 가능) */
+.D-top{
+    font-weight: bold;
+}
+.D-bottom{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+}
+.D-date{
+    color: #7A7A7A;
+}
+.D-title{
+    font-size: 30px;
+    font-weight: bolder;
+}
+.D-titleBox{
+    min-width: 1150px;
+    display: grid;
+    grid-template-columns: 1060px 90px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #f0f0f0;
+}
+.d-textarea{
+    margin-top: 30px;
+    min-height: 600px;
+    border-bottom: 3px solid #f0f0f0;
+    width: 1150px;
+}
+.D-answer{
+    text-align: center;
+    width: 1150px;
+}
+.btn-answer{
+    margin-top: 30px;
+    min-width: 800px;
+    width: 800px;
+    border-radius: 7px;
+    color: white;
+    background-color: #003154;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px;
 }
