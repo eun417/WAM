@@ -24,7 +24,7 @@ public class MemberApiController {
     /**
      * 로그인 회원의 email로 회원 정보 조회
      */
-    @GetMapping("/mypage/profile-detail")
+    @GetMapping("/profile-detail")
     public ResponseEntity<MemberDto> getMemberProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(memberService.getMemberProfile(userDetails.getMember().getMemberId()));
     }
@@ -32,7 +32,7 @@ public class MemberApiController {
     /**
      * 회원 수정
      */
-    @PutMapping("/mypage/profile-detail")
+    @PutMapping("/profile-detail")
     public ResponseEntity<String> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @RequestBody @Valid UpdateMemberRequestDto updateMembmerDto) {
         memberService.updateMember(userDetails.getMember().getMemberId(), updateMembmerDto);
@@ -42,7 +42,7 @@ public class MemberApiController {
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/mypage/leave/{memberId}")
+    @DeleteMapping("/leave/{memberId}")
     public ResponseEntity<String> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @PathVariable(value = "memberId") Long selectedMemberId) {
         memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
@@ -52,7 +52,7 @@ public class MemberApiController {
     /**
      * 자신이 작성한 QnA List 조회 (Pagination)
      */
-    @GetMapping("/mypage/qna/{page}")
+    @GetMapping("/qna/{page}")
     public ResponseEntity<List<MyQnaResponseDto>> getMyQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                            @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(memberService.getMyQna(userDetails.getMember().getMemberId(), page));
@@ -61,7 +61,7 @@ public class MemberApiController {
     /**
      * 자신이 작성한 후원 List 조회 (Pagination)
      */
-    @GetMapping("/mypage/support/{page}")
+    @GetMapping("/support/{page}")
     public ResponseEntity<List<MySupportResponseDto>> getMySupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                    @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(memberService.getMySupport(userDetails.getMember().getMemberId(), page));
@@ -70,7 +70,7 @@ public class MemberApiController {
     /**
      * 자신이 추가한 좋아요 조회 (Pagination)
      */
-    @GetMapping("/mypage/like/{page}")
+    @GetMapping("/like/{page}")
     public ResponseEntity<List<MySupportResponseDto>> getMyLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                 @PathVariable(value = "page") int page) {
         return ResponseEntity.ok().body(memberService.getMyLike(userDetails.getMember().getMemberId(), page));

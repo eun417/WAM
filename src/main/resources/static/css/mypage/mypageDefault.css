@@ -24,3 +24,10 @@
 	margin-bottom: 150px;
 	margin-right: 30px;
 }
+
+/* 바닥 버튼 */
+.foot-btn{
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
