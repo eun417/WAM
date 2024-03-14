@@ -1,8 +1,8 @@
 package com.chungjin.wam.global.jwt;
 
 import com.chungjin.wam.domain.auth.dto.TokenDto;
-import com.chungjin.wam.domain.auth.repository.RefreshTokenRepository;
 import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
+import com.chungjin.wam.domain.auth.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     public static final String BEARER_PREFIX = "Bearer ";
 
     private final CustomUserDetailsService userDetailsService;
-//    private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisService redisService;
 
     private final Key key;
 
@@ -44,7 +44,7 @@ public class JwtTokenProvider {
      * 주어진 시크릿 키를 사용하여 JwtTokenProvider 인스턴스를 생성하고 초기화
      * 시크릿 키는 JWT 토큰의 생성 및 검증에 사용
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService, RefreshTokenRepository refreshTokenRepository) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService, RedisService redisService) {
         //Base64로 인코딩된 시크릿 키를 디코딩
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
@@ -52,7 +52,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
 
         this.userDetailsService = userDetailsService;
-//        this.refreshTokenRepository = refreshTokenRepository;
+        this.redisService = redisService;
     }
 
     /**
@@ -81,7 +81,10 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-            //TokenDto 생성: 클라이언트에게 제공되어야 하는 토큰 정보 담고 있음
+        //Refresh Token 만료를 위해 Redis에 7일 동안 저장
+        redisService.setDataExpire(authentication.getName(), refreshToken, REFRESH_TOKEN_EXPIRE_TIME);    //memberId를 String으로 저장
+
+        //TokenDto 생성: 클라이언트에게 제공되어야 하는 토큰 정보 담고 있음
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)

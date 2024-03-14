@@ -77,7 +77,7 @@ public class AuthApiController {
      */
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        authService.logout(userDetails.getMember().getMemberId());
+        authService.logout(userDetails.getUsername());
         return ResponseEntity.ok("로그아웃");
     }
 
