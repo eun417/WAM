@@ -1,0 +1,85 @@
+/*mypage 메뉴 전체*/
+.mypage-menu-wrapper:has{
+    position: relative;
+}
+.mypage-menu-wrapper{
+    position: absolute;
+    color: #fff;
+    top: 100px;
+}
+
+/*왼쪽 메뉴*/
+.left-menu{
+    /* background-color: #242e27; */
+    width: 250px;
+    z-index: 1;
+    height: 100%;
+    overflow: auto;
+    position: fixed;
+    margin: 10px;
+}
+.left-menu-title{
+    font-size: 24px;
+    font-weight: 800;
+    padding: 70px 25px 25px 25px ;
+    text-align: center;
+    background-color: #ad5f40;
+    border-radius: 15px 15px 0 0 ;
+}
+.menu-title{
+    font-size: 2.5em;
+    color: #ffffff;
+    cursor: default;
+}
+.left-menu-list *{
+    cursor: pointer;
+}
+.left-menu-content{
+    padding: 30px;
+    border-radius: 0 0 15px 15px;
+    border: solid #f0f0f0;
+}
+.left-menu-list>li>div{
+    display: flex;
+    font-weight: 600;
+}
+.left-menu-list>li>div{
+    text-align: center;
+}
+.left-menu-list>li{
+    display: block;
+    text-align: center;
+}
+.left-menu-list .detail-notice{
+    display: block;
+    cursor: default;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    background-color: #4e6452;
+    border-radius: .25rem;
+    margin-bottom: 20px;
+}
+.menu-detail-title{
+    padding: 10px;
+    position: relative;
+    color: #e4f0e1;
+}
+.menu-detail-title>span{
+    color: #acacac;
+}
+.menu-detail-title>a{
+    display: block;
+    margin-left: 10px;
+    color: #acacac;
+    font-size: 18px;
+}
+.menu-detail-title:hover>a{
+    color:#003154;
+    transition: 0.4s ease-out;
+}
+.menu-detail-title:hover>.title-icon{
+    color:#003154;
+    transition: 0.4s ease-out;
+}

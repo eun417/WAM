@@ -50,7 +50,7 @@ public class AuthController {
     /**
      * 비밀번호 재설정
      */
-    @GetMapping("/change-pw")
+    @GetMapping("/change-pw/{authCode}")
     public String changePw() {
         return "loginFindPassword";
     }

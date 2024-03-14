@@ -18,7 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
 
     //name, phoneNumber로 email 찾기
-    Member findByNameAndPhoneNumber(String name, String phoneNumber);
+    Optional<Member> findByNameAndPhoneNumber(String name, String phoneNumber);
 
     //이메일로 memberId 찾기
     @Query("select m.memberId from Member m where m.email = :email")
@@ -34,8 +34,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      * 따라서 추가 정보를 입력받아 회원 가입을 진행할 때 소셜 타입, 식별자로 해당 회원을 찾기 위한 메소드
      */
     Optional<Member> findByLoginTypeAndOauthId(LoginType loginType, String oauthId);
-
-    //소셜의 식별값(oauthId)로 회원 찾기
-    Member findByOauthId(String oauthId);
 
 }

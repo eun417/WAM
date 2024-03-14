@@ -49,6 +49,14 @@ public class AuthApiController {
     }
 
     /**
+     * 이메일 중복 체크
+     */
+    @GetMapping("/email-check")
+    public ResponseEntity<Boolean> emailCheck(@RequestParam String email) {
+        return ResponseEntity.ok(authService.checkEmailExists(email));
+    }
+
+    /**
      * 로그인
      */
     @PostMapping("/login")
@@ -69,7 +77,7 @@ public class AuthApiController {
      */
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        authService.logout(userDetails.getMember().getMemberId());
+        authService.logout(userDetails.getUsername());
         return ResponseEntity.ok("로그아웃");
     }
 

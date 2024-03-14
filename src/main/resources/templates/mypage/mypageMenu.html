@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="mypageMenu">
+    <!-- 아이콘 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- 전체 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@100..900&display=swap" rel="stylesheet">
+    <!-- 로고 폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" href="/css/common/default.css">
+    <link rel="stylesheet" href="/css/mypage/mypageMenu.css">
+    <link rel="stylesheet" href="/css/mypage/mypageDefault.css">
+    <link rel="stylesheet" href="/css/mypage/mypageTable.css">
+    <link rel="stylesheet" href="/css/admin/pageNavi.css">
+    <!-- axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- script -->
+    <script src="/js/pagination.js"></script>
+
+    <div class="mypage-menu-wrapper">
+        <div class="left-menu">
+            <div class="left-menu-title">
+                <a href="/">
+                    <div class="waveEffect">
+                        <p class="menu-title" style="font-family: 'Righteous', cursive;">MY PAGE</p>
+                    </div>
+                </a>
+            </div>
+            <div class="left-menu-content">
+                <ul class="left-menu-list">
+                    <li>
+                        <div class="menu-detail-title detail-notice">현재 일반 회원입니다!</div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">group</span>
+                            <a href="/member/profile">회원 정보 수정</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">favorite</span>
+                            <a href="/member/like">좋아요 목록</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">inventory</span>
+                            <a href="/member/support">나의 후원 관리</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">help</span>
+                            <a href="/member/qna">나의 QnA 관리</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">person_cancel</span>
+                            <a href="/member/leave">회원 탈퇴</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

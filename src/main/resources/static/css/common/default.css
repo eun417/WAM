@@ -1,0 +1,449 @@
+/*
+    전체태그 기본 margin, padding 제거
+    기본 글씨 색 및 폰트 설정
+*/
+* {
+    margin: 0;
+    padding: 0;
+    color: #2f343d;
+    font-family: "Hahmlet", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-decoration-line: none;
+}
+
+*:not(a, input, textarea, span) {
+    cursor: default;
+}
+*>p {
+    cursor: text;
+}
+
+ul{
+    list-style-type: none;
+}
+
+
+/* 기본화면 레이아웃 */
+.page-content {
+    width: 1200px;
+    margin: 30px auto;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.page-title {
+    font-weight: 600;
+    padding: 10px 0px;
+    font-size: 1.5rem;
+}
+
+
+/* font 클래스 */
+.f-thin {
+    font-weight: 300;
+}
+
+.f-light {
+    font-weight: 400;
+}
+
+.f-medium {
+    font-weight: 500;
+}
+
+.f-bold {
+    font-weight: 700;
+}
+
+.f-black {
+    font-weight: 900;
+}
+
+
+/* 글씨 색 */
+.fc-1 {
+    color: #25382f;
+}
+
+.fc-2 {
+    color: #59516e;
+}
+
+.fc-3 {
+    color: #eeeeee;
+}
+
+.fc-4 {
+    color: #003154;
+}
+
+.fc-5 {
+    color: #0f631d;
+}
+
+.fc-6 {
+    color: #94310a;
+}
+
+.fc-7 {
+    color: #d6b822;
+}
+
+
+/* 배경 색*/
+.bg-1 {
+    background-color: #2f343d;
+}
+
+.bg-2 {
+    background-color: #59516e;
+}
+
+.bg-3 {
+    background-color: #eeeeee;
+}
+
+.bg-4 {
+    background-color: #003154;
+}
+
+.bg-5 {
+    background-color: #4d7a55;
+}
+
+.bg-6 {
+    background-color: #8f533b;
+}
+
+.bg-7 {
+    background-color: #daba65;
+}
+
+
+/* 버튼 디자인 */
+.btn {
+    border: none;
+    padding: 17px 20px 17px 20px;
+    display: inline-block;
+    box-sizing: border-box;
+    transition-duration: 0.4s;
+    font-size: 16px;
+    font-weight: 300;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-pill {
+    border-radius: 10rem;
+}
+
+.bc1 {
+    background-color: #454e49;
+    color: #fff;
+    border: 2px solid #454e49;
+}
+
+.bc1:hover {
+    background-color: #25382f;
+    border: 2px solid #25382f;
+}
+
+.bc2 {
+    background-color: #59516e;
+    color: #fff;
+    border: 2px solid #59516e;
+}
+
+.bc2:hover {
+    background-color: #403950;
+    border: 2px solid #403950;
+}
+
+.bc3 {
+    background-color: rgba(238, 238, 238, 0.9);
+    color: #252a34;
+    border: 2px solid rgba(238, 238, 238, 0.9);
+}
+
+.bc3:hover {
+    background-color: rgb(226, 226, 226);
+    border: 2px solid rgb(226, 226, 226);
+    cursor: pointer;
+}
+
+.bc4 {
+    background-color: #003c66;
+    color: #fff;
+    border: 2px solid #003154;
+}
+
+.bc4:hover {
+    background-color: #042b49;
+    border: 2px solid #042b49;
+    cursor: pointer;
+}
+
+.bc5 {
+    background-color: #445D48;
+    color: #fff;
+    border: 2px solid #445D48;
+}
+
+.bc5:hover {
+    background-color: #304132;
+    border: 2px solid #304132;
+    cursor: pointer;
+}
+
+.bc6 {
+    background-color: #a86e57;
+    color: #fff;
+    border: 2px solid #a86e57;
+}
+
+.bc6:hover {
+    background-color: #9c5d44;
+    border: 2px solid #9c5d44;
+    cursor: pointer;
+}
+
+.bc7 {
+    background-color: #d3bf59;
+    color: #fff;
+    border: 2px solid #d3bf59;
+}
+
+.bc7:hover {
+    background-color: #cfb73e;
+    border: 2px solid #cfb73e;
+    cursor: pointer;
+}
+
+
+.bc11 {
+    color: #454e49;
+    background-color: #fff;
+    border: 2px solid #454e49;
+}
+
+.bc11:hover {
+    background-color: #454e49;
+    cursor: pointer;
+    color: #fff;
+}
+
+.bc22 {
+    color: #59516e;
+    background-color: #fff;
+    border: 2px solid #403950;
+}
+
+.bc22:hover {
+    background-color: #403950;
+    cursor: pointer;
+    color: #fff;
+}
+
+.bc33 {
+    color: rgba(117, 117, 117, 0.9);
+    background-color: #fff;
+    border: 2px solid rgba(189, 189, 189, 0.9);
+}
+
+.bc33:hover {
+    background-color: rgba(238, 238, 238, 0.9);
+    cursor: pointer;
+    color: rgba(37, 42, 52, 1);
+    border: 2px solid rgba(238, 238, 238, 0.9);
+}
+
+.bc44 {
+    color: #003c66;
+    background-color: #fff;
+    border: 2px solid #003c66;
+}
+
+.bc44:hover {
+    background-color: #003c66;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bc55 {
+    color: #304132;
+    background-color: #fff;
+    border: 2px solid #304132;
+}
+
+.bc55:hover {
+    background-color: #304132;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bc66 {
+    color: #a86e57;
+    background-color: #fff;
+    border: 2px solid #a86e57;
+}
+
+.bc66:hover {
+    background-color: #a86e57;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bc77 {
+    color: #d3bf59;
+    background-color: #fff;
+    border: 2px solid #d3bf59;
+}
+
+.bc77:hover {
+    background-color: #d3bf59;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+.bc000 {
+    color: #454e49;
+    background-color: #fff;
+    border: 2px solid #ccc;
+}
+
+.bc111:hover {
+    cursor: pointer;
+    border-color: #454e49;
+    color: #2f343d;
+}
+
+.bc222:hover {
+    cursor: pointer;
+    border-color: #403950;
+    color: #403950;
+}
+
+.bc333:hover {
+    cursor: pointer;
+    color: #59516e;
+    border-color: rgba(238, 238, 238, 0.9)
+}
+
+.bc444:hover {
+    color: #003c66;
+    cursor: pointer;
+    border-color: #003c66;
+}
+
+.bc555:hover {
+    color: #445D48;
+    cursor: pointer;
+    border-color: #445D48;
+}
+
+.bc666:hover {
+    color: #a86e57;
+    cursor: pointer;
+    border-color: #a86e57;
+}
+
+.bc777:hover {
+    color: #d3bf59;
+    cursor: pointer;
+    border-color: #d3bf59;
+}
+
+/* 버튼 크기 */
+.bs1 {
+    padding: 1rem 1.3rem 1rem 1.3rem;
+}
+
+.bs2 {
+    padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+    font-size: 1.1em;
+}
+
+.bs3 {
+    padding: 1.3rem 2rem 1.3rem 2rem;
+    font-size: 1.2em;
+}
+
+.bs4 {
+    width: 100%;
+    padding: 2rem;
+    font-size: 1.2em;
+}
+
+
+/* input 디자인 */
+.input-form {
+    width: 100%;
+    height: 50px;
+    display: block;
+    padding: 0.8rem;
+    background-color: #fff;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-form:focus {
+    box-shadow: 0 0 0 0.1rem #eee;
+}
+
+textarea.input-form {
+    resize: none;
+    min-height: 100px;
+}
+
+.input-form:read-only:not(select),
+.input-form:disabled {
+    background-color: #f7f7f7;
+}
+
+
+/* 페이징 디자인 */
+.pagination {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination>li>a.page-item {
+    display: block;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    margin: 5px;
+}
+
+.pagination>li>a.page-item:not(.active-page):hover{
+    color: #b8b8b8;
+    transition: 0.2s ease-out;
+}
+
+.pagination>li>a.page-item>span.material-icons {
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 40px;
+}
+
+.pagination>li>a.page-item>span.material-icons:hover{
+    color: #b8b8b8;
+    transition: 0.2s ease-out;
+}
+
+.pagination .page-item.active-page {
+    background-color: #445D48;
+    color: #fff;
+    border-radius: 50%;
+}
