@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div>.user-bold{
+            font-weight: 500;
+        }
+        .update-input-wrap>div{
+            padding: 15px 0px 15px 0px;
+        }
+        .content-wrap>div:first-child{
+            padding-top: 20px;
+            padding-bottom: 15px;
+        }
+
+        /* input */
+        .input-form{
+            margin: 10px 0px 10px 0px;
+            font-weight: 300;
+        }
+
+        /* 비밀번호 */
+        .pw-change-notice{
+            padding: 10px 0px 10px 0px;
+            font-size: 14px;
+        }
+        .pw-change-notice>ul{
+            padding: 5px 5px 10px 5px;
+            list-style-position: inside;
+        }
+        .pw-change-notice li{
+            padding: 3px 0px 3px 0px;
+            font-weight: 300;
+        }
+        .pw-change-notice>.bold{
+            font-weight: 400;
+        }
+
+        /*check-circle*/
+        .update-input-wrap>div>div{
+            position: relative;
+        }
+        div>.check-circle{
+            color: #445D48;
+            position: absolute;
+            z-index: 1;
+            right: 10px;
+            top: 12px;
+            /* display: none; */
+        }
+
+        div>.active-check-circle{
+            display: block;
+        }
+
+        div>.active-reg-msg{
+            color: #f86697;
+            font-size: 12px;
+        }
+        div>.active-reg-input{
+            margin-bottom: 2px;
+            outline: 2px solid #f86697;
+        }
+
+        /* 바닥 버튼 */
+        .foot-btn{
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<!-- mypageMenu 영역 참조 -->
+<div th:insert="~{mypage/mypageMenu :: mypageMenu}"></div>
+
+<div class="member-wrapper mypage-content">
+    <div class="mypage-detail">
+        <div class="mypage-title page-title">회원 정보 변경</div>
+        <div class="content-wrap">
+            <div class="update-input-wrap">
+                <div>
+                    <label for="memberEmail" class="user-bold">이메일</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="email" name="email" id="memberEmail" class="input-form input-update"
+                               value="xxxx@example.com" disabled>
+                        <span class="reg-msg"></span>
+                    </div>
+                </div>
+                <div>
+                    <label for="memberNickname" class="bold user-bold">닉네임</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" name="nickname" id="memberNickname" class="input-form input-update"
+                               value="하하하닉네임">
+                        <span class="reg-msg"></span>
+                    </div>
+                </div>
+                <div>
+                    <label for="memberName" class="bold user-bold">이름</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" name="name" id="memberName" class="input-form" value="성이름">
+                    </div>
+                </div>
+                <div>
+                    <label for="memberPhoneNumber" class="bold user-bold">휴대폰 번호</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" name="phoneNumber" id="memberPhoneNumber"
+                               class="input-form input-update" value="01012345678">
+                        <span class="reg-msg"></span>
+                    </div>
+                </div>
+                <div>
+                    <label for="nowPw" class="bold user-bold">비밀번호</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" name="nowPassword" id="nowPw" placeholder="현재 비밀번호"
+                               class="input-form input-update">
+
+                        <span class="reg-msg"></span>
+                    </div>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" name="newPassword" id="newPw" placeholder="새 비밀번호"
+                               class="input-form input-update">
+                        <span class="reg-msg"></span>
+                    </div>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" name="checkPassword" id="checkPw" placeholder="새 비밀번호 확인"
+                               class="input-form input-update">
+                        <span class="reg-msg"></span>
+                    </div>
+                    <div class="pw-change-notice">
+                        <div class="bold">비밀번호 변경 시 유의사항</div>
+                        <ul>
+                            <li>· 영문, 숫자, 특수문자 조합으로 이루어진 8 ~ 15자로 입력해주세요.</li>
+                            <li>· 입력 후 비밀번호 변경을 클릭해주세요.</li>
+                        </ul>
+                        <button class="btn bc000 bc666">비밀번호 변경</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="foot-btn">
+            <a href="#" class="btn bc3">취소</a>
+            <button class="btn bc4">정보 수정</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

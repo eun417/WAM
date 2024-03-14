@@ -24,7 +24,7 @@ public class MemberApiController {
     /**
      * 로그인 회원의 email로 회원 정보 조회
      */
-    @GetMapping("/mypage/profile")
+    @GetMapping("/mypage/profile-detail")
     public ResponseEntity<MemberDto> getMemberProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(memberService.getMemberProfile(userDetails.getMember().getMemberId()));
     }
@@ -32,7 +32,7 @@ public class MemberApiController {
     /**
      * 회원 수정
      */
-    @PutMapping("/mypage/profile")
+    @PutMapping("/mypage/profile-detail")
     public ResponseEntity<String> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @RequestBody @Valid UpdateMemberRequestDto updateMembmerDto) {
         memberService.updateMember(userDetails.getMember().getMemberId(), updateMembmerDto);
