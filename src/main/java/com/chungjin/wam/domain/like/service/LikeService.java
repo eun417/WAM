@@ -47,15 +47,15 @@ public class LikeService {
     /**
      * 좋아요 삭제
      */
-    public void deleteLike(Long memberId, Long supportId, Long supportLikeId) {
+    public void deleteLike(Long memberId, Long supportId) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
         //supportLikeId로 supportLike 객체 가져오기
-        SupportLike supportLike = supportLikeRepository.findById(supportLikeId)
+        SupportLike supportLike = supportLikeRepository.findBySupport_SupportIdAndMember_MemberId(supportId, memberId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_LIKE_NOT_FOUND));
 
         //로그인한 사용자가 좋아요 생성한 사람이 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(supportLike.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
 
         //좋아요 감소
         support.downLike(support.getSupportLike());

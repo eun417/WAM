@@ -1,22 +1,21 @@
 package com.chungjin.wam.domain.member.dto.response;
 
-import com.chungjin.wam.domain.qna.entity.QnaCheck;
+import com.chungjin.wam.domain.support.entity.SupportStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-@AllArgsConstructor
-public class MyQnaResponseDto {
+public class MyLikeResponseDto {
 
-    private Long qnaId;
+    private Long supportId;
+    private Long supportLikeId;
     private String title;
+    private String nickname;
     private String createDate;
-    private Long viewCount;
     @Enumerated(EnumType.STRING)
-    private QnaCheck qnaCheck;
+    private SupportStatus supportStatus;
 
 }

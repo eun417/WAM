@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping("/support")
 public class LikeApiController {
 
     private final LikeService likeService;
@@ -17,7 +17,7 @@ public class LikeApiController {
     /**
      * 좋아요 생성
      */
-    @PostMapping("/support/{supportId}/like")
+    @PostMapping("/{supportId}/like")
     public ResponseEntity<String> createLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @PathVariable(value = "supportId") Long supportId) {
         likeService.createLike(userDetails.getMember().getMemberId(), supportId);
@@ -27,11 +27,10 @@ public class LikeApiController {
     /**
      * 좋아요 삭제
      */
-    @DeleteMapping("/support/{supportId}/like/{supportLikeId}")
+    @DeleteMapping("/{supportId}/like")
     public ResponseEntity<String> deleteLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                             @PathVariable(value = "supportId") Long supportId,
-                                             @PathVariable(value = "supportLikeId") Long supportLikeId) {
-        likeService.deleteLike(userDetails.getMember().getMemberId(), supportId, supportLikeId);
+                                             @PathVariable(value = "supportId") Long supportId) {
+        likeService.deleteLike(userDetails.getMember().getMemberId(), supportId);
         return ResponseEntity.ok("좋아요가 삭제되었습니다.");
     }
 

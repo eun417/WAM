@@ -359,20 +359,24 @@ ul{
 
 /* 버튼 크기 */
 .bs1 {
-    padding: 1rem 1.3rem 1rem 1.3rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.5rem;
 }
 
 .bs2 {
+    padding: 1rem 1.3rem 1rem 1.3rem;
+}
+
+.bs3 {
     padding: 1.2rem 1.5rem 1.2rem 1.5rem;
     font-size: 1.1em;
 }
 
-.bs3 {
+.bs4 {
     padding: 1.3rem 2rem 1.3rem 2rem;
     font-size: 1.2em;
 }
 
-.bs4 {
+.bs5 {
     width: 100%;
     padding: 2rem;
     font-size: 1.2em;

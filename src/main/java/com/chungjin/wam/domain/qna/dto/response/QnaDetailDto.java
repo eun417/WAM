@@ -19,7 +19,7 @@ public class QnaDetailDto {
     private String title;
     private String content;
     private String createDate;
-    private int viewCount;
+    private Long viewCount;
     private String answer;
     private String answerDate;
     @Enumerated(EnumType.STRING)

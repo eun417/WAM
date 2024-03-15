@@ -6,6 +6,7 @@ import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
 import com.chungjin.wam.domain.member.service.MemberService;
+import com.chungjin.wam.global.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,27 +54,27 @@ public class MemberApiController {
      * 자신이 작성한 QnA List 조회 (Pagination)
      */
     @GetMapping("/qna/{page}")
-    public ResponseEntity<List<MyQnaResponseDto>> getMyQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                           @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(memberService.getMyQna(userDetails.getMember().getMemberId(), page));
+    public ResponseEntity<PageResponse> getMyQna(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                 @PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(memberService.getMyQna(userDetails.getMember().getMemberId(), pageNo));
     }
 
     /**
      * 자신이 작성한 후원 List 조회 (Pagination)
      */
     @GetMapping("/support/{page}")
-    public ResponseEntity<List<MySupportResponseDto>> getMySupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                   @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(memberService.getMySupport(userDetails.getMember().getMemberId(), page));
+    public ResponseEntity<PageResponse> getMySupport(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                   @PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(memberService.getMySupport(userDetails.getMember().getMemberId(), pageNo));
     }
 
     /**
      * 자신이 추가한 좋아요 조회 (Pagination)
      */
     @GetMapping("/like/{page}")
-    public ResponseEntity<List<MySupportResponseDto>> getMyLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(memberService.getMyLike(userDetails.getMember().getMemberId(), page));
+    public ResponseEntity<PageResponse> getMyLike(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                @PathVariable(value = "page") int pageNo) {
+        return ResponseEntity.ok().body(memberService.getMyLike(userDetails.getMember().getMemberId(), pageNo));
     }
 
 }

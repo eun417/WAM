@@ -3,6 +3,9 @@ package com.chungjin.wam.domain.member.service;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
+import com.chungjin.wam.domain.member.dto.response.MyLikeResponseDto;
+import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
+import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
@@ -89,54 +92,119 @@ public class MemberService {
         }
     }
 
+    //memberId로 Member 객체 조회
+    private Member getMember (Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+    }
+
     /**
      * 자신이 작성한 QnA List 조회 (Pagination)
      */
-    public List<MyQnaResponseDto> getMyQna(Long memberId, int page) {
+    public PageResponse getMyQna(Long memberId, int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
         //Qna를 페이지별 조회
         Page<Qna> qnaPage = qnaRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 Qna 목록
         List<Qna> qnas = qnaPage.getContent();
         //EntityList -> DtoList
-        return qnaMapper.toMyQnaDtoList(qnas);
+        List<Object> qnaDtos = new ArrayList<>();
+        for (Qna qna : qnas) {
+            qnaDtos.add(convertToQnaDto(qna)); // Qna를 MyQnaDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(qnaDtos)	//Qna 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(qnaPage.getSize()) //페이지당 항목 수
+                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
+                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
+                .last(qnaPage.isLast())  //마지막 페이지 여부
+                .build();
+    }
+
+    //Entity -> Dto
+    public MyQnaResponseDto convertToQnaDto(Qna qna) {
+        return MyQnaResponseDto.builder()
+                .qnaId(qna.getQnaId())
+                .title(qna.getTitle())
+                .createDate(qna.getCreateDate())
+                .viewCount(qna.getViewCount())
+                .qnaCheck(qna.getQnaCheck())
+                .build();
     }
 
     /**
      * 자신이 작성한 후원 List 조회 (Pagination)
      */
-    public List<MySupportResponseDto> getMySupport(Long memberId, int page) {
+    public PageResponse getMySupport(Long memberId, int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
         //후원을 페이지별 조회
         Page<Support> supportPage = supportRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
         List<Support> supports = supportPage.getContent();
         //EntityList -> DtoList
-        return supportMapper.toMySupportDtoList(supports);
+        List<Object> supportDtos = new ArrayList<>();
+        for (Support support : supports) {
+            supportDtos.add(convertToSupportDto(support)); // Support를 MySupportDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(supportDtos)	//Support 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(supportPage.getSize()) //페이지당 항목 수
+                .totalElements(supportPage.getTotalElements())   //전체 Support 수
+                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
+                .last(supportPage.isLast())  //마지막 페이지 여부
+                .build();
+    }
+
+    //Entity -> Dto
+    public MySupportResponseDto convertToSupportDto(Support support) {
+        return MySupportResponseDto.builder()
+                .supportId(support.getSupportId())
+                .title(support.getTitle())
+                .goalAmount(support.getGoalAmount())
+                .supportAmount(support.getSupportAmount())
+                .createDate(support.getCreateDate())
+                .supportStatus(support.getSupportStatus())
+                .build();
     }
 
     /**
      * 자신이 추가한 좋아요 조회 (Pagination)
      */
-    public List<MySupportResponseDto> getMyLike(Long memberId, int page) {
+    public PageResponse getMyLike(Long memberId, int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportLikeId").descending());
         //후원을 페이지별 조회
-        Page<Support> supportPage = supportLikeRepository.findByMemberId(memberId, pageable);
+        Page<Support> likePage = supportLikeRepository.findByMemberId(memberId, pageable);
         //현재 페이지의 후원 목록
-        List<Support> supports = supportPage.getContent();
+        List<Support> supports = likePage.getContent();
         //EntityList -> DtoList
-        return supportMapper.toMySupportDtoList(supports);
+        List<Object> likeDtos = new ArrayList<>();
+        for (Support support : supports) {
+            likeDtos.add(convertToLikeDto(support)); // Support를 MyLikeDto로 변환하여 리스트에 추가
+        }
+        return PageResponse.builder()
+                .content(likeDtos)	//Support 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(likePage.getSize()) //페이지당 항목 수
+                .totalElements(likePage.getTotalElements())   //전체 Support 수
+                .totalPages(likePage.getTotalPages()) //전체 페이지 수
+                .last(likePage.isLast())  //마지막 페이지 여부
+                .build();
     }
 
-    /**
-     * memberId로 Member 객체 조회
-     */
-    private Member getMember (Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+    //Entity -> Dto
+    public MyLikeResponseDto convertToLikeDto(Support support) {
+        return MyLikeResponseDto.builder()
+                .supportId(support.getSupportId())
+                .title(support.getTitle())
+                .nickname(support.getMember().getNickname())
+                .createDate(support.getCreateDate())
+                .supportStatus(support.getSupportStatus())
+                .build();
     }
 
     /**

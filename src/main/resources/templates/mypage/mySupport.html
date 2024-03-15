@@ -20,6 +20,7 @@
                     <th>목표 금액</th>
                     <th>모인 금액</th>
                     <th>작성일</th>
+                    <th style="width: 10%">상태</th>
                 </tr>
                 <tbody id="supportTableBody">
             </table>
@@ -30,5 +31,48 @@
         </div>
     </div>
 </div>
+
+<script>
+    //현재 페이지 번호를 저장할 변수
+   var currentPage = 0;
+
+   //페이지 로드 시 Support 목록을 테이블에 표시하는 함수
+   function loadSupportList(page) {
+       //토큰을 로컬 스토리지에서 가져오기
+       const token = localStorage.getItem('accessToken');
+
+       axios.get(`/member/support/${page}`, {
+           headers: {
+               'Authorization': 'Bearer ' + token
+           }
+       }).then(function (response) {
+           //서버로부터 받은 데이터를 테이블에 추가
+           var supportList = response.data.content;
+           var tableBody = document.querySelector('#supportTableBody');
+           tableBody.innerHTML = ''; //테이블 내용 초기화
+
+           supportList.forEach(function (support) {
+               var row = `<tr>
+                               <td>${support.supportId}</td>
+                               <td>${support.title}</td>
+                               <td>${support.goalAmount}</td>
+                               <td>${support.supportAmount}</td>
+                               <td>${support.createDate}</td>
+                               <td><button class="answer-btn btn bs1 bc3}" style="cursor: default;">${support.supportStatus === 'START' ? '후원 시작' : support.supportStatus === 'SUPPORTING' ? '후원중' : '후원 종료'}</button></td>
+                           </tr>`;
+               tableBody.innerHTML += row; // 행 추가
+           });
+
+           //페이지 내비게이션 업데이트
+           //renderPagination('Support', response.data.totalPages, page);
+       })
+       .catch(function (error) {
+           console.error(error);
+       });
+   }
+
+   //페이지 로드 시 첫 번째 페이지 Support 목록을 불러옴
+   loadSupportList(currentPage);
+</script>
 </body>
 </html>

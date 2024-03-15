@@ -15,7 +15,7 @@ public class QnaResponseDto {
     private String title;
     private String nickname;
     private String createDate;
-    private int viewCount;
+    private Long viewCount;
     @Enumerated(EnumType.STRING)
     private QnaCheck qnaCheck;
 

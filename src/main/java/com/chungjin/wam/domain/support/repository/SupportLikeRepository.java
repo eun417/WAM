@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SupportLikeRepository extends JpaRepository<SupportLike, Long> {
 
@@ -16,4 +18,6 @@ public interface SupportLikeRepository extends JpaRepository<SupportLike, Long> 
     @Query("select s from SupportLike sl JOIN sl.support s where sl.member.memberId = :memberId")
     Page<Support> findByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
+    //supportId, memberId로 좋아요 조회
+    Optional<SupportLike> findBySupport_SupportIdAndMember_MemberId(Long supportId, Long memberId);
 }

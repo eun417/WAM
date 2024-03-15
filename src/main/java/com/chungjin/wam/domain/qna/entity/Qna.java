@@ -25,7 +25,7 @@ public class Qna extends BaseTimeEntity {
     private String content;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private Long viewCount;
 
     private String answer;
 
@@ -50,7 +50,7 @@ public class Qna extends BaseTimeEntity {
     }
 
     //조회수 증가
-    public void updateViewCount(int viewCount) {
+    public void updateViewCount(Long viewCount) {
         this.viewCount++;
     }
 
