@@ -4,8 +4,6 @@ import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.dto.response.MyLikeResponseDto;
-import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
-import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
@@ -20,18 +18,22 @@ import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
-import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -45,6 +47,8 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final QnaMapper qnaMapper;
     private final SupportMapper supportMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 로그인 회원의 email로 회원 정보 조회
@@ -64,7 +68,7 @@ public class MemberService {
         Member member = getMember(memberId);
 
         //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!memberId.equals(member.getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(member.getMemberId())) throw new CustomException(FORBIDDEN);
 
         //이름, 휴대폰 번호 입력하면 GUEST인 사용자의 권한을 USER로 변경
         if (member.getAuthority() == Authority.GUEST) {
@@ -78,24 +82,24 @@ public class MemberService {
     /**
      * 회원 탈퇴
      */
-    public void deleteMember(Long memberId, Long selectedMemberId) {
+    public void deleteMember(Long memberId, String password) {
         //memberId로 로그인 한 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //로그인한 사용자가 마이페이지 회원인 경우 또는 관리자인 경우 탈퇴 가능
-        if(memberId.equals(selectedMemberId) || member.getAuthority().equals(Authority.ADMIN)) {
-            //DB에서 영구 삭제
-            memberRepository.deleteById(selectedMemberId);
-        } else {
-            //그 외 에러 발생
-            throw new CustomException(ErrorCodeType.FORBIDDEN);
+        //입력한 비밀번호가 암호화된 비밀번호와 맞는지 확인
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            log.info("비밀번호 일치 여부: {}", passwordEncoder.matches(password, member.getPassword()));
+            throw new CustomException(INVALID_PASSWORD);
         }
+
+        //DB에서 영구 삭제
+        memberRepository.delete(member);
     }
 
     //memberId로 Member 객체 조회
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     /**

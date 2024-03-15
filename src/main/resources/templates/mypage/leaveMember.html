@@ -44,6 +44,7 @@
             <div class="check-pw">
                 <div class="detail-title">본인 확인을 위해 비밀번호를 입력해주세요.</div>
                 <div>
+                    <input type="hidden" name="memberId" id="memberId">
                     <input type="password" name="password" id="password" placeholder="비밀번호 입력" class="input-form" required>
                 </div>
                 <div class="check-notice">※ 탈퇴가 완료된 계정은 다시 복구할 수 없습니다.</div>
@@ -53,9 +54,52 @@
             </div>
         </div>
         <div class="foot-btn">
-            <button class="btn bc66">회원 탈퇴</button>
+            <button class="leaveMember-btn btn bc66">회원 탈퇴</button>
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelector('.leaveMember-btn').addEventListener('click', function() {
+        var memberId = document.getElementById('memberId').value;
+        console.log(memberId);
+        var password = document.getElementById('password').value;
+        var quitAgreement = document.getElementById('quit-agreement').checked; //탈퇴 동의 여부 가져오기
+
+        //필요한 유효성 검사 등을 수행
+        if (!quitAgreement) {
+            alert('탈퇴에 동의해주세요.');
+            return;
+        }
+
+        if (confirm("정말로 탈퇴하시겠습니까?")) {
+            //토큰을 로컬 스토리지에서 가져오기
+            const token = localStorage.getItem('accessToken');
+
+            //회원 탈퇴 요청
+            axios.delete('/member/leave', {
+                headers: {
+                    'Authorization': 'Bearer ' + token //헤더에 토큰 추가
+                },
+                data: {
+                    password: password
+                }
+            }).then(function(response) {
+                alert(response.data); //응답 메시지 표시
+            })
+            .catch(function(error) {
+                console.error(error);
+
+                //에러 응답 처리
+                if (error.response && error.response.data) {
+                    //서버가 에러 응답을 반환한 경우
+                    alert(error.response.data.message); //서버가 반환한 에러 메시지 표시
+                } else {
+                    alert('서버 요청 중 에러가 발생했습니다.');
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

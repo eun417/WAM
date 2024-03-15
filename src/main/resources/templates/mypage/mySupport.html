@@ -50,17 +50,20 @@
            var supportList = response.data.content;
            var tableBody = document.querySelector('#supportTableBody');
            tableBody.innerHTML = ''; //테이블 내용 초기화
+           var num = 1;
 
            supportList.forEach(function (support) {
                var row = `<tr>
-                               <td>${support.supportId}</td>
-                               <td>${support.title}</td>
-                               <td>${support.goalAmount}</td>
-                               <td>${support.supportAmount}</td>
-                               <td>${support.createDate}</td>
-                               <td><button class="answer-btn btn bs1 bc3}" style="cursor: default;">${support.supportStatus === 'START' ? '후원 시작' : support.supportStatus === 'SUPPORTING' ? '후원중' : '후원 종료'}</button></td>
-                           </tr>`;
+                           <td style="display: none;">${support.supportId}</td>
+                           <td>${num}</td>
+                           <td>${support.title}</td>
+                           <td>${support.goalAmount}</td>
+                           <td>${support.supportAmount}</td>
+                           <td>${support.createDate}</td>
+                           <td><button class="answer-btn btn bs1 bc3}" style="cursor: default;">${support.supportStatus === 'START' ? '후원 시작' : support.supportStatus === 'SUPPORTING' ? '후원중' : '후원 종료'}</button></td>
+                       </tr>`;
                tableBody.innerHTML += row; // 행 추가
+               num++;
            });
 
            //페이지 내비게이션 업데이트

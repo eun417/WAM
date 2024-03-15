@@ -54,14 +54,14 @@
 
             likeList.forEach(function(like) {
                 var row = `<tr>
-                                <td style="display: none;">${like.supportId}</td>
-                                <td>${num}</td>
-                                <td>${like.title}</td>
-                                <td>${like.nickname}</td>
-                                <td>${like.createDate}</td>
-                                <td><button class="answer-btn btn bs1 bc3}" style="cursor: default;">${like.supportStatus === 'START' ? '후원 시작' : like.supportStatus === 'SUPPORTING' ? '후원중' : '후원 종료'}</button></td>
-                                <td><button class="deleteLike-btn btn bs1 bc6">삭제</button></td>
-                            </tr>`;
+                            <td style="display: none;">${like.supportId}</td>
+                            <td>${num}</td>
+                            <td>${like.title}</td>
+                            <td>${like.nickname}</td>
+                            <td>${like.createDate}</td>
+                            <td><button class="answer-btn btn bs1 bc3}" style="cursor: default;">${like.supportStatus === 'START' ? '후원 시작' : like.supportStatus === 'SUPPORTING' ? '후원중' : '후원 종료'}</button></td>
+                            <td><button class="deleteLike-btn btn bs1 bc6">삭제</button></td>
+                        </tr>`;
                 tableBody.innerHTML += row; // 행 추가
                 num++;
             });

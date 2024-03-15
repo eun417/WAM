@@ -49,16 +49,19 @@
             var qnaList = response.data.content;
             var tableBody = document.querySelector('#qnaTableBody');
             tableBody.innerHTML = ''; //테이블 내용 초기화
+            var num = 1;
 
             qnaList.forEach(function(qna) {
                 var row = `<tr>
-                            <td>${qna.qnaId}</td>
+                            <td style="display: none;">${qna.qnaId}</td>
+                            <td>${num}</td>
                             <td>${qna.title}</td>
                             <td>${qna.viewCount}</td>
                             <td>${qna.createDate}</td>
                             <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc2'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
                         </tr>`;
                 tableBody.innerHTML += row; // 행 추가
+                num++;
             });
 
             //페이지 내비게이션 업데이트

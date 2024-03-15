@@ -3,8 +3,6 @@ package com.chungjin.wam.domain.member.controller;
 import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
-import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
-import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
 import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.global.common.PageResponse;
 import jakarta.validation.Valid;
@@ -13,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -43,10 +42,10 @@ public class MemberApiController {
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/leave/{memberId}")
+    @DeleteMapping("/leave")
     public ResponseEntity<String> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                             @PathVariable(value = "memberId") Long selectedMemberId) {
-        memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
+                                             @RequestBody Map<String, String> password) {
+        memberService.deleteMember(userDetails.getMember().getMemberId(), password.get("password"));
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
@@ -64,7 +63,7 @@ public class MemberApiController {
      */
     @GetMapping("/support/{page}")
     public ResponseEntity<PageResponse> getMySupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                   @PathVariable(value = "page") int pageNo) {
+                                                     @PathVariable(value = "page") int pageNo) {
         return ResponseEntity.ok().body(memberService.getMySupport(userDetails.getMember().getMemberId(), pageNo));
     }
 
@@ -73,7 +72,7 @@ public class MemberApiController {
      */
     @GetMapping("/like/{page}")
     public ResponseEntity<PageResponse> getMyLike(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                @PathVariable(value = "page") int pageNo) {
+                                                  @PathVariable(value = "page") int pageNo) {
         return ResponseEntity.ok().body(memberService.getMyLike(userDetails.getMember().getMemberId(), pageNo));
     }
 
