@@ -1,7 +1,6 @@
 package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.comment.service.CommentService;
-import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
@@ -15,7 +14,6 @@ import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
-import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import com.chungjin.wam.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -132,7 +132,7 @@ public class SupportService {
         Support support = getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
 
         //기존 대표 이미지를 삭제한 경우
         if (updateSupportReq.getFirstImgDeleted()) {
@@ -162,16 +162,15 @@ public class SupportService {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
-        if(memberId.equals(support.getMember().getMemberId()) || member.getAuthority().equals(Authority.ADMIN)) {
-            //S3에서 파일 삭제
-            deleteFileAtS3(support.getFirstImg());
-            //DB에서 영구 삭제
-            supportRepository.delete(support);
-        } else {
-            //그 외 에러 발생
-            throw new CustomException(ErrorCodeType.FORBIDDEN);
+        //로그인한 사용자가 작성자가 아닌 경우 에러 발생
+        if(!memberId.equals(support.getMember().getMemberId())) {
+            throw new CustomException(FORBIDDEN);
         }
+
+        //S3에서 파일 삭제
+        deleteFileAtS3(support.getFirstImg());
+        //DB에서 영구 삭제
+        supportRepository.delete(support);
     }
 
     //파일 업로드 메소드
@@ -195,7 +194,7 @@ public class SupportService {
      */
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     /**
@@ -203,7 +202,7 @@ public class SupportService {
      */
     private Support getSupport (Long supportId) {
         return supportRepository.findById(supportId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(SUPPORT_NOT_FOUND));
     }
 
     /**

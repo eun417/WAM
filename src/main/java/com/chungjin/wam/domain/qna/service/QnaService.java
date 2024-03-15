@@ -1,7 +1,5 @@
 package com.chungjin.wam.domain.qna.service;
 
-import com.chungjin.wam.domain.comment.dto.response.CommentDto;
-import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
@@ -15,7 +13,6 @@ import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
-import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +20,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -118,7 +113,7 @@ public class QnaService {
         Qna qna = getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(qna.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(qna.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
 
         //MapStruct로 수정
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
@@ -133,14 +128,13 @@ public class QnaService {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //로그인한 사용자가 작성자인 경우 또는 관리자인 경우 삭제 가능
-        if(memberId.equals(qna.getMember().getMemberId()) || member.getAuthority().equals(Authority.ADMIN)) {
-            //DB에서 영구 삭제
-            qnaRepository.delete(qna);
-        } else {
-            //그 외 에러 발생
-            throw new CustomException(ErrorCodeType.FORBIDDEN);
+        //로그인한 사용자가 작성자가 아닌 경우 에러 발생
+        if(!memberId.equals(qna.getMember().getMemberId())) {
+            throw new CustomException(FORBIDDEN);
         }
+
+        //DB에서 영구 삭제
+        qnaRepository.delete(qna);
     }
 
     /**
@@ -187,7 +181,7 @@ public class QnaService {
      */
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     /**
@@ -195,7 +189,7 @@ public class QnaService {
      */
     private Qna getQna (long qnaId) {
         return qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.QNA_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(QNA_NOT_FOUND));
     }
 
     /**

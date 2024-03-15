@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.admin.controller;
 
+import com.chungjin.wam.domain.admin.service.AdminService;
 import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.service.MemberService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 //@PreAuthorize("hasRole('ROLE_ADMIN')")  //관리자만 가능
 public class AdminApiController {
 
+    private final AdminService adminService;
     private final MemberService memberService;
     private final QnaService qnaService;
     private final SupportService supportService;
@@ -31,10 +33,9 @@ public class AdminApiController {
     /**
      * 회원 삭제 (관리자)
      */
-    @DeleteMapping("/member/leave/{memberId}")
-    public ResponseEntity<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                               @PathVariable(value = "memberId") Long selectedMemberId) {
-        memberService.deleteMember(userDetails.getMember().getMemberId(), selectedMemberId);
+    @DeleteMapping("/member/{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable(value = "memberId") Long memberId) {
+        adminService.deleteMember(memberId);
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
@@ -50,9 +51,8 @@ public class AdminApiController {
      * QnA 삭제 (관리자)
      */
     @DeleteMapping("/qna/{qnaId}")
-    public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable(value = "qnaId") Long qnaId) {
-        qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
+    public ResponseEntity<String> deleteQna(@PathVariable(value = "qnaId") Long qnaId) {
+        adminService.deleteQna(qnaId);
         return ResponseEntity.ok("QnA 게시물이 삭제되었습니다.");
     }
 
@@ -68,9 +68,8 @@ public class AdminApiController {
      * 후원 삭제 (관리자)
      */
     @DeleteMapping("/support/{supportId}")
-    public ResponseEntity<String> deleteSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @PathVariable(value = "supportId") Long supportId) {
-        supportService.deleteSupport(userDetails.getMember().getMemberId(), supportId);
+    public ResponseEntity<String> deleteSupport(@PathVariable(value = "supportId") Long supportId) {
+        adminService.deleteSupport(supportId);
         return ResponseEntity.ok("후원이 삭제되었습니다.");
     }
 
