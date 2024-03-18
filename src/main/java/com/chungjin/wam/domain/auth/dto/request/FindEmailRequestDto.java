@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static com.chungjin.wam.global.util.RegExp.PHONE_NUMBER_REGEXP;
+import static com.chungjin.wam.global.util.Constants.PHONE_NUMBER_REGEXP;
 
 @Getter
 @Setter

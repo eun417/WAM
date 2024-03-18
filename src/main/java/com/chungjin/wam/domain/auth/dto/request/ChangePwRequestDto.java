@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
-import static com.chungjin.wam.global.util.RegExp.PASSWORD_REGEXP;
+import static com.chungjin.wam.global.util.Constants.PASSWORD_REGEXP;
 
 @Getter
 public class ChangePwRequestDto {
