@@ -29,7 +29,7 @@ ul{
 /* 기본화면 레이아웃 */
 .page-content {
     width: 1200px;
-    margin: 30px auto;
+    margin: 0 auto;
     margin-bottom: 10px;
     flex-grow: 1;
 }
@@ -163,14 +163,14 @@ ul{
 }
 
 .bc3 {
-    background-color: rgba(238, 238, 238, 0.9);
+    background-color: rgba(240, 240, 240, 0.9);
     color: #252a34;
-    border: 2px solid rgba(238, 238, 238, 0.9);
+    border: 2px solid rgba(242, 242, 242, 0.9);
 }
 
 .bc3:hover {
-    background-color: rgb(226, 226, 226);
-    border: 2px solid rgb(226, 226, 226);
+    background-color: rgb(232, 232, 232);
+    border: 2px solid rgb(232, 232, 232);
     cursor: pointer;
 }
 

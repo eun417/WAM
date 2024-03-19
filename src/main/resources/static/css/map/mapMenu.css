@@ -1,0 +1,38 @@
+.map-menu{
+    width: 50%;
+    z-index: 1;
+    height: 100%;
+    margin: 10px;
+}
+.map-menu-title{
+    padding-bottom: 15px;
+}
+.menu-title{
+    font-size: 36px;
+    cursor: default;
+}
+.map-menu-list *{
+    cursor: pointer;
+}
+.map-menu-content{
+    border-radius: 0 0 15px 15px;
+}
+.map-menu-list>li>div{
+    display: flex;
+    font-weight: 600;
+}
+.map-menu-list>li>div{
+    text-align: center;
+}
+.map-menu-content>ul{
+    display: flex;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.menu-detail-title{
+    padding: 7px 20px 7px 20px;
+    margin-right: 10px;
+    position: relative;
+    display: block;
+    background-color: #fff;
+}

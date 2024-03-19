@@ -1,53 +1,52 @@
 package com.chungjin.wam.domain.map.controller;
 
-import com.chungjin.wam.domain.map.dto.MapDataDto;
-import com.chungjin.wam.domain.map.service.MapService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-
-@RestController
-@RequiredArgsConstructor
+@Controller
 @RequestMapping("/animal-map")
 public class MapController {
 
-    private final MapService mapService;
+    @Value("${naver.client.id}")
+    String clientId;
 
     /**
-     * 포유류 정보 조회
+     * 포유류 지도 조회
      */
     @GetMapping("/mml")
-    public ResponseEntity<List<MapDataDto>> callmmlMapApi() {
-        return ResponseEntity.ok(mapService.getMmlMap());
+    public String goMmlMap(Model model) {
+        model.addAttribute("clientId", clientId);
+        return "map/mmlMap";
     }
 
     /**
-     * 조류 정보 조회
+     * 조류 지도 조회
      */
     @GetMapping("/birds")
-    public ResponseEntity<List<MapDataDto>> callBirdsMapApi() {
-        return ResponseEntity.ok(mapService.getBirdsMap());
+    public String goBirdsMap(Model model) {
+        model.addAttribute("clientId", clientId);
+        return "map/birdsMap";
     }
 
     /**
-     * 양서파충류 정보 조회
+     * 양서파충류 지도 조회
      */
     @GetMapping("/amnrp")
-    public ResponseEntity<List<MapDataDto>> callAmnrpMapApi() {
-        return ResponseEntity.ok(mapService.getAmnrpMap());
+    public String goAmnrpMap(Model model) {
+        model.addAttribute("clientId", clientId);
+        return "map/AmnrpMap";
     }
 
     /**
-     * 어류 정보 조회
+     * 어류 지도 조회
      */
     @GetMapping("/fishes")
-    public ResponseEntity<List<MapDataDto>> callFishesMapApi() {
-        return ResponseEntity.ok(mapService.getFishesMap());
+    public String goFishesMap(Model model) {
+        model.addAttribute("clientId", clientId);
+        return "map/fishesMap";
     }
 
 }

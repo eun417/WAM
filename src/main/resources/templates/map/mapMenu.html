@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="mapMenu">
+    <!-- 전체 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@100..900&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" href="/css/common/default.css">
+    <link rel="stylesheet" href="/css/map/mapMenu.css">
+    <link rel="stylesheet" href="/css/map/mapDefault.css">
+    <!-- axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- naver map -->
+    <script type="text/javascript" th:src="@{'https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=' + ${clientId}}"></script>
+    <!-- proj4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <!-- js -->
+    <script src="/js/map/mapDefault.js"></script>
+
+    <div class="map-menu-wrapper">
+        <div class="map-menu">
+            <div class="map-menu-title">
+                <a href="/" class="menu-title">야생동물 지도</a>
+            </div>
+            <div class="map-menu-content">
+                <ul class="map-menu-list">
+                    <li>
+                        <a class="menu-detail-title btn bc3 btn-pill" href="/animal-map/mml">포유류</a>
+                    </li>
+                    <li>
+                        <a class="menu-detail-title btn bc3 btn-pill" href="/animal-map/birds">조류</a>
+                    </li>
+                    <li>
+                        <a class="menu-detail-title btn bc3 btn-pill" href="/animal-map/amnrp">양서파충류</a>
+                    </li>
+                    <li>
+                        <a class="menu-detail-title btn bc3 btn-pill" href="/animal-map/fishes">어류</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
