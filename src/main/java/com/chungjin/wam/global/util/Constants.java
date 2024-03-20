@@ -14,22 +14,23 @@ public final class Constants {
     /**
      * 자연환경조사 데이터 조회에 필요한 상수
      */
-    public static final String BASE_URL = "https://www.nie-ecobank.kr/ecoapi/NteeInfoService/wfs";
+    public static final String BASE_URL = "https://www.nie-ecobank.kr/ecoapi/EcpeInfoService/wfs";
+    public static final String BBOX = "-410465.4539024363%2C23210.844119483023%2C811157.9208071957%2C634022.531474299";
 
     //양서파충류
     public static final String AMNRP_URL_DETAIL = "/getAmnrpPointWFS";
-    public static final String AMNRP_TYPE_NAME = "mv_map_ntee_amnrp_point";
+    public static final String AMNRP_TYPE_NAME = "mv_map_ecpe_amnrp_point";
 
     //포유류
     public static final String MML_URL_DETAIL = "/getMmlPointWFS";
-    public static final String MML_TYPE_NAME = "mv_map_ntee_mml_point";
+    public static final String MML_TYPE_NAME = "mv_map_ecpe_mml_point";
 
     //조류
     public static final String BIRDS_URL_DETAIL = "/getBirdsPointWFS";
-    public static final String BIRDS_TYPE_NAME = "mv_map_ntee_birds_point";
+    public static final String BIRDS_TYPE_NAME = "mv_map_ecpe_birds_point";
 
     //어류
     public static final String FISHES_URL_DETAIL = "/getFishesPointWFS";
-    public static final String FISHES_TYPE_NAME = "mv_map_ntee_fishes_point";
+    public static final String FISHES_TYPE_NAME = "mv_map_ecpe_fishes_point";
 
 }

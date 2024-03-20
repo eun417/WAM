@@ -2,3 +2,19 @@
     width: 100%;
     height: 700px;
 }
+/*선택된 메뉴 동적 클래스*/
+.active-menu-detail{
+    background-color: rgb(232, 232, 232);
+}
+/*정보창*/
+.animal-detail-parent-parent {
+    border-radius: 15px;
+}
+/*출처 표시*/
+.map-bottom{
+    text-align: right;
+}
+.map-bottom>p{
+    color: #a9a9a9;
+    font-size: 14px;
+}

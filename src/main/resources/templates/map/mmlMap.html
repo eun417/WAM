@@ -14,6 +14,15 @@
             <div id="map"></div>
         </div>
     </div>
+    <div class="map-bottom">
+        <p>출처: 국립생태원 생태계정밀조사</p>
+    </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.map-menu-list li:first-child .menu-detail-title').addClass('active-menu-detail');   //메뉴 선택
+        loadDataAndAddMarkers('/animal-map/mml-detail');    //네이버 지도 조회
+    });
+</script>
 </body>
 </html>
