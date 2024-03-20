@@ -16,7 +16,7 @@ async function loadDataAndAddMarkers(apiUrl) {
         const response = await axios.get(apiUrl);
         const mapDataList = response.data;
 
-        for (const mapData of mapDataList) {
+        mapDataList.forEach(async (mapData) => {
             //좌표 변환 (EPSG:5186 -> WGS84)
             var p1 = proj4(epsg5186, epsg4326, [mapData.coordinates[0], mapData.coordinates[1]]);
 
@@ -49,7 +49,7 @@ async function loadDataAndAddMarkers(apiUrl) {
                     infoWindow.close();
                 }
             });
-        }
+        });
     } catch (error) {
         console.error(error);
     }
