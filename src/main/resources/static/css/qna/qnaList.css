@@ -1,0 +1,145 @@
+.QnAlist-wrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
+    text-align: center; /* 텍스트 가운데 정렬 플러스*/
+}
+
+/* 본문 */
+.QnAlist-ContBox{
+    text-align: center;
+}
+.QnAlist-inputBox{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.QnAlist-header{
+    margin-bottom: 90px;
+}
+.QnAlist-header span{
+    font-size: 48px;
+    font-weight: 600;
+    border-bottom: 5px solid #445D48;
+    padding-bottom: 10px;
+}
+.QnAlist-searchBox{
+    position: relative;
+    display: flex;
+}
+.QnAsearch{
+    margin-right: 5px;
+}
+#search-btn{
+    cursor: pointer;
+    padding: 12px 15px 12px 15px;
+    font-weight: 500;
+}
+.QnAlist-searchBox>.QnAsearch{
+    height: 50px;
+    width: 600px;
+    display: inline-block;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.QnAlist-searchBox>.select{
+    width: 15%;
+    height: 50px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 15px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+}
+
+.QnAlist-inputBox>.writer-btn{
+    text-decoration: none;
+    padding: 10px 15px 10px 15px;
+}
+.writer-btn>div{
+    display: flex;
+    cursor: pointer;
+}
+.writer-btn span{
+    color: #fff;
+}
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 15
+}
+
+.list-header{
+    margin-top: 30px;
+    min-width: 1150px;
+    height: 50px;
+}
+
+/* table */
+.header-list{
+    min-width: 1150px;
+    height: 50px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border: 2px solid #F5F5F5;
+    border-spacing: 0;
+}
+.header-list th{
+    background-color: #f6f6f1;
+    color: #333536;
+}
+.header-list tr{
+    height: 50px;
+}
+.header-list tr:hover{
+    background-color: #fafafa;
+}
+#qnaDetail{
+    cursor: pointer;
+}
+#qnaDetail:hover{
+    color: #808080;
+    transition: 0.2s ease-out;
+}
+#qnaTableBody .answer-btn{
+    pointer-events: none;
+}
+
+/* pagination */
+.w3-center{
+    margin-top: 30px;
+}
+
+.w3-pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0
+}
+
+.w3-pagination li {
+    display: inline
+}
+
+.w3-pagination li a {
+    text-decoration: none;
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.w3-pagination li a:hover {
+    background-color: #f0f0f0;
+}
+
+.w3-green,.w3-hover-green:hover {
+    color: #fff!important;
+    background-color: #445D48!important
+}
+.answer-btn{
+    width: 80%;
+}

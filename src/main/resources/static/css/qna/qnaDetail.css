@@ -1,0 +1,92 @@
+.QnAHeader-wrapper{
+    max-height: max-content;
+    max-width: max-content;
+    margin-bottom: 30px;
+}
+
+.D-left-box {
+    float: left; /* 왼쪽으로 정렬 */
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    height: 80px;
+    width: 80px;
+}
+.D-left-box {
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    overflow:hidden;
+    margin:0 auto;
+    margin-right: 15px;
+}
+
+.D-left-box img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.D-right-box {
+    overflow: hidden; /* 자식 요소의 float 속성에 영향을 받지 않도록 처리 */
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+}
+.D-top{
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 5px;
+}
+.D-bottom{
+    display: flex;
+}
+.D-bottom *{
+    color: #808080;
+}
+.D-date{
+    margin-right: 10px;
+}
+.D-viewCount{
+    display: flex;
+}
+.D-viewCount>span:first-child{
+    margin-left: 10px;
+    margin-right: 5px;
+}
+.D-title{
+    font-size: 30px;
+    font-weight: bolder;
+}
+.D-titleBox{
+    min-width: 1150px;
+    display: grid;
+    grid-template-columns: 1060px 90px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #f0f0f0;
+}
+.d-textarea{
+    padding: 50px 10px 150px 10px;
+    border-bottom: 3px solid #f0f0f0;
+    width: 1150px;
+}
+.d-textarea>textarea{
+    width: 100%;
+}
+.D-answer{
+    text-align: center;
+    width: 1150px;
+}
+.btn-answer{
+    margin-top: 30px;
+    min-width: 800px;
+    width: 100%;
+}
+.answer-comp{
+    pointer-events: none;
+}
+.answer-nyet{
+    border-radius: 8px;
+    font-weight: 700;
+    background-color: #BFBFBF;
+    color: #ffffff;
+    padding: 6px;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/qna/qnaList.css">
+    <title>QnAList</title>
+</head>
+<body>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
+
+<div class="QnAlist-wrapper wrapper">
+    <div class="QnAlist-ContBox contbox">
+        <div class="QnAlist-header"><span>QnA</span></div>
+        <div class="QnAlist-inputBox">
+            <div class="QnAlist-searchBox">
+                <select class="select">
+                    <option value="Title">제목+내용</option>
+                    <option value="Writer">작성자</option>
+                </select>
+                <!-- QnA 검색창 name : QnAsearch -->
+                <input type="text" class="QnAsearch input-form" name="QnAsearch" placeholder="내용을 입력해주세요.">
+                <button id="search-btn" class="btn bc3">Search</button>
+            </div>
+            <button class="writer-btn btn bc4" onclick="goToQnaDetail(event, ${qnaId})">
+                <div onclick="goToQnaWrite(event)">
+                    <span class="material-symbols-outlined">edit</span>
+                    <span>글쓰기</span>
+                </div>
+            </button>
+        </div>
+        <div class="tableBox">
+            <table id="qnaTable" class="header-list">
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                    <th>답변</th>
+                </tr>
+                <tbody id="qnaTableBody">
+            </table>
+        </div>
+        <div class="w3-center">
+            <ul id="pagination" class="w3-pagination"></ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

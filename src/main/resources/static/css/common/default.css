@@ -26,7 +26,19 @@ ul{
 }
 
 
+
 /* 기본화면 레이아웃 */
+.wrapper{
+    margin-top:170px;
+}
+.contbox{
+    max-height: max-content;
+    max-width: max-content;
+    min-height: 800px;
+    margin: 0 auto;
+    padding-bottom: 5px;
+}
+
 .page-content {
     width: 1200px;
     margin: 0 auto;
