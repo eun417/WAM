@@ -44,5 +44,43 @@
         <div class="D-answer"><button class="btn-answer btn bc4">답변작성하기</button></div>
     </div>
 </div>
+
+<script>
+    /*QnA 상세 조회*/
+    function loadQnaDetail() {
+        var qnaId = [[${qnaId}]];
+        console.log(qnaId);
+
+        axios.get(`/qna/${qnaId}`)
+            .then(function(response) {
+                var qnaDetail = response.data;
+
+                var titleElement = document.querySelector('.D-title');
+                var nicknameElement = document.querySelector('.D-top');
+                var createDateElement = document.querySelector('.D-date');
+                var viewCountElement = document.querySelector('.viewCount-num');
+                var contentElement = document.querySelector('.D-textarea p');
+
+                //데이터 넣기
+                nicknameElement.textContent = qnaDetail.nickname;
+                createDateElement.textContent = qnaDetail.createDate;
+                viewCountElement.textContent = qnaDetail.viewCount;
+                titleElement.textContent = qnaDetail.title;
+                contentElement.textContent = qnaDetail.content;
+
+                //답변 상태에 따라 버튼 스타일 설정
+                var answerButton = document.querySelector('.answer-comp');
+                answerButton.classList.add(qnaDetail.qnaCheck === 'CHECKING' ? 'bc3' : 'bc2');
+                answerButton.textContent = qnaDetail.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료';
+            })
+            .catch(function(error) {
+                console.error(error);
+                alert('QnA를 불러오지 못했습니다.');
+            });
+    }
+
+    //QnA 상세 조회 함수 실행
+    loadQnaDetail();
+</script>
 </body>
 </html>

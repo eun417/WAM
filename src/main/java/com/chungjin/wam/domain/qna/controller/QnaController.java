@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -37,6 +38,15 @@ public class QnaController {
     @GetMapping("/write")
     public String goQnaWrite() {
         return "qna/qnaWrite";
+    }
+
+    /**
+     * 검색
+     */
+    @GetMapping("/search")
+    public String goQnaSearch(@RequestParam("select") String select,
+                              @RequestParam("search") String search) {
+        return "qna/qnaSearch";
     }
 
 }

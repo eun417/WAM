@@ -92,6 +92,22 @@
     background-color: #f6f6f1;
     color: #333536;
 }
+/*크기 지정*/
+.header-list th:nth-child(1){
+    width: 8%;
+}
+.header-list th:nth-child(3){
+    width: 15%;
+}
+.header-list th:nth-child(4){
+    width: 15%;
+}
+.header-list th:nth-child(5){
+    width: 10%;
+}
+.header-list th:nth-child(6){
+    width: 12%;
+}
 .header-list tr{
     height: 50px;
 }
@@ -107,6 +123,7 @@
 }
 #qnaTableBody .answer-btn{
     pointer-events: none;
+    width: 70%;
 }
 
 /* pagination */
@@ -139,7 +156,4 @@
 .w3-green,.w3-hover-green:hover {
     color: #fff!important;
     background-color: #445D48!important
-}
-.answer-btn{
-    width: 80%;
 }

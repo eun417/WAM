@@ -57,9 +57,9 @@
     font-weight: bolder;
 }
 .D-titleBox{
-    min-width: 1150px;
-    display: grid;
-    grid-template-columns: 1060px 90px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     padding-bottom: 10px;
     border-bottom: 3px solid #f0f0f0;
 }
@@ -73,7 +73,6 @@
 }
 .D-answer{
     text-align: center;
-    width: 1150px;
 }
 .btn-answer{
     margin-top: 30px;

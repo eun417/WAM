@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/qna/qnaList.css">
-    <title>QnAList</title>
+    <title>QnA Search</title>
 </head>
 <body>
 <!-- header 영역 참조 -->
@@ -16,8 +16,8 @@
         <div class="QnAlist-inputBox">
             <div class="QnAlist-searchBox">
                 <select class="select">
-                    <option value="tc">제목+내용</option>
-                    <option value="writer">작성자</option>
+                    <option value="Title">제목+내용</option>
+                    <option value="Writer">작성자</option>
                 </select>
                 <!-- QnA 검색창 name : QnAsearch -->
                 <input type="text" class="QnAsearch input-form" name="QnAsearch" placeholder="내용을 입력해주세요.">
@@ -51,21 +51,41 @@
 
 <script src="/js/qna/qnaList.js"></script>
 <script>
-    /*QnA 목록 조회*/
+    /*URL에서 매개변수 추출 함수*/
+    function getQueryParams() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const select = urlParams.get('select');
+        const search = urlParams.get('search');
+        console.log(select);
+        console.log(search);
+        return { select, search };
+    }
+
+    /*QnA 검색 목록 조회*/
     var currentPage = 0;    //현재 페이지 번호를 저장할 변수
     loadQnaList(currentPage);   //페이지 로드 시 첫 번째 페이지 QnA 목록을 불러옴
 
-    //페이지 로드 시 QnA 목록을 테이블에 표시하는 함수
+    //페이지 로드 시 QnA 검색 목록을 테이블에 표시하는 함수
     function loadQnaList(page) {
-        axios.get(`/qna?page=${page}`)
+        const { select, search } = getQueryParams();
+
+        axios.get(`/qna/search/`+ select + `?search=${search}&page=${page}`)
             .then(function(response) {
+                if (response.data.content.length === 0) {
+                    //검색 결과가 없는 경우
+                    alert('검색 결과가 없습니다.');
+                    window.location.href = "/qna/list";
+                    return;
+                }
+
                 //서버로부터 받은 데이터를 테이블에 추가
-                var qnaList = response.data.content;
+                var searchList = response.data.content;
                 var tableBody = document.querySelector('#qnaTableBody');
                 tableBody.innerHTML = ''; //테이블 내용 초기화
                 var num = response.data.totalElements;  //전체 Qna 수
 
-                qnaList.forEach(function(qna) {
+                searchList.forEach(function(qna) {
                     var row = `<tr>
                                 <td>${qna.qnaId}</td>
                                 <td id="qnaDetail" onclick="goToQnaDetail(event, ${qna.qnaId})">${qna.title}</td>
