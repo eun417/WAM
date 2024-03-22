@@ -10,7 +10,7 @@
 <!-- header 영역 참조 -->
 <header th:insert="~{/header :: header}"></header>
 
-<div class="QnAlist-wrapper wrapper">
+<div class="QnAlist-wrapper page-content">
     <div class="QnAlist-ContBox contbox">
         <div class="QnAlist-header"><span>QnA</span></div>
         <div class="QnAlist-inputBox">
@@ -72,7 +72,7 @@
                                 <td>${qna.nickname}</td>
                                 <td>${qna.createDate}</td>
                                 <td>${qna.viewCount}</td>
-                                <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc2'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                                <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
                             </tr>`;
                     tableBody.innerHTML += row; // 행 추가
                     num--;

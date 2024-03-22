@@ -74,7 +74,7 @@
     font-weight: 600;
 }
 .menu-active{
-    font-weight: 600;
+    font-weight: 600 !important;
     border-bottom: 4px solid #445D48;
 }
 
@@ -87,6 +87,5 @@
     border-radius: 10px;
 }
 
-.right-box button{
-    height: 40px;
+.right-box>.btn{
 }

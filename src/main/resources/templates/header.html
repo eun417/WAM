@@ -11,7 +11,7 @@
     <!-- 로고 폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <!-- css -->
-    <link rel="stylesheet"  th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/common/default.css}">
     <link rel="stylesheet" th:href="@{/css/qna/qnaList.css}">
     <link rel="stylesheet" th:href="@{/css/qna/qnaDetail.css}">
@@ -19,22 +19,53 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- js -->
+    <script th:src="@{/js/common/checkToken.js}"></script>
 
     <div class="header-wrapper">
         <div class="header">
             <div class="left-box">
-                <div class="logo"><img src="#"></div>
+                <div>
+                    <div class="logo"><img src="https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png" style="width:100%;" alt="Logo"></div>
+                </div>
                 <div class="menu">
-                    <a href="#">야생동물 지도</a>
+                    <a href="/animal-map/mml">야생동물 지도</a>
                     <a href="#">후원하기</a>
-                    <a href="#">QnA</a>
+                    <a href="/qna/list">QnA</a>
                 </div>
             </div>
             <div class="right-box">
-                <button class="button-login btn bc3 bs1">로그인</button>
-                <button class="button-join btn bc5 bs1">회원가입</button>
+                <a href="/auth/login" class="button-login btn bc3 bs1" style="display: none;">로그인</a>
+                <a href="/auth/signup/main" class="button-join btn bc5 bs1" style="display: none;">회원가입</a>
+                <a href="/member/profile" class="button-mypage btn bc3 bs1" style="display: none;">My Page</a>
+                <a class="button-logout btn bc5 bs1" style="display: none;">로그아웃</a>
             </div>
         </div>
     </div>
+
+    <script>
+        //현재 있는 탭에 acitve 클래스 추가하는 코드
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 URL에 따라 클래스 추가
+            var currentPath = window.location.pathname;
+
+            var menuItems = document.querySelectorAll('.menu a');
+            menuItems.forEach(function(item) {
+                item.classList.remove('menu-active'); // 모든 메뉴에서 클래스 제거
+            });
+
+            var qnaMenuItem = document.querySelector('.menu a[href^="/qna"]');
+            var supportMenuItem = document.querySelector('.menu a[href^="/support"]');
+            var animalMapMenuItem = document.querySelector('.menu a[href^="/animal-map"]');
+
+            if (qnaMenuItem && currentPath.startsWith("/qna")) {
+                qnaMenuItem.classList.add('menu-active');
+            } else if (supportMenuItem && currentPath.startsWith("/support")) {
+                supportMenuItem.classList.add('menu-active');
+            } else if (animalMapMenuItem && currentPath.startsWith("/animal-map")) {
+                animalMapMenuItem.classList.add('menu-active');
+            }
+        });
+    </script>
 </header>
 </html>

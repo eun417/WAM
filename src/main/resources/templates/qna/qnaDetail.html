@@ -20,7 +20,7 @@
 <!-- header 영역 참조 -->
 <header th:insert="~{/header :: header}"></header>
 
-<div class="QnADetail-wrapper wrapper">
+<div class="QnADetail-wrapper page-content">
     <div class="QnADetail-contBox contbox">
         <div class="QnAHeader-wrapper">
             <input type="hidden" id="qnaId" value="${qnaId}">
@@ -36,12 +36,12 @@
         </div>
         <div class="D-titleBox">
             <p class="D-title"></p>
-            <button class="answer-comp btn bc2 bs1">답변완료</button>
+            <button class="answer-comp btn bs1"></button>
         </div>
         <div class="D-textarea">
             <p></p>
         </div>
-        <div class="D-answer"><button class="btn-answer btn bc4">답변작성하기</button></div>
+        <div class="D-answer" style="display:none;"><button class="btn-answer btn bc4">답변작성하기</button></div>
     </div>
 </div>
 
@@ -70,7 +70,7 @@
 
                 //답변 상태에 따라 버튼 스타일 설정
                 var answerButton = document.querySelector('.answer-comp');
-                answerButton.classList.add(qnaDetail.qnaCheck === 'CHECKING' ? 'bc3' : 'bc2');
+                answerButton.classList.add(qnaDetail.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7');
                 answerButton.textContent = qnaDetail.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료';
             })
             .catch(function(error) {
@@ -79,8 +79,20 @@
             });
     }
 
+    function showAnswerBtnForAdmin() {
+        //payload에서 데이터 가져오기
+        const payload = getPayloadData();
+
+        //권한이 관리자이면 답변 작성 버튼 보이기
+        if (payload.auth == "ADMIN") {
+            document.querySelector('.D-answer').style.display = 'block';
+        }
+        const exp = payload.exp;    //토큰 만료 시간
+    }
+
     //QnA 상세 조회 함수 실행
     loadQnaDetail();
+    showAnswerBtnForAdmin();
 </script>
 </body>
 </html>

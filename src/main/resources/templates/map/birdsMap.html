@@ -6,7 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-<div class="map-wrapper page-content">
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
+
+<div class="map-wrapper page-content wrapper">
     <!-- mapMenu 영역 참조 -->
     <div th:insert="~{map/mapMenu :: mapMenu}"></div>
     <div class="map-detail">
@@ -18,6 +21,7 @@
         <p>출처: 국립생태원 생태계정밀조사</p>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         $('.map-menu-list li:nth-child(2) .menu-detail-title').addClass('active-menu-detail');   //메뉴 선택
