@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/donation.css">
-    <link rel="stylesheet" href="css/QnA.css">
+<!--    <link rel="stylesheet" href="css/donation.css">-->
+    <link rel="stylesheet" th:href="@{/css/qna/qnaList.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>donationList</title>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <body>
 <!-- header 영역 참조 -->
 <header th:insert="~{/header :: header}"></header>
 
-<div class="donationList-wrapper wrapper">
+<div class="donationList-wrapper page-content">
     <div class="donationList-ContBox">
         <div class="donationList-header"><span>후원하기</span></div>
         <div class="donationList-body">

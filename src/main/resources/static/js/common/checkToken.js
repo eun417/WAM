@@ -7,6 +7,10 @@ function getToken() {
 function getPayloadData() {
     //토큰을 로컬 스토리지에서 가져오기
     const token = localStorage.getItem('accessToken');
+    //토큰이 없는 경우 0 반환
+    if (!token) {
+        return 0;
+    }
     //토큰의 payload 부분 추출
     var base64Payload = token.split('.')[1];    //value 0: header, 1: payload, 2: VERIFY SIGNATURE
     //base64 디코딩 및 JSON 객체로 변환
