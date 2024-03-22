@@ -35,8 +35,8 @@
                 </div>
             </div>
             <div class="right-box">
-                <a href="/auth/login" class="button-login btn bc3 bs1" style="display: none;">로그인</a>
-                <a href="/auth/signup/main" class="button-join btn bc5 bs1" style="display: none;">회원가입</a>
+                <a href="/auth/login" class="button-login btn bc3 bs1">로그인</a>
+                <a href="/auth/signup/main" class="button-join btn bc5 bs1">회원가입</a>
                 <a href="/member/profile" class="button-mypage btn bc3 bs1" style="display: none;">My Page</a>
                 <a class="button-logout btn bc5 bs1" style="display: none;">로그아웃</a>
             </div>
@@ -66,6 +66,29 @@
                 animalMapMenuItem.classList.add('menu-active');
             }
         });
+
+        /*로그아웃 요청 함수*/
+        function logout() {
+            //토큰을 로컬 스토리지에서 가져오기
+            const token = localStorage.getItem('accessToken');
+
+            axios.get('/auth/logout', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }).then(function(response) {
+              console.log(response.data);
+
+              localStorage.removeItem('accessToken');
+              //window.location.href = '/';
+            })
+            .catch(function(error) {
+              console.error(error);
+            });
+        }
+
+        //로그아웃
+        document.querySelector('.button-logout').addEventListener('click', logout);
     </script>
 </header>
 </html>
