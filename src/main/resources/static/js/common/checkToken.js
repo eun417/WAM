@@ -3,6 +3,11 @@ function getToken() {
     return localStorage.getItem('accessToken');
 }
 
+//토큰을 토컬 스토리지에 저장
+function saveTokenToLocalStorage(accessToken) {
+    localStorage.setItem('accessToken', accessToken);
+}
+
 //payload에서 데이터 가져오기
 function getPayloadData() {
     //토큰을 로컬 스토리지에서 가져오기
@@ -40,10 +45,10 @@ function checkTokenExpiration() {
         //토큰 있는 경우: 로그인 상태
         const tokenExpiration = payload.exp * 1000; //밀리초 단위로 변환
         const currentTime = Date.now();
-        if (tokenExpiration && tokenExpiration < currentTime) {
+        if (tokenExpiration && tokenExpiration <= currentTime) {
             console.log("토큰 만료")
             //토큰 만료된 경우: 로그아웃 처리
-            logout();
+            logout(token);
         }
     }
 }

@@ -75,7 +75,6 @@ public class QnaApiController {
      * QnA 답변 등록 (관리자만 가능)
      */
     @PutMapping("/{qnaId}/answer")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> updateQnaAnswer(@PathVariable(value = "qnaId") Long qnaId,
                                                   @RequestBody @Valid QnaAnswerRequestDto qnaAnswerReq) {
         qnaService.updateQnaAnswer(qnaId, qnaAnswerReq);

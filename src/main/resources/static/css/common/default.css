@@ -52,6 +52,13 @@ ul{
     font-size: 1.5rem;
 }
 
+/*active 클래스*/
+.display-block{
+    display: block;
+}
+.display-none{
+    display: none;
+}
 
 /* font 클래스 */
 .f-thin {

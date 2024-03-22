@@ -67,6 +67,7 @@ public class QnaService {
         //Entity -> Dto
         return QnaDetailDto.builder()
                 .qnaId(qna.getQnaId())
+                .memberId(qna.getMember().getMemberId())
                 .nickname(qna.getMember().getNickname())
                 .title(qna.getTitle())
                 .content(qna.getContent())

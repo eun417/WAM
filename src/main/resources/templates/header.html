@@ -19,8 +19,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- js -->
-    <script th:src="@{/js/common/checkToken.js}"></script>
 
     <div class="header-wrapper">
         <div class="header">
@@ -43,8 +41,9 @@
         </div>
     </div>
 
+    <script th:src="@{/js/common/checkToken.js}"></script>
     <script>
-        //현재 있는 탭에 acitve 클래스 추가하는 코드
+        //현재 있는 탭에 menu-acitve 클래스 추가하는 코드
         document.addEventListener('DOMContentLoaded', function() {
             // 현재 URL에 따라 클래스 추가
             var currentPath = window.location.pathname;
@@ -68,17 +67,13 @@
         });
 
         /*로그아웃 요청 함수*/
-        function logout() {
-            //토큰을 로컬 스토리지에서 가져오기
-            const token = localStorage.getItem('accessToken');
-
+        function logout(token) {
             axios.get('/auth/logout', {
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
             }).then(function(response) {
               console.log(response.data);
-
               localStorage.removeItem('accessToken');
               //window.location.href = '/';
             })
@@ -88,7 +83,10 @@
         }
 
         //로그아웃
-        document.querySelector('.button-logout').addEventListener('click', logout);
+        document.querySelector('.button-logout').addEventListener('click', function() {
+            const token = getToken();
+            logout(token);
+        });
     </script>
 </header>
 </html>

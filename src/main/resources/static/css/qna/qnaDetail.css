@@ -71,12 +71,22 @@
 .d-textarea>textarea{
     width: 100%;
 }
-.D-answer{
-    text-align: center;
+.D-writer{
+    display: flex;
+    justify-content: right;
+    margin-top: 10px;
+}
+.D-writer>button:first-child{
+    margin-right: 10px;
+}
+.D-writer>button{
+    width: 8%;
 }
 .btn-answer{
     margin-top: 30px;
     min-width: 800px;
+}
+.D-answer .btn{
     width: 100%;
 }
 .answer-comp{
@@ -88,4 +98,24 @@
     background-color: #BFBFBF;
     color: #ffffff;
     padding: 6px;
+}
+/*답변 입력창*/
+.D-answer>.input-form{
+    margin-top: 50px;
+    min-height: 300px;
+}
+#answerContent{
+    padding-top: 30px;
+}
+#answerContent>div{
+    padding: 0 10px 80px 10px;
+}
+.answer-date{
+    color: #a9a9a9;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: right;
+}
+.answer-content{
+    width: 100%;
 }
