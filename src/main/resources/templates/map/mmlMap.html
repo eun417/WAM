@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
+
+<div class="map-wrapper page-content wrapper">
+    <!-- mapMenu 영역 참조 -->
+    <div th:insert="~{map/mapMenu :: mapMenu}"></div>
+    <div class="map-detail">
+        <div class="content-wrap">
+            <div id="map"></div>
+        </div>
+    </div>
+    <div class="map-bottom">
+        <p>출처: 국립생태원 생태계정밀조사</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.map-menu-list li:first-child .menu-detail-title').addClass('active-menu-detail');   //메뉴 선택
+        loadDataAndAddMarkers('/animal-map/mml-detail');    //네이버 지도 조회
+    });
+</script>
+</body>
+</html>

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class QnaDetailDto {
 
     private Long qnaId;
-    private String email;
+    private String nickname;
     private String title;
     private String content;
     private String createDate;

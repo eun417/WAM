@@ -9,13 +9,12 @@ import java.util.List;
 @Builder
 public class MapDataDto {
 
-    private List<String> coordinates;
-    private String realmCode;
+    private List<Double> coordinates;
+//    private String realmCode;
     private String year;
     private String speciesName;
-    private String speciesEngName;
-    private String pointLnPynSeCode;
-    private String tme;
+    private String areaName;
+//    private String pointLnPynSeCode;
     private String beginDate;
     private String endDate;
 

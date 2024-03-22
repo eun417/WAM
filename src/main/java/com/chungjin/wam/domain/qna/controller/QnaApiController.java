@@ -45,8 +45,8 @@ public class QnaApiController {
     /**
      * QnA List 조회 (Pagination)
      */
-    @GetMapping("/page={page}")
-    public ResponseEntity<PageResponse> readAllQna(@PathVariable(value = "page") int pageNo) {
+    @GetMapping
+    public ResponseEntity<PageResponse> readAllQna(@RequestParam("page") int pageNo) {
         return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
     }
 
@@ -85,19 +85,19 @@ public class QnaApiController {
     /**
      * 검색 - 제목+내용
      */
-    @GetMapping("/search/page={page}")
-    public ResponseEntity<List<QnaResponseDto>> searchQna(@RequestParam("keyword") String keyword,
-                                                          @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(qnaService.searchQna(keyword, page));
+    @GetMapping("/search/tc")
+    public ResponseEntity<PageResponse> searchQna(@RequestParam("search") String keyword,
+                                                  @RequestParam("page") int pageNo) {
+        return ResponseEntity.ok().body(qnaService.searchQna(keyword, pageNo));
     }
 
     /**
      * 검색 - 작성자
      */
-    @GetMapping("/search/writer/page={page}")
-    public ResponseEntity<List<QnaResponseDto>> searchQnaWriter(@RequestParam("keyword") String keyword,
-                                                                @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, page));
+    @GetMapping("/search/writer")
+    public ResponseEntity<PageResponse> searchQnaWriter(@RequestParam("search") String keyword,
+                                                        @RequestParam("page") int pageNo) {
+        return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, pageNo));
     }
 
 }

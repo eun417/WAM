@@ -1,7 +1,6 @@
 package com.chungjin.wam.domain.map.service;
 
 import com.chungjin.wam.domain.map.dto.MapDataDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import java.net.URLEncoder;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -113,29 +111,36 @@ public class MapService {
                 if (ecoBankList.getLength() > 0) {
                     Element ecoBankElement = (Element) ecoBankList.item(0);
 
-                    String coordinates = ecoBankElement.getElementsByTagName("EcoBank:geom").item(0).getTextContent();
-                    String realmCode = ecoBankElement.getElementsByTagName("EcoBank:examin_realm_se_code").item(0).getTextContent();
-                    String year = ecoBankElement.getElementsByTagName("EcoBank:examin_year").item(0).getTextContent();
-                    String speciesName = ecoBankElement.getElementsByTagName("EcoBank:spcs_korean_nm").item(0).getTextContent();
-                    String speciesEngName = getElementTextContent(ecoBankElement, "EcoBank:spcs_eng_nm");
-                    String pointLnPynSeCode = ecoBankElement.getElementsByTagName("EcoBank:point_ln_pyn_se_code").item(0).getTextContent();
-                    String tme = getElementTextContent(ecoBankElement, "EcoBank:tme");
+                    String speciesName = getElementTextContent(ecoBankElement, "EcoBank:spcs_korean_nm");
+                    if (speciesName.equals("알수없음")) {
+                        continue;
+                    }
+                    String coordinates = getElementTextContent(ecoBankElement, "EcoBank:geom");
+//                    String realmCode = getElementTextContent(ecoBankElement, "EcoBank:examin_realm_se_code");
+                    String year = getElementTextContent(ecoBankElement, "EcoBank:examin_year");
+                    String areaName = getElementTextContent(ecoBankElement, "EcoBank:examin_area_nm");
+//                    String pointLnPynSeCode = getElementTextContent(ecoBankElement, "EcoBank:point_ln_pyn_se_code");
                     String beginDate = getElementTextContent(ecoBankElement, "EcoBank:examin_begin_de");
                     String endDate = getElementTextContent(ecoBankElement, "EcoBank:examin_end_de");
 
+
+
                     //좌표 데이터 분리
                     String[] coordinatePairs = coordinates.split(",");
-                    List<String> coordinateList = Arrays.asList(coordinatePairs);
+
+                    //Double로 형 변환하여 List 저장
+                    List<Double> coordinateList = new ArrayList<>();
+                    coordinateList.add(Double.parseDouble(coordinatePairs[0])); // 위도
+                    coordinateList.add(Double.parseDouble(coordinatePairs[1])); // 경도
 
                     //DTO에 저장
                     MapDataDto mapDataDto = MapDataDto.builder()
                             .coordinates(coordinateList)
-                            .realmCode(realmCode)
+//                            .realmCode(realmCode)
                             .year(year)
                             .speciesName(speciesName)
-                            .speciesEngName(speciesEngName)
-                            .pointLnPynSeCode(pointLnPynSeCode)
-                            .tme(tme)
+                            .areaName(areaName)
+//                            .pointLnPynSeCode(pointLnPynSeCode)
                             .beginDate(beginDate)
                             .endDate(endDate)
                             .build();
@@ -151,7 +156,7 @@ public class MapService {
     //null 처리하는 함수
     private String getElementTextContent(Element element, String tagName) {
         NodeList nodeList = element.getElementsByTagName(tagName);
-        return nodeList.getLength() > 0 ? nodeList.item(0).getTextContent() : null;
+        return nodeList.getLength() > 0 ? nodeList.item(0).getTextContent() : "알수없음";
     }
 
     //자연환경조사 데이터 가져오는 함수
@@ -161,7 +166,7 @@ public class MapService {
         StringBuilder parameter = new StringBuilder();
         parameter.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
         parameter.append("&" + URLEncoder.encode("srs", "UTF-8") + "=" + URLEncoder.encode("EPSG:5186", "UTF-8"));
-        parameter.append("&" + URLEncoder.encode("bbox", "UTF-8") + "=" + URLEncoder.encode("314540.9311225004,400742.29949240043,320869.0145135768,419072.0397406582", "UTF-8"));
+        parameter.append("&" + URLEncoder.encode("bbox", "UTF-8") + "=" + URLEncoder.encode(BBOX, "UTF-8"));
         parameter.append("&" + URLEncoder.encode("typeName", "UTF-8") + "=" + URLEncoder.encode(typeName, "UTF-8"));
         parameter.append("&" + URLEncoder.encode("maxFeatures", "UTF-8") + "=" + URLEncoder.encode("500", "UTF-8"));
 

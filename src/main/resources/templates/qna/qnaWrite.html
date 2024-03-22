@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>QnAWrite</title>
+    <script>
+    //에디터
+    $(document).ready(function() {
+	    $('#summernote').summernote({
+		  height: 500,         
+		  minHeight: null,             
+		  maxHeight: null,             
+		  focus: true,                  
+		  lang: "ko-KR",					// 언어 설정
+		  placeholder: '질문을 작성해주세요'	//placeholder 설정
+          
+        });
+    });
+    </script>
+</head>
+<body>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
+
+<div id="header"></div>
+<div class="QnAWrite-wrapper page-content">
+    <div class="QnAWrite-ContBox contbox">
+        <div class="QnAWrite-header"><span>질문 작성하기</span></div>
+        <div class="write-form">
+            <textarea name="title"></textarea>
+            <textarea id="summernote" name="content"></textarea>
+        </div>
+    </div>
+    <button id="createQnaButton">작성</button>
+</div>
+
+<script>
+    /*QnA 생성*/
+    document.getElementById('createQnaButton').addEventListener('click', function() {
+        var title = document.getElementsByName('title')[0].value;
+        var content = document.getElementsByName('content')[0].value;
+
+        //QnaRequestDto 객체 생성
+        const qnaReq = {
+            title: title,
+            content: content,
+        };
+
+        //토큰을 로컬 스토리지에서 가져오기
+        const token = localStorage.getItem('accessToken');
+
+        //후원 생성 요청을 보냄
+        axios.post('/qna/', qnaReq, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(function(response) {
+            alert(response.data);
+        })
+        .catch(function(error) {
+            console.error(error);
+
+            if (error.response && error.response.data && error.response.data.errors) {
+                alert(error.response.data.errors[0].message);
+            } else {
+                alert('서버 요청 중 에러가 발생했습니다.');
+            }
+        });
+    });
+</script>
+</body>
+</html>

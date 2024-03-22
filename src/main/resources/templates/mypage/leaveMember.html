@@ -34,10 +34,13 @@
     </style>
 </head>
 <body>
-<!-- mypageMenu 영역 참조 -->
-<div th:insert="~{mypage/mypageMenu :: mypageMenu}"></div>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
 
-<div class="leaveMember-wrapper mypage-content">
+<div class="leaveMember-wrapper page-content">
+    <!-- mypageMenu 영역 참조 -->
+    <div th:insert="~{mypage/mypageMenu :: mypageMenu}"></div>
+
     <div class="mypage-detail">
         <div class="mypage-title page-title">회원 탈퇴</div>
         <div class="content-wrap">

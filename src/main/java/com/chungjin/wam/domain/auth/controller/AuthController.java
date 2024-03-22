@@ -13,22 +13,22 @@ public class AuthController {
      */
     @GetMapping("/signup/main")
     public String signupMain() {
-        return "join";
+        return "join/join";
     }
 
     @GetMapping("/signup/agree")
     public String signupAgree() {
-        return "joinAgree";
+        return "join/joinAgree";
     }
 
     @GetMapping("/signup/email")
     public String signupEmail() {
-        return "joinEmail";
+        return "join/joinEmail";
     }
 
     @GetMapping("/signup/form")
     public String signupForm() {
-        return "joinForm";
+        return "join/joinForm";
     }
 
     /**
@@ -36,7 +36,7 @@ public class AuthController {
      */
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "login/login";
     }
 
     /**
@@ -44,7 +44,7 @@ public class AuthController {
      */
     @GetMapping("/find-account")
     public String findEmail() {
-        return "loginFindEmail";
+        return "login/loginFindEmail";
     }
 
     /**
@@ -52,7 +52,7 @@ public class AuthController {
      */
     @GetMapping("/change-pw/{authCode}")
     public String changePw() {
-        return "loginFindPassword";
+        return "login/loginFindPassword";
     }
 
 }

@@ -11,18 +11,15 @@
     padding: 10px;
     margin-bottom: 20px;
 }
-.mypage-content{
-	display: flex;
+.page-content{
+	/*display: flex;*/
 }
 .mypage-content>.mypage-title{
     font-size: 22px;
 }
 .mypage-detail{
-	margin: 0;
-	width:900px;
-	margin-top: 20px;
-	margin-bottom: 150px;
-	margin-right: 30px;
+    width: 75%;
+	margin: 20px 0 150px 300px;
 }
 
 /* 바닥 버튼 */

@@ -20,7 +20,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- script -->
     <script src="/js/mypage/mypageDefault.js"></script>
-<!--    <script src="/js/pagination.js"></script>-->
 
     <div class="mypage-menu-wrapper">
         <div class="left-menu">
@@ -35,6 +34,12 @@
                 <ul class="left-menu-list">
                     <li>
                         <div class="menu-detail-title detail-notice"></div>
+                    </li>
+                    <li id="adminPage" style="display:none;">
+                        <div class="menu-detail-title">
+                            <span class="material-symbols-outlined title-icon">admin_panel_settings</span>
+                            <a href="/admin/member">관리자 페이지</a>
+                        </div>
                     </li>
                     <li>
                         <div class="menu-detail-title">
@@ -70,5 +75,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            //payload에서 데이터 가져오기
+            const payload = getPayloadData();
+
+            //권한이 관리자이면 관리자 페이지 링크 보이기
+            if (payload.auth == "ADMIN") {
+                const adminPageLink = document.querySelector('#adminPage');
+                adminPageLink.style.display = 'block';
+            }
+        });
+    </script>
 </div>
 </html>

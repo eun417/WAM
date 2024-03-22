@@ -6,11 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-<!-- mypageMenu 영역 참조 -->
-<div th:insert="~{mypage/mypageMenu :: mypageMenu}"></div>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
 
-<div class="supportList-wrapper mypage-content">
-    <div class="list-wrapper">
+<div class="supportList-wrapper page-content">
+    <!-- mypageMenu 영역 참조 -->
+    <div th:insert="~{mypage/mypageMenu :: mypageMenu}"></div>
+
+    <div class="list-wrapper mypage-detail">
         <div class="supportList-top list-top">
             <div class="list-title">나의 후원 목록</div>
             <table id="supportTable">

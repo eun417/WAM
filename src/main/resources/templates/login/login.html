@@ -62,10 +62,7 @@
                     alert('로그인 성공!');
 
                     //서버에서 반환한 토큰을 로컬 스토리지에 저장
-                    const data = response.data;
-                    localStorage.setItem('accessToken', data.accessToken);
-                    localStorage.setItem('refreshToken', data.refreshToken);
-                    localStorage.setItem('expiresIn', data.accessTokenExpiresIn);
+                    localStorage.setItem('accessToken', response.data.accessToken);
                 })
                 .catch(function(error) {
                     //오류 처리

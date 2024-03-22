@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,11 +67,10 @@ public class QnaService {
         //Entity -> Dto
         return QnaDetailDto.builder()
                 .qnaId(qna.getQnaId())
-                .email(qna.getMember().getEmail())
+                .nickname(qna.getMember().getNickname())
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .createDate(qna.getCreateDate())
-                .viewCount(qna.getViewCount())
                 .viewCount(qna.getViewCount())
                 .answer(qna.getAnswer())
                 .answerDate(qna.getAnswerDate())
@@ -86,23 +84,7 @@ public class QnaService {
     public PageResponse readAllQna(int pageNo) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
-        //Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findAll(pageable);
-        //현재 페이지의 Qna 목록
-        List<Qna> qnas = qnaPage.getContent();
-        //EntityList -> DtoList
-        List<Object> qnaDtos = new ArrayList<>();
-        for (Qna qna : qnas) {
-            qnaDtos.add(convertToDto(qna)); // Qna를 QnaDto로 변환하여 리스트에 추가
-        }
-        return PageResponse.builder()
-                .content(qnaDtos)	//Qna 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(qnaPage.getSize()) //페이지당 항목 수
-                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
-                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
-                .last(qnaPage.isLast())  //마지막 페이지 여부
-                .build();
+        return getQnaPageResponse(qnaRepository.findAll(pageable), pageNo);
     }
 
     /**
@@ -151,29 +133,19 @@ public class QnaService {
     /**
      * 검색 - 제목+내용
      */
-    public List<QnaResponseDto> searchQna(String keyword, int page) {
+    public PageResponse searchQna(String keyword, int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
-        //검색 키워드를 바탕으로 Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findByTitleOrContentContaining(keyword, pageable);
-        //현재 페이지의 Qna 목록
-        List<Qna> qnas = qnaPage.getContent();
-        //EntityList -> DtoList
-        return convertToDtoList(qnas);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
+        return getQnaPageResponse(qnaRepository.findByTitleOrContentContaining(keyword, pageable), pageNo);
     }
 
     /**
      * 검색 - 작성자
      */
-    public List<QnaResponseDto> searchQnaWriter(String keyword, int page) {
+    public PageResponse searchQnaWriter(String keyword, int pageNo) {
         //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(page, 10);
-        //검색 키워드를 바탕으로 Qna를 페이지별 조회
-        Page<Qna> qnaPage = qnaRepository.findByNicknameContaining(keyword, pageable);
-        //현재 페이지의 Qna 목록
-        List<Qna> qnas = qnaPage.getContent();
-        //EntityList -> DtoList
-        return convertToDtoList(qnas);
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
+        return getQnaPageResponse(qnaRepository.findByNicknameContaining(keyword, pageable), pageNo);
     }
 
     /**
@@ -222,6 +194,24 @@ public class QnaService {
                         .qnaCheck(qna.getQnaCheck())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    //Pagination 결과 함수
+    private PageResponse getQnaPageResponse(Page<Qna> qnaPage, int pageNo) {
+        //현재 페이지의 Qna 목록
+        List<Qna> qnas = qnaPage.getContent();
+        //EntityList -> DtoList
+        List<Object> qnaDtos = qnas.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return PageResponse.builder()
+                .content(qnaDtos)   // Qna 목록
+                .pageNo(pageNo) // 현재 페이지 번호
+                .pageSize(10) // 페이지당 항목 수
+                .totalElements(qnaPage.getTotalElements())   // 전체 Qna 수
+                .totalPages(qnaPage.getTotalPages()) // 전체 페이지 수
+                .last(qnaPage.isLast())  // 마지막 페이지 여부
+                .build();
     }
 
 }
