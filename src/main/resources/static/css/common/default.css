@@ -430,7 +430,40 @@ textarea.input-form {
 }
 
 
-/* 페이징 디자인 */
+/* 페이징 디자인 1 */
+.w3-center{
+    text-align: center;
+    margin-top: 30px;
+}
+
+.w3-pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0
+}
+
+.w3-pagination li {
+    display: inline
+}
+
+.w3-pagination li a {
+    text-decoration: none;
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.w3-pagination li a:hover {
+    background-color: #f0f0f0;
+}
+
+.w3-green,.w3-hover-green:hover {
+    color: #fff!important;
+    background-color: #445D48!important
+}
+
+/* 페이징 디자인 2 */
 .pagination {
     list-style-type: none;
     display: flex;

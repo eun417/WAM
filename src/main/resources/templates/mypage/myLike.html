@@ -18,7 +18,7 @@
             <div class="list-title">나의 좋아요 목록</div>
             <table id="likeTable">
                 <tr>
-                    <th>No</th>
+                    <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일</th>
@@ -27,7 +27,8 @@
                 </tr>
                 <tbody id="likeTableBody">
             </table>
-            <div id="pagination">
+            <div class="w3-center">
+                <ul id="pagination" class="w3-pagination"></ul>
             </div>
         </div>
         <div class="list-bottom">
@@ -35,14 +36,15 @@
     </div>
 </div>
 
+<script th:src="@{/js/common/pagination.js}"></script>
 <script>
-    //현재 페이지 번호를 저장할 변수
-    var currentPage = 0;
+    //페이지 로드 시 첫 번째 페이지 좋아요 목록을 불러옴
+    loadList(0);
 
     //페이지 로드 시 좋아요한 목록을 테이블에 표시하는 함수
-    function loadLikeList(page) {
+    function loadList(page) {
         //토큰을 로컬 스토리지에서 가져오기
-        const token = localStorage.getItem('accessToken');
+        const token = getToken();
 
         axios.get(`/member/like/${page}`, {
             headers: {
@@ -53,12 +55,10 @@
             var likeList = response.data.content;
             var tableBody = document.querySelector('#likeTableBody');
             tableBody.innerHTML = ''; //테이블 내용 초기화
-            var num = 1;
 
             likeList.forEach(function(like) {
                 var row = `<tr>
-                            <td style="display: none;">${like.supportId}</td>
-                            <td>${num}</td>
+                            <td>${like.supportId}</td>
                             <td>${like.title}</td>
                             <td>${like.nickname}</td>
                             <td>${like.createDate}</td>
@@ -66,11 +66,10 @@
                             <td><button class="deleteLike-btn btn bs1 bc6">삭제</button></td>
                         </tr>`;
                 tableBody.innerHTML += row; // 행 추가
-                num++;
             });
 
             //페이지 내비게이션 업데이트
-            //renderPagination('Like', response.data.totalPages, page);
+            renderPagination(response.data.totalPages, page);
 
             //삭제 버튼에 이벤트 리스너 추가
             tableBody.querySelectorAll('.deleteLike-btn').forEach(function(button) {
@@ -104,9 +103,6 @@
             console.error(error);
         });
     }
-
-    //페이지 로드 시 첫 번째 페이지 좋아요 목록을 불러옴
-    loadLikeList(currentPage);
 </script>
 </body>
 </html>

@@ -44,7 +44,6 @@
                         <p class="answer-date"></p>
                         <p class="answer-content"></p>
                     </div>
-                    <button class="btn-answer-update btn bc4" style="display:none">답변 수정하기</button>
                 </div>
                 <button class="btn-answer btn bc4" style="display:none;">답변 작성하기</button>
             </div>
@@ -78,14 +77,22 @@
                 contentElement.textContent = qnaDetail.content;
 
                 //답변한 QnA인 경우
-                if (qnaDetail.answerDate !== null && qnaDetail.answerContent !== null) {
+                if (qnaDetail.answerDate !== null && qnaDetail.answer !== null) {
                     var answerDateElement = document.querySelector('.answer-date');
                     var answerContentElement = document.querySelector('.answer-content');
+                    var answerTextarea = document.getElementById('answerTextarea');
                     answerDateElement.textContent = qnaDetail.answerDate;
                     answerContentElement.textContent = qnaDetail.answer;
+                    answerTextarea.value = qnaDetail.answer;
 
                     hideAnswerBtnForAdmin('.btn-answer');
                     showHideElement('#answerContent');
+
+                    // 버튼 텍스트 변경
+                    var answerButton = document.querySelector('.btn-answer');
+                    if (answerButton) {
+                        answerButton.textContent = '답변 수정하기';
+                    }
                 }
 
                 //답변 상태에 따라 버튼 스타일 설정
@@ -159,6 +166,8 @@
         } else {
             //textarea가 보이지 않는 경우 보이게 하기
             showHideElement('.input-form');
+            //답변 내용 보이기
+            showHideElement('#answerContent');
         }
     });
 
