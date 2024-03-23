@@ -43,6 +43,7 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/js/common/checkToken.js}"></script>
     <script>
         document.getElementById('loginButton').addEventListener('click', function() {
             var email = document.getElementsByName('email')[0].value;
@@ -61,8 +62,9 @@
                     console.log(response);
                     alert('로그인 성공!');
 
-                    //서버에서 반환한 토큰을 로컬 스토리지에 저장
-                    saveTokenToLocalStorage(response.data.accessToken)
+                    const accessToken = response.data.accessToken;
+                    const refreshToken = response.data.refreshToken;
+                    saveTokenToLocalStorage(accessToken, refreshToken); //서버에서 반환한 토큰을 로컬 스토리지에 저장
                 })
                 .catch(function(error) {
                     //오류 처리

@@ -4,14 +4,19 @@ function getToken() {
 }
 
 //토큰을 토컬 스토리지에 저장
-function saveTokenToLocalStorage(accessToken) {
+function saveTokenToLocalStorage(accessToken, refreshToken) {
     localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+}
+
+//토큰을 토컬 스토리지에서 삭제
+function removeTokenInLocalStorage(accessToken, refreshToken) {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
 }
 
 //payload에서 데이터 가져오기
-function getPayloadData() {
-    //토큰을 로컬 스토리지에서 가져오기
-    const token = localStorage.getItem('accessToken');
+function getPayloadData(token) {
     //토큰이 없는 경우 0 반환
     if (!token) {
         return 0;
@@ -35,10 +40,30 @@ function getTokenExpirationDate(exp) {
     console.log("토큰 만료 시간:"+date);
 }
 
-//토큰 만료 여부를 검사, 로그아웃 처리 함수
+//새로운 access token을 요청하는 함수
+function refreshAccessToken() {
+    //TokenRequestDto 객체 생성
+    const tokenReq = {
+        refreshToken: localStorage.getItem('refreshToken')
+    };
+
+    //refresh 요청
+    return axios.post('/auth/refresh', tokenReq)
+        .then(response => {
+            //새로운 access token 발급
+            const { accessToken } = response.data;
+            localStorage.setItem('accessToken', accessToken);
+        })
+        .catch(error => {
+            console.error('새로운 access token 발급 실패:', error);
+            localStorage.removeItem('refreshToken');
+        });
+}
+
+/*토큰 만료 여부 검사, refresh 요청 함수*/
 function checkTokenExpiration() {
     const token = getToken();
-    const payload = getPayloadData();
+    const payload = getPayloadData(token);
     getTokenExpirationDate(payload.exp);
 
     if (token) {
@@ -48,12 +73,13 @@ function checkTokenExpiration() {
         if (tokenExpiration && tokenExpiration <= currentTime) {
             console.log("토큰 만료")
             //토큰 만료된 경우: 로그아웃 처리
-            logout(token);
+            localStorage.removeItem('accessToken');
+            refreshAccessToken();   //access token 재발급 OR refresh token 삭제
         }
     }
 }
 
-//로그인 상태 확인, 화면 표시 함수
+/*로그인 상태 확인, 화면 표시 함수*/
 function checkLoginStatus() {
     const token = getToken();
 

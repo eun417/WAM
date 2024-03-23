@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.auth.service;
 import com.chungjin.wam.domain.auth.dto.TokenDto;
 import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
+import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.LoginType;
 import com.chungjin.wam.domain.member.entity.Member;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
@@ -113,17 +115,18 @@ public class AuthService {
     /**
      * Refresh
      */
-    public TokenDto refresh(TokenRequestDto tokenReq) {
+    public TokenResponseDto refresh(TokenRequestDto tokenReq) {
         //Refresh 토큰 검증
         if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
             throw new CustomException(TOKEN_EXPIRED);
         }
 
-        //Access Token으로 Authentication 객체 가져오기
-        Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
+        //Refresh Token으로 memberId 가져오기
+        String memberIdString = jwtTokenProvider.getMemberId(tokenReq.getRefreshToken());
 
-        //Redis에서 memberId를 기반으로 Refresh Token 값 가져옴
-        String refreshToken = redisService.getData(authentication.getName());
+        //Redis에서 memberId를 기반으로 values 가져옴
+        List<String> values = redisService.getListData(memberIdString); //0: refresh token, 1: authorities
+        String refreshToken = values.get(0);
         log.info("Refresh Token in Redis: {}", refreshToken);
 
         //Refresh Token 일치하는지 검사
@@ -131,8 +134,10 @@ public class AuthService {
             throw new CustomException(TOKEN_USER_MISMATCH);
         }
 
-        //새로운 토큰 발급
-        return jwtTokenProvider.generateTokenDto(authentication);
+        //새로운 access token 발급
+        return TokenResponseDto.builder()
+                .accessToken(jwtTokenProvider.generateAccessToken(memberIdString, values.get(1)))
+                .build();
     }
 
     /**

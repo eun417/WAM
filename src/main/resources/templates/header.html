@@ -74,7 +74,7 @@
                 }
             }).then(function(response) {
               console.log(response.data);
-              localStorage.removeItem('accessToken');
+              removeTokenInLocalStorage();
               //window.location.href = '/';
             })
             .catch(function(error) {

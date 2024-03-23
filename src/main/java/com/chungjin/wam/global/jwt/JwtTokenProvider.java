@@ -18,9 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -67,22 +65,11 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         //Access Token 생성
+        String accessToken = generateAccessToken(authentication.getName(), authorities);
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())       // payload "sub": "name" ... 사용자 이름
-                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER" ... 사용자 권한 정보
-                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022(예시) ... 액세스 토큰 만료 시간
-                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512" ... JWT에 서명 추가
-                .compact(); //JWT를 문자로 직렬화하여 반환
 
         //Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-
-        //Refresh Token 만료를 위해 Redis에 7일 동안 저장
-        redisService.setDataExpire(authentication.getName(), refreshToken, REFRESH_TOKEN_EXPIRE_TIME);    //memberId를 String으로 저장
+        String refreshToken = generateRefreshToken(authentication.getName(), authorities);
 
         //TokenDto 생성: 클라이언트에게 제공되어야 하는 토큰 정보 담고 있음
         return TokenDto.builder()
@@ -91,6 +78,34 @@ public class JwtTokenProvider {
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    //Access Token 생성하는 함수
+    public String generateAccessToken(String memberIdString, String authorities) {
+        long now = (new Date()).getTime();
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        return Jwts.builder()
+                .setSubject(memberIdString)   // payload "sub": "name" ... 사용자 이름
+                .claim(AUTHORITIES_KEY, authorities)    // payload "auth": "ROLE_USER" ... 사용자 권한 정보
+                .setExpiration(accessTokenExpiresIn)    // payload "exp": 1516239022(예시) ... 액세스 토큰 만료 시간
+                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512" ... JWT에 서명 추가
+                .compact(); //JWT를 문자로 직렬화하여 반환
+    }
+
+    //Refresh Token 생성하는 함수
+    private String generateRefreshToken(String memberIdString, String authorities) {
+        long now = (new Date()).getTime();
+        String refreshToken = Jwts.builder()
+                .setSubject(memberIdString) //memberId 포함
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+        List<String> values = new ArrayList<>();
+        values.add(refreshToken);
+        values.add(authorities);
+        //Refresh Token 만료를 위해 Redis에 7일 동안 저장
+        redisService.setListDataExpire(memberIdString, values, REFRESH_TOKEN_EXPIRE_TIME);
+        return refreshToken;
     }
 
     /**
@@ -120,6 +135,13 @@ public class JwtTokenProvider {
         ""(비밀번호): JWT 토큰을 사용하여 사용자를 인증하고 권한을 부여하는 경우에는 이미 인증이 완료되었으며, 사용자의 비밀번호는 필요하지 않음
         */
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+    }
+
+    /**
+     * memberId 조회
+     */
+    public String getMemberId(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     /**

@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.auth.controller;
 import com.chungjin.wam.domain.auth.dto.TokenDto;
 import com.chungjin.wam.domain.auth.dto.request.*;
 import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
+import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
 import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import jakarta.mail.MessagingException;
@@ -68,7 +69,7 @@ public class AuthApiController {
      * Refresh
      */
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@RequestBody @Valid TokenRequestDto tokenReq) {
+    public ResponseEntity<TokenResponseDto> refresh(@RequestBody @Valid TokenRequestDto tokenReq) {
         return ResponseEntity.ok(authService.refresh(tokenReq));
     }
 

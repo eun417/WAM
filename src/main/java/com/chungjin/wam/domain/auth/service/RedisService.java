@@ -1,11 +1,14 @@
 package com.chungjin.wam.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,14 @@ public class RedisService {
     }
 
     /**
+     * key로 value(List)를 가져옴
+     */
+    public List<String> getListData(String key) {
+        ListOperations<String, String> listOperations = template.opsForList();
+        return listOperations.range(key, 0, -1);
+    }
+
+    /**
      * 해당 key에 해당하는 value가 존재하는지 확인
      */
     public boolean existData(String key) {
@@ -35,6 +46,17 @@ public class RedisService {
         ValueOperations<String, String> valueOperations = template.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
+    }
+
+    /**
+     * 새로운 key - value(List) 쌍을 저장
+     */
+    public void setListDataExpire(String key, List<String> values, long duration) {
+        ListOperations<String, String> listOperations = template.opsForList();
+        for (String value : values) {
+            listOperations.rightPush(key, value);
+        }
+        template.expire(key, duration, TimeUnit.SECONDS);
     }
 
     /**
