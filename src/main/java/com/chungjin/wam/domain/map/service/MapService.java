@@ -85,69 +85,68 @@ public class MapService {
     }
 
     //조회한 데이터(XML)를 파싱하여 Dto에 저장하는 함수
-    public List<MapDataDto> extractData(String xmlData, String typeName) throws Exception {
+    public List<MapDataDto> extractData(String xmlData, String typeName) {
         List<MapDataDto> mapDataDtoList = new ArrayList<>();
 
-        //XML 파싱을 위한 DocumentBuilderFactory 생성
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
+        try {
+            //XML 파싱을 위한 DocumentBuilderFactory 생성
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
-        //XML 데이터를 InputStream으로 변환하여 Document로 파싱
-        ByteArrayInputStream input = new ByteArrayInputStream(xmlData.getBytes());
-        Document document = builder.parse(input);
+            //XML 데이터를 InputStream으로 변환하여 Document로 파싱
+            ByteArrayInputStream input = new ByteArrayInputStream(xmlData.getBytes());
+            Document document = builder.parse(input);
 
-        //필요한 데이터를 추출하기 위해 XML 트리를 탐색
-        NodeList featureList = document.getElementsByTagName("gml:featureMember");
+            //필요한 데이터를 추출하기 위해 XML 트리를 탐색
+            NodeList featureList = document.getElementsByTagName("gml:featureMember");
 
-        log.info("featureList.getLength(): {}", featureList.getLength());
+            log.info("야생동물 데이터 조회: {}", featureList.getLength());
 
-        //featureMember 태그 내의 데이터 추출
-        for (int i = 0; i < featureList.getLength(); i++) {
-            Node featureNode = featureList.item(i);
-            if (featureNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element featureElement = (Element) featureNode;
-                NodeList ecoBankList = featureElement.getElementsByTagName("EcoBank:" + typeName);
+            //featureMember 태그 내의 데이터 추출
+            for (int i = 0; i < featureList.getLength(); i++) {
+                Node featureNode = featureList.item(i);
+                if (featureNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element featureElement = (Element) featureNode;
+                    NodeList ecoBankList = featureElement.getElementsByTagName("EcoBank:" + typeName);
 
-                if (ecoBankList.getLength() > 0) {
-                    Element ecoBankElement = (Element) ecoBankList.item(0);
+                    if (ecoBankList.getLength() > 0) {
+                        Element ecoBankElement = (Element) ecoBankList.item(0);
 
-                    String speciesName = getElementTextContent(ecoBankElement, "EcoBank:spcs_korean_nm");
-                    if (speciesName.equals("알수없음")) {
-                        continue;
+                        String speciesName = getElementTextContent(ecoBankElement, "EcoBank:spcs_korean_nm");
+                        if (speciesName.equals("알수없음")) {
+                            continue;
+                        }
+                        String coordinates = getElementTextContent(ecoBankElement, "EcoBank:geom");
+                        String year = getElementTextContent(ecoBankElement, "EcoBank:examin_year");
+                        String areaName = getElementTextContent(ecoBankElement, "EcoBank:examin_area_nm");
+                        String beginDate = getElementTextContent(ecoBankElement, "EcoBank:examin_begin_de");
+                        String endDate = getElementTextContent(ecoBankElement, "EcoBank:examin_end_de");
+
+                        //좌표 데이터 분리
+                        String[] coordinatePairs = coordinates.split(",");
+
+                        //Double로 형 변환하여 List 저장
+                        List<Double> coordinateList = new ArrayList<>();
+                        coordinateList.add(Double.parseDouble(coordinatePairs[0])); // 위도
+                        coordinateList.add(Double.parseDouble(coordinatePairs[1])); // 경도
+
+                        //DTO에 저장
+                        MapDataDto mapDataDto = MapDataDto.builder()
+                                .coordinates(coordinateList)
+                                .year(year)
+                                .speciesName(speciesName)
+                                .areaName(areaName)
+                                .beginDate(beginDate)
+                                .endDate(endDate)
+                                .build();
+
+                        mapDataDtoList.add(mapDataDto);
                     }
-                    String coordinates = getElementTextContent(ecoBankElement, "EcoBank:geom");
-//                    String realmCode = getElementTextContent(ecoBankElement, "EcoBank:examin_realm_se_code");
-                    String year = getElementTextContent(ecoBankElement, "EcoBank:examin_year");
-                    String areaName = getElementTextContent(ecoBankElement, "EcoBank:examin_area_nm");
-//                    String pointLnPynSeCode = getElementTextContent(ecoBankElement, "EcoBank:point_ln_pyn_se_code");
-                    String beginDate = getElementTextContent(ecoBankElement, "EcoBank:examin_begin_de");
-                    String endDate = getElementTextContent(ecoBankElement, "EcoBank:examin_end_de");
-
-
-
-                    //좌표 데이터 분리
-                    String[] coordinatePairs = coordinates.split(",");
-
-                    //Double로 형 변환하여 List 저장
-                    List<Double> coordinateList = new ArrayList<>();
-                    coordinateList.add(Double.parseDouble(coordinatePairs[0])); // 위도
-                    coordinateList.add(Double.parseDouble(coordinatePairs[1])); // 경도
-
-                    //DTO에 저장
-                    MapDataDto mapDataDto = MapDataDto.builder()
-                            .coordinates(coordinateList)
-//                            .realmCode(realmCode)
-                            .year(year)
-                            .speciesName(speciesName)
-                            .areaName(areaName)
-//                            .pointLnPynSeCode(pointLnPynSeCode)
-                            .beginDate(beginDate)
-                            .endDate(endDate)
-                            .build();
-
-                    mapDataDtoList.add(mapDataDto);
                 }
             }
+        } catch (Exception e) {
+            e.getStackTrace();  //예외 추적 정보 출력
         }
 
         return mapDataDtoList;
