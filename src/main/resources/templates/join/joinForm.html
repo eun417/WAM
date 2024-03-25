@@ -9,39 +9,41 @@
 <!-- loginJoinHeader 영역 참조 -->
 <header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
 
-<div class="join-form-wrapper">
-    <div>개인정보를 입력해주세요.</div>
-    <div class="content-box">
+<div class="join-wrapper wrapper">
+    <div class="join-header">
+        <div class="title">개인정보를 입력해주세요.</div>
+    </div>
+    <div class="join-content content-box">
         <div>
-            <div>이메일 주소</div>
-            <input type="text" id="email" required>
+            <div class="content-title">이메일</div>
+            <input type="text" id="email" class="input-form" placeholder="이메일 입력" required>
         </div>
         <div>
-            <div>이름</div>
-            <input type="text" id="name" required>
+            <div class="content-title">이름</div>
+            <input type="text" id="name" class="input-form" placeholder="이름 입력" required>
         </div>
         <div>
-            <div>닉네임</div>
-            <input type="text" id="nickname" required>
+            <div class="content-title">닉네임</div>
+            <input type="text" id="nickname" class="input-form" placeholder="닉네임 입력" required>
         </div>
         <div>
-            <div>휴대폰 번호</div>
-            <input type="text" id="phoneNumber" required>
+            <div class="content-title">휴대폰 번호</div>
+            <input type="text" id="phoneNumber" class="input-form" placeholder="- 없이 숫자만 입력" required>
         </div>
         <div>
-            <div>비밀번호</div>
-            <input type="password" id="password" required>
+            <div class="content-title">비밀번호</div>
+            <input type="password" id="password" class="input-form" placeholder="비밀번호 입력" required>
         </div>
         <div>
-            <div>비밀번호 재입력</div>
-            <input type="password" id="checkPassword" required>
-            <div>
+            <div class="content-title">비밀번호 재입력</div>
+            <input type="password" id="checkPassword" class="input-form" placeholder="비밀번호 재입력" required>
+            <div class="password-notice">
                 <div>8자 이상 ~ 16자 이하로 입력하세요</div>
                 <div>영문, 숫자, 특수문자 사용 가능합니다</div>
                 <div>안전도가 사용불가, 위험일 경우 변경이 불가합니다</div>
             </div>
         </div>
-        <button id="joinBtn" class="btn bc3">완료</button>
+        <button id="joinBtn" class="btn bc5">완료</button>
     </div>
 </div>
 </body>

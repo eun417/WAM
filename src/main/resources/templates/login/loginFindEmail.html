@@ -3,30 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/loginFindEmail.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login/loginFindEmail.css}">
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">
     <title>이메일 찾기</title>
 </head>
 <body>
 <!-- loginJoinHeader 영역 참조 -->
 <header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
 
-<div class="login-findEmail-wrapper">
-    <div class="emailFind-box">
-    <div class="find-header">이메일 찾기</div>
+<div class="login-wrapper wrapper">
+    <div class="emailFind-box content-box">
+        <div class="find-header">이메일 찾기</div>
         <div class="typing-box">
             <div class="dass1">
                 <div class="empx"><span>이름</span></div>
-                <input type="text" name="memberName" required>
+                <input type="text" class="input-form" placeholder="이름 입력" required>
             </div>
             <div class="dass1">
                 <div class="empx"><span>전화번호</span></div>
-                <input type="text" name="phoneNumber" required>
-                <button type="button" class="pass">전송</button>
-                <button type="button" class="repass">다시전송</button>
-                <div><span>인증번호가 해당번호로 전송되었습니다.</span></div>
-                <input type="text" name="dass" required>
-                <button type="button" name="complete">인증확인</button>
+                <div class="phoneNum">
+                    <input type="text" class="input-form" placeholder="- 없이 숫자만 입력" required>
+                    <button class="pass btn bs1 bc1">인증번호 전송</button>
+                </div>
+                <div class="auth">
+                    <div class="auth-fin">
+                        <input type="text" name="dass" class="input-form" placeholder="인증번호 입력" required>
+                        <button type="button" id="auth-btn" class="pass btn bs1 bc6">인증 확인</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

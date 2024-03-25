@@ -7,20 +7,20 @@
 
     position: absolute;
     width: 100%;
-    height: 60px;
+    height: 40px;
     left: 0px;
+
+    background: #fff;
+    border-bottom: 1.5px solid #EEF0F3;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.06);
 
     /*헤더 고정*/
     z-index: 1;
     position: fixed;
-
-    background-color: #445D48;
 }
 
 .header{
-    width: 100%;
-    height: 80px;
-    line-height: 60px;
+    line-height: 40px;
 }
 
 .left-box{
@@ -38,9 +38,9 @@
 .site-name{
     display: block;
 }
-.site-name{
+.site-name>*{
     font-family: 'Righteous';
     font-weight: 900;
-    font-size: 30px;
-    color: #fff;
+    font-size: 24px;
+    color: #445D48;
 }

@@ -3,25 +3,47 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/join.css}">
     <title>회원가입</title>
 </head>
 <body>
 <!-- loginJoinHeader 영역 참조 -->
 <header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
 
-<div class="join-wrapper">
+<div class="join-wrapper wrapper">
     <div class="join-header">
-        <div>WAM에 오신 것을 환영합니다!</div>
+        <div class="title"><span style="color: #445D48;">W</span><span style="color: #996F5E;">A</span><span style="color: #BFB374">M</span>에 오신 것을 환영합니다!</div>
         <div>회원가입 방식을 선택해주세요.</div>
     </div>
-    <div>
-        <div><a href="/auth/signup/agree">이메일로 회원가입</a><span>이메일ID와 비밀번호로 회원가입</span></div>
-        <div><a href="/oauth2/authorization/google">Google로 회원가입</a><span>구글로 인증하여 회원가입</span></div>
-        <div><a href="/oauth2/authorization/kakao">Kakao로 회원가입</a><span>카카오로 인증하여 회원가입</span></div>
-        <div><a href="/oauth2/authorization/naver">Naver로 회원가입</a><span>네이버로 인증하여 회원가입</span></div>
+    <div class="join-content">
+        <a href="/auth/signup/agree" class="join-box">
+            <div>
+                <span class="material-symbols-outlined email-icon icon">mail</span>
+                <span>이메일로 회원가입</span>
+            </div>
+            <span>이메일ID와 비밀번호로 회원가입</span>
+        </a>
+        <a href="/oauth2/authorization/google" class="join-box">
+            <div>
+                <span class="social-icon google icon"></span>
+                <span>Google로 회원가입</span>
+            </div>
+            <span>구글로 인증하여 회원가입</span>
+        </a>
+        <a href="/oauth2/authorization/kakao" class="join-box">
+            <div>
+                <span class="social-icon kakao icon"></span>
+                <span>Kakao로 회원가입</span>
+            </div>
+            <span>카카오로 인증하여 회원가입</span>
+        </a>
+        <a href="/oauth2/authorization/naver" class="join-box">
+            <div>
+                <span class="social-icon naver icon"></span>
+                <span>Naver로 회원가입</span>
+            </div>
+            <span>네이버로 인증하여 회원가입</span>
+        </a>
     </div>
-    K
 </div>
 </body>
 </html>

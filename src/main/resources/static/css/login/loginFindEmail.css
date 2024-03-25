@@ -1,0 +1,26 @@
+.find-header{
+    text-align: center;
+    font-weight: 600;
+    font-size: 35px;
+    border-bottom: 1px solid #000000;
+    padding: 10px;
+}
+div>.pass{
+    font-size: 14px;
+    width: 100%;
+}
+.phoneNum{
+    display: flex;
+}
+.phoneNum>.pass{
+    width: 45%;
+}
+.auth{
+    padding: 25px 0 5px 0;
+}
+.auth-fin{
+    display: flex;
+}
+#auth-btn{
+    width: 30%;
+}

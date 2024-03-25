@@ -418,6 +418,9 @@ ul{
 .input-form:focus {
     box-shadow: 0 0 0 0.1rem #eee;
 }
+.input-form::placeholder {
+    color: rgb(172, 172, 172);
+}
 
 textarea.input-form {
     resize: none;

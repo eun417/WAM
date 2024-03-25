@@ -1,0 +1,145 @@
+.join-wrapper{
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 6%;
+    padding-bottom: 10%;
+}
+.join-header{
+    border-bottom: rgb(177, 177, 177) solid 1px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 15px;
+}
+.join-header>.title{
+    font-size: 26px;
+    font-weight: 600;
+}
+.title>span{
+    font-family: 'Righteous';
+    font-size: 26px;
+    font-weight: 900;
+}
+.join-header>div:last-child{
+    margin-top: 5px;
+}
+.join-content{
+    padding-top: 50px;
+}
+.join-content>.join-box{
+    width: 60%;
+    height: 60px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    display: block;
+    border: 1px solid #d1d1d1ee;
+    border-radius: 0.5rem;
+    display: flex;
+    line-height: 60px;
+    padding-left: 20px;
+}
+.join-box>div{
+    display: flex;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.input-form{
+    background-color: #efefef;
+}
+
+/* join */
+.email-icon{
+    font-size: 35px;
+    color: #b3b3b3ee;
+    line-height: 40px;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+.icon{
+    width: 35px;
+    height: 35px;
+    margin: 13px 15px;
+}
+.social-icon{
+    background-size: 100% 100%;
+}
+.kakao{
+    background-image: url("/css/images/kakao.png");
+}
+.naver{
+    background-image: url("/css/images/naver.png");
+}
+.google{
+    background-image: url("/css/images/google.png");
+}
+
+.join-box>span{
+    font-size: 12px;
+    color: #c7c7c7ee;
+}
+.content-title{
+    font-size: 18px;
+    padding: 5px;
+}
+
+/* agree */
+.join-wrapper>.content-box{
+    width: 60%;
+    margin: 0 auto;
+}
+.all-agree{
+    background-color: #f5f5f5ee;
+}
+.all-agree>label{
+    margin-right: 15px;
+}
+label>input{
+    margin-right: 7px;
+}
+.agree-detail{
+    margin-bottom: 50px;
+}
+.agree-detail>div{
+    padding: 25px 15px 25px 15px;
+    border-bottom: 1px solid #d8d8d8ee;
+    display: flex;
+    justify-content: space-between;
+}
+.agree-detail>div>a>span{
+    color: #b3b3b3ee;
+}
+.join-content>div>.input{
+    display: flex;
+}
+.join-content>div{
+    margin-bottom: 15px;
+}
+.auth-btn{
+    width: 25%;
+    border-radius: 4px;
+    font-weight: 300;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.join-content>.btn{
+    width: 100%;
+    margin-top: 50px;
+}
+
+/* joinForm */
+.password-notice{
+    margin-top: 5px;
+}
+.password-notice>div{
+    font-size: 14px;
+    color: #9a9a9aee;
+}
+#joinBtn{
+    margin-top: 20px;
+}

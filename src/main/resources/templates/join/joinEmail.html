@@ -4,27 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 이메일 인증</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <!-- loginJoinHeader 영역 참조 -->
 <header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
 
-<div class="join-email-wapper">
-    <div>사용할 이메일 인증</div>
-    <div>
-        <div>
-            <div>이메일</div>
-            <div><input type="text" id="emailInput"></div>
-            <button id="sendEmailButton">전송 요청</button>
-        </div>
-        <div>
-            <div>인증번호</div>
-            <div><input type="text" id="authCodeInput"></div>
-            <button id="verifyButton">인증하기</button>
-        </div>
+<div class="join-wrapper wrapper">
+    <div class="join-header">
+        <div class="title">사용할 이메일 인증</div>
     </div>
-    <button id="nextButton">다음</button>
+    <div class="join-content content-box">
+        <div>
+            <div class="content-title">이메일</div>
+            <div class="email input">
+                <input type="text" id="emailInput" class="input-form" placeholder="이메일 입력">
+                <button id="sendEmailButton" class="auth-btn bc1">메일 전송</button>
+            </div>
+        </div>
+        <div>
+            <div class="content-title">인증번호</div>
+            <div class="auth input">
+                <input type="text" id="authCodeInput" class="input-form" placeholder="인증번호 입력">
+                <button id="verifyButton" class="auth-btn bc6">인증하기</button>
+            </div>
+        </div>
+        <button id="nextButton" class="btn bc5">다음</button>
+    </div>
 </div>
 
 <script>
