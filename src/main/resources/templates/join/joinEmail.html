@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+<!-- loginJoinHeader 영역 참조 -->
+<header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
+
 <div class="join-email-wapper">
     <div>사용할 이메일 인증</div>
     <div>

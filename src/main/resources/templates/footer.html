@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>footer</title>
-    <link rel="stylesheet" href="css/footer.css">
-</head>
-<body>
-    <footer th:fragment="footerFragment" >
-        <div class="footer-wrapper">
-            <div class="footer-cont">
-                <div class="f-logo"><img src="#"></div><div class="f-content"><span>Content | </span><span>WAMadmin@WAM.com</span></div>
-            </div>
+<footer th:fragment="footerFragment" >
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <div class="footer-wrapper">
+        <div class="footer-cont">
+            <div class="f-logo"><img src="#"></div><div class="f-content"><span>Content | </span><span>WAMadmin@WAM.com</span></div>
         </div>
-    </header>
-</body>
+    </div>
+</footer>
 </html>

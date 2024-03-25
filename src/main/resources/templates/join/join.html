@@ -7,18 +7,21 @@
     <title>회원가입</title>
 </head>
 <body>
-    <div class="join-wrapper">
-        <div class="join-header">
-            <div>WAM에 오신 것을 환영합니다!</div>
-            <div>회원가입 방식을 선택해주세요.</div>
-        </div>
-        <div>
-            <div><a href="/auth/signup/agree">이메일로 회원가입</a><span>이메일ID와 비밀번호로 회원가입</span></div>
-            <div><a href="/oauth2/authorization/google">Google로 회원가입</a><span>구글로 인증하여 회원가입</span></div>
-            <div><a href="/oauth2/authorization/kakao">Kakao로 회원가입</a><span>카카오로 인증하여 회원가입</span></div>
-            <div><a href="/oauth2/authorization/naver">Naver로 회원가입</a><span>네이버로 인증하여 회원가입</span></div>
-        </div>
-        K
+<!-- loginJoinHeader 영역 참조 -->
+<header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
+
+<div class="join-wrapper">
+    <div class="join-header">
+        <div>WAM에 오신 것을 환영합니다!</div>
+        <div>회원가입 방식을 선택해주세요.</div>
     </div>
+    <div>
+        <div><a href="/auth/signup/agree">이메일로 회원가입</a><span>이메일ID와 비밀번호로 회원가입</span></div>
+        <div><a href="/oauth2/authorization/google">Google로 회원가입</a><span>구글로 인증하여 회원가입</span></div>
+        <div><a href="/oauth2/authorization/kakao">Kakao로 회원가입</a><span>카카오로 인증하여 회원가입</span></div>
+        <div><a href="/oauth2/authorization/naver">Naver로 회원가입</a><span>네이버로 인증하여 회원가입</span></div>
+    </div>
+    K
+</div>
 </body>
 </html>
