@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- css -->
+    <link rel="stylesheet" th:href="@{/css/login/loginFindEmail.css}">
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">
+    <title>비밀번호 재설정 폼</title>
+</head>
+<body>
+<!-- loginJoinHeader 영역 참조 -->
+<header th:insert="~{/loginJoinHeader :: loginJoinHeader}"></header>
+
+<div class="login-wrapper wrapper">
+    <div class="change-pw-box content-box">
+        <div class="find-header">비밀번호 재설정</div>
+        <input type="hidden" value="">
+        <div class="typing-box update-input-wrap">
+            <div class="dass1">
+                <div class="empx"><span>새 비밀번호</span></div>
+                <div>
+                    <span class="material-symbols-outlined check-circle">check_circle</span>
+                    <input type="password" id="newPw" class="input-form" placeholder="새 비밀번호 입력" required>
+                    <span class="reg-msg"></span>
+                </div>
+            </div>
+            <div class="dass1">
+                <div class="empx"><span>비밀번호 확인</span></div>
+                <div>
+                    <span class="material-symbols-outlined check-circle">check_circle</span>
+                    <input type="password" id="checkPw" class="input-form" placeholder="새 비밀번호 확인" required>
+                    <span class="reg-msg"></span>
+                </div>
+            </div>
+            <button id="finBtn" class="btn bc5" style="width: 100%; margin-top: 10px;">확인</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/common/regex.js"></script>
+<script>
+    /*URL에서 매개변수 추출 함수*/
+    function getQueryParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('authCode');
+        console.log(authCode);
+        return { authCode, authCode };
+    }
+
+    /* 비밀번호 재설정 요청 */
+    document.getElementById('finBtn').addEventListener('click', function() {
+        const { authCode } = getQueryParams();
+        console.log(authCode);
+
+        //ChangePwRequestDto 객체 생성
+        const newPw = document.getElementById('newPw').value;
+        const checkPw = document.getElementById('checkPw').value;
+
+        const changePwReq = {
+            newPassword: newPw,
+            checkPassword: checkPw
+        };
+
+        axios.put(`/auth/change-pw/${authCode}`, changePwReq)
+            .then(response => {
+              console.log(response);
+              alert(response.data)
+              window.location.href = '/auth/login';
+            })
+            .catch(error => {
+              console.error('비밀번호 재설정 실패:', error.response.data);
+            });
+    });
+</script>
+</body>
+</html>

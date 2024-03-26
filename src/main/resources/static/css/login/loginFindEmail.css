@@ -15,9 +15,6 @@ div>.pass{
 .phoneNum>.pass{
     width: 45%;
 }
-.auth{
-    padding: 25px 0 5px 0;
-}
 .auth-fin{
     display: flex;
 }

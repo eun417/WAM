@@ -2,7 +2,6 @@
 .login-wrapper {
     display: flex;
     justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
-    text-align: center; /* 텍스트 가운데 정렬 플러스*/
     height: 65vh; /* 뷰포트 높이의 65% */
     padding-top: 6%;
 }
@@ -69,6 +68,7 @@ div>.input-form{
 }
 .login-bottom{
     margin-bottom: 15px;
+    text-align: center; /* 텍스트 가운데 정렬 플러스*/
 }
 .socal-login{
     flex-direction: column;

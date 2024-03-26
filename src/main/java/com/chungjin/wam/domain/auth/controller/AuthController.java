@@ -1,8 +1,10 @@
 package com.chungjin.wam.domain.auth.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/auth")
@@ -12,22 +14,22 @@ public class AuthController {
      * 회원가입
      */
     @GetMapping("/signup/main")
-    public String signupMain() {
+    public String goSignupMain() {
         return "join/join";
     }
 
     @GetMapping("/signup/agree")
-    public String signupAgree() {
+    public String goSignupAgree() {
         return "join/joinAgree";
     }
 
     @GetMapping("/signup/email")
-    public String signupEmail() {
+    public String goSignupEmail() {
         return "join/joinEmail";
     }
 
     @GetMapping("/signup/form")
-    public String signupForm() {
+    public String goSignupForm() {
         return "join/joinForm";
     }
 
@@ -35,7 +37,7 @@ public class AuthController {
      * 로그인
      */
     @GetMapping("/login")
-    public String login() {
+    public String goLogin() {
         return "login/login";
     }
 
@@ -43,7 +45,7 @@ public class AuthController {
      * 이메일 찾기
      */
     @GetMapping("/find-account")
-    public String findEmail() {
+    public String goFindEmail() {
         return "login/loginFindEmail";
     }
 
@@ -51,8 +53,13 @@ public class AuthController {
      * 비밀번호 재설정
      */
     @GetMapping("/change-pw")
-    public String changePw() {
-        return "login/loginChangePassword";
+    public String goChangePw() {
+        return "login/loginChangePw";
+    }
+
+    @GetMapping("/change-pw/form")
+    public String goChangePwForm(@RequestParam("authCode") String authCode) {
+        return "login/loginChangePwForm";
     }
 
 }

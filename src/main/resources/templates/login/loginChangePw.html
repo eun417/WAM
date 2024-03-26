@@ -17,15 +17,38 @@
         <div class="typing-box">
             <div class="dass1">
                 <div class="empx"><span>이름</span></div>
-                <input type="text" class="input-form" placeholder="이름 입력" required>
+                <input type="text" id="name" class="input-form" placeholder="이름 입력" required>
             </div>
             <div class="dass1">
                 <div class="empx"><span>이메일</span></div>
-                <input type="text" class="input-form" placeholder="이메일 입력" required>
+                <input type="text" id="email" class="input-form" placeholder="이메일 입력" required>
             </div>
             <button id="sendMailBtn" class="mail-btn btn bc5" style="width: 100%; margin-top: 10px;">메일 발송</button>
         </div>
     </div>
 </div>
+
+<script>
+    /* 비밀번호 재설정 링크 메일 전송 */
+    document.getElementById('sendMailBtn').addEventListener('click', function() {
+      //ChangePwLinkRequestDto 객체 생성
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      const changePwLinkReq = {
+        name: name,
+        email: email
+      };
+
+      axios.post('/auth/change-pw/email/send', changePwLinkReq)
+        .then(response => {
+          console.log(response);
+          alert(response.data)
+        })
+        .catch(error => {
+          console.error('메일 전송 실패:', error.response.data);
+        });
+    });
+</script>
 </body>
 </html>

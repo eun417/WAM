@@ -51,7 +51,7 @@ public class EmailService {
     private String setCodeContext(String authCode) {
         Context context = new Context();
         context.setVariable("authCode", authCode); //Template에 전달할 데이터 설정
-        return templateEngine.process("mailAuthCode", context); //mailAuthCode.html
+        return templateEngine.process("join/mailAuthCode", context); //mailAuthCode.html
     }
 
     /**
@@ -86,7 +86,7 @@ public class EmailService {
      */
     public void sendLinkMail(String email) throws MessagingException, UnsupportedEncodingException {
         String authCode = createCode(); //인증코드 생성
-        String changePwLink = "http://localhost:8081/auth/change-pw/" + authCode;   //인증코드로 링크 생성
+        String changePwLink = "http://localhost:8081/auth/change-pw/form?authCode=" + authCode;   //인증코드로 링크 생성
 
         MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -96,7 +96,7 @@ public class EmailService {
         message.setFrom(new InternetAddress(smtpEmail, "WAM"));   //보낼 때 이름 설정하고 싶은 경우
 
         //링크 제공시간 제한을 위해 Redis에 10분 동안 저장
-        redisService.setDataExpire(email, authCode, 60 * 10L);
+        redisService.setDataExpire(authCode, email, 60 * 10L);
 
         javaMailSender.send(message);   //이메일 전송
     }
@@ -107,7 +107,7 @@ public class EmailService {
     private String setLinkContext(String changePwLink) {
         Context context = new Context();
         context.setVariable("changePwLink", changePwLink); //Template에 전달할 데이터 설정
-        return templateEngine.process("mailChangePwLink", context); //mailChangePwLink.html
+        return templateEngine.process("login/mailChangePwLink", context); //mailChangePwLink.html
     }
 
 }

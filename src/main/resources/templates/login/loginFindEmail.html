@@ -15,25 +15,62 @@
     <div class="emailFind-box content-box">
         <div class="find-header">이메일 찾기</div>
         <div class="typing-box">
-            <div class="dass1">
-                <div class="empx"><span>이름</span></div>
-                <input type="text" class="input-form" placeholder="이름 입력" required>
-            </div>
-            <div class="dass1">
-                <div class="empx"><span>전화번호</span></div>
-                <div class="phoneNum">
-                    <input type="text" class="input-form" placeholder="- 없이 숫자만 입력" required>
-                    <button class="pass btn bs1 bc1">인증번호 전송</button>
+            <div id="findEmailInput">
+                <div class="dass1">
+                    <div class="empx"><span>이름</span></div>
+                    <input type="text" id="name" class="input-form" placeholder="이름 입력" required>
                 </div>
-                <div class="auth">
-                    <div class="auth-fin">
-                        <input type="text" name="dass" class="input-form" placeholder="인증번호 입력" required>
-                        <button type="button" id="auth-btn" class="pass btn bs1 bc6">인증 확인</button>
+                <div class="dass1">
+                    <div class="empx"><span>전화번호</span></div>
+                    <div class="phoneNum">
+                        <input type="text" id="phoneNumber" class="input-form" placeholder="- 없이 숫자만 입력" required>
+    <!--                    <button class="pass btn bs1 bc1">인증번호 전송</button>-->
                     </div>
+                    <div class="auth">
+    <!--                    <div class="auth-fin">-->
+    <!--                        <input type="text" name="dass" class="input-form" placeholder="인증번호 입력" required>-->
+    <!--                        <button id="auth-btn" class="pass btn bs1 bc6">인증 확인</button>-->
+    <!--                    </div>-->
+                    </div>
+                </div>
+                <button id="finBtn" class="btn bc5" style="width: 100%; margin-top: 10px;">확인</button>
+                <div id="emailResult">
                 </div>
             </div>
         </div>
+
     </div>
 </div>
+
+<script>
+    /* 이메일 찾기 */
+    document.getElementById('finBtn').addEventListener('click', function() {
+      //FindEmailRequestDto 객체 생성
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const name = document.getElementById('name').value;
+
+      const findEmailReq = {
+        phoneNumber: phoneNumber,
+        name: name
+      };
+
+      axios.post('/auth/find-account', findEmailReq)
+        .then(response => {
+          console.log(response.data);
+
+          //입력창 숨기기
+          const findEmailInputDiv = document.getElementById('findEmailInput');
+          findEmailInputDiv.style.display = 'none';
+
+          //결과 출력
+          const emailResultDiv = document.getElementById('emailResult');
+          const email = response.data.findEmail;    //찾은 이메일
+          emailResultDiv.innerHTML = `<div>${name}님의 이메일은<br><span style="color: #445D48;">${email}</span>입니다.</div>`;
+        })
+        .catch(error => {
+          console.error('이메일 찾기 실패:', error.response.data);
+        });
+    });
+</script>
 </body>
 </html>

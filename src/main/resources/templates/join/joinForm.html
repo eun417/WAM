@@ -46,5 +46,37 @@
         <button id="joinBtn" class="btn bc5">완료</button>
     </div>
 </div>
+
+<script>
+    document.getElementById('joinBtn').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+      const nickname = document.getElementById('nickname').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const password = document.getElementById('password').value;
+      const checkPassword = document.getElementById('checkPassword').value;
+
+      //SignUpRequestDto 객체 생성
+      const signUpReq = {
+        email: email,
+        password: password,
+        checkPassword: checkPassword,
+        nickname: nickname,
+        name: name,
+        phoneNumber: phoneNumber
+      };
+
+      //회원가입 요청
+      axios.post('/auth/signup', signUpReq)
+        .then(response => {
+          console.log(response.data);
+          alert(response.data);
+          //window.location.href = '/';
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+</script>
 </body>
 </html>

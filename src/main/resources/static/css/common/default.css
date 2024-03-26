@@ -25,12 +25,7 @@ ul{
     list-style-type: none;
 }
 
-
-
 /* 기본화면 레이아웃 */
-.wrapper{
-
-}
 .contbox{
     max-height: max-content;
     max-width: max-content;
@@ -52,7 +47,33 @@ ul{
     font-size: 1.5rem;
 }
 
+/*check-circle*/
+.update-input-wrap>div>div{
+    position: relative;
+}
+div>.check-circle{
+    color: #996F5E;
+    position: absolute;
+    z-index: 1;
+    right: 10px;
+    top: 12px;
+    display: none;
+}
+
+div>.active-check-circle{
+    display: block;
+}
+
 /*active 클래스*/
+div>.active-reg-msg{
+    color: #f86697;
+    font-size: 12px;
+}
+div>.active-reg-input{
+    margin-bottom: 2px;
+    outline: 2px solid #f86697;
+}
+
 .display-block{
     display: block;
 }

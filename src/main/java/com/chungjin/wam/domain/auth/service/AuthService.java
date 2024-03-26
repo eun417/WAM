@@ -185,20 +185,23 @@ public class AuthService {
      * 비밀번호 재설정
      */
     public void changePw(ChangePwRequestDto changePwReq, String authCode) {
-        //Redis에 저장된 인증코드 가져오기
-        String redisAuthCode = redisService.getData(changePwReq.getEmail());
+        //Redis에 저장된 email 가져오기
+        String email = redisService.getData(authCode);
 
-        //인증코드가 만료되었거나, 사용자가 입력한 인증코드와 Redis에서 가져온 인증코드가 일치하지 않는 경우
-        if (redisAuthCode == null || !redisAuthCode.equals(authCode)) {
+        //인증코드에 해당하는 이메일이 없는 경우
+        if (email == null) {
             throw new CustomException(INCORRECT_VERIFICATION_CODE);
         }
 
-        //사용자가 입력한 이메일로 사용자 가져오기
-        Member member = memberRepository.findByEmail(changePwReq.getEmail())
+        //이메일로 사용자 조회
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         //비밀번호 암호화 후 변경
         member.updatePw(passwordEncoder.encode(changePwReq.getNewPassword()));
+
+        //Redis에 저장된 데이터 삭제
+        redisService.deleteData(authCode);
     }
 
 }
