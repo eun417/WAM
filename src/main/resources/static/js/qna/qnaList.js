@@ -13,7 +13,9 @@ function goToQnaDetail(event, qnaId) {
         config.headers['Authorization'] = 'Bearer ' + token;
     }
 
-    //서버의 컨트롤러로 이동
+//    window.location.href = "/qna/detail/" + qnaId;
+
+    /*서버의 컨트롤러로 이동*/
     axios.get(`/qna/detail/${qnaId}`, config)
         .then(function(response) {
             window.location.href = "/qna/detail/" + qnaId;

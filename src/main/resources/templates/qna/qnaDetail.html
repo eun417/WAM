@@ -34,8 +34,8 @@
         </div>
         <div>
             <div class="D-writer" style="display:none;">
-                <button id="updateQnaBtn" class="btn-update btn bc4">수정</button>
-                <button id="deleteQnaBtn" class="btn-delete btn bc66">삭제</button>
+                <button id="updateQnaBtn" class="btn-update btn bs1 bc4">수정</button>
+                <button id="deleteQnaBtn" class="btn-delete btn bs1 bc66">삭제</button>
             </div>
             <div class="D-answer">
                 <textarea id="answerTextarea" class="input-form" placeholder="답변을 입력해주세요" style="display:none;"></textarea>
@@ -178,7 +178,7 @@
     function showUpDelBtnForWriter(memberId) {
         //payload에서 데이터 가져오기
         const payload = getPayloadData();
-        console.log(payload.sub);
+        console.log('login memberId:'+payload.sub);
 
         //memberId가 같으면 버튼 보이기
         if (payload.sub == memberId) {

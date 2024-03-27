@@ -52,8 +52,14 @@
         console.log(authCode);
 
         //ChangePwRequestDto 객체 생성
-        const newPw = document.getElementById('newPw').value;
-        const checkPw = document.getElementById('checkPw').value;
+        const newPw = document.getElementById('newPw').value.trim();
+        const checkPw = document.getElementById('checkPw').value.trim();
+
+        //입력값이 비어 있는지 확인
+        if (newPw === '' || checkPw === '') {
+            alert('정보를 입력해주세요.');
+            return;
+        }
 
         const changePwReq = {
             newPassword: newPw,

@@ -16,7 +16,9 @@ function removeTokenInLocalStorage(accessToken, refreshToken) {
 }
 
 //payload에서 데이터 가져오기
-function getPayloadData(token) {
+function getPayloadData() {
+    const token = getToken();
+
     //토큰이 없는 경우 0 반환
     if (!token) {
         return 0;

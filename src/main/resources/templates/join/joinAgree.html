@@ -15,16 +15,16 @@
     </div>
     <div class="join-content content-box">
         <div class="all-agree join-box">
-            <label><input type="checkbox">모두 동의</label>
+            <label><input type="checkbox" id="allAgreeCheck">모두 동의</label>
             <span>필수 및 선택 항목 동의 포함</span>
         </div>
         <div class="agree-detail">
             <div>
-                <label><input type="checkbox">통합 서비스 이용약관 동의(필수)</label>
+                <label><input type="checkbox" class="chk" required>통합 서비스 이용약관 동의(필수)</label>
                 <a href="#"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
             </div>
             <div>
-                <label><input type="checkbox">개인정보 수집 및 이용 동의(필수)</label>
+                <label><input type="checkbox" class="chk" required>개인정보 수집 및 이용 동의(필수)</label>
                 <a href="#"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
             </div>
         </div>
@@ -33,9 +33,37 @@
 </div>
 
 <script>
-    //joinEmail로 이동
-    document.getElementById("nextButton").addEventListener("click", function() {
-        window.location.href = "email";
+    //모두 동의 체크
+    document.getElementById("allAgreeCheck").addEventListener("click", function() {
+        //allAgreeCheck 상태(체크 여부)
+        const isChecked = this.checked;
+
+        const checkboxes = document.querySelectorAll('.chk');
+        checkboxes.forEach(function(checkbox) {
+            //allAgreeCheck 상태에 따라 체크박스들의 상태 변경
+            checkbox.checked = isChecked;
+        });
+    });
+
+    /* 필수 체크박스 확인 */
+    document.addEventListener('DOMContentLoaded', function() {
+        const nextButton = document.getElementById('nextButton');
+        const requiredCheckboxes = document.querySelectorAll('.chk[required]'); // 필수 체크박스들
+
+        nextButton.addEventListener('click', function(event) {
+            //필수 체크박스 상태 확인
+            const allChecked = Array.from(requiredCheckboxes).every(function(cb) {
+                return cb.checked;
+            });
+
+            //모든 필수 체크박스가 체크되지 않았을 경우
+            if (!allChecked) {
+                event.preventDefault(); //기본 동작 취소
+                alert('모든 필수 항목을 체크해주세요.');
+            } else {
+                window.location.href = "form"; //다음 페이지로 이동
+            }
+        });
     });
 </script>
 </body>

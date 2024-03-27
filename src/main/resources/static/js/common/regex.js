@@ -1,5 +1,7 @@
 /* 회원가입 유효성 검사 */
 document.addEventListener('DOMContentLoaded', function() {
+    let isValidated = false;    //유효성 검사 완료 확인
+
     const nameInput = document.getElementById('name');
     const nicknameInput = document.getElementById('nickname');
     const phoneNumberInput = document.getElementById('phoneNumber');
@@ -61,11 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 regMsgs[index].classList.add('active-reg-msg');
                 regMsgs[index].textContent = errorMessage;
                 checkCircles[index].style.display = "none";
+                isValidated = false;
             } else {
                 input.classList.remove('active-reg-input');
                 regMsgs[index].classList.remove('active-reg-msg');
                 regMsgs[index].textContent = '';
                 checkCircles[index].style.display = "inline";
+                isValidated = true;
             }
         });
     }
@@ -75,4 +79,9 @@ document.addEventListener('DOMContentLoaded', function() {
     validateInput(phoneNumberInput, 2);
     validateInput(passwordInput, 3);
     validateInput(checkPasswordInput, 4);
+
+    //isValidated(유효성 결과) 리턴하는 함수
+    window.getValidationStatus = function() {
+        return isValidated;
+    };
 });

@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<div class="join-wrapper join-form-wrapper">
+<div class="join-wrapper join-form-wrapper" style="display:none;">
     <div class="join-header">
         <div class="title">개인정보를 입력해주세요.</div>
     </div>
@@ -81,7 +81,7 @@
                 <div class="content-title">비밀번호 재입력</div>
                 <div>
                     <span class="material-symbols-outlined check-circle">check_circle</span>
-                    <input type="password" id="checkPw" class="input-form password" placeholder="비밀번호 재입력" required>
+                    <input type="password" id="checkPassword" class="input-form password" placeholder="비밀번호 재입력" required>
                     <span class="reg-msg"></span>
                 </div>
                 <div class="password-notice">
@@ -154,7 +154,7 @@
             //email 값 미리 설정
             const emailInputValue = document.getElementById("emailInput").value;
             document.getElementById("email").value = emailInputValue;
-            //joinForm 보이기
+            //개인정보 입력창 보이기
             const emailWrapper = document.querySelector('.join-email-wrapper');
             const formWrapper = document.querySelector('.join-form-wrapper');
             emailWrapper.style.display = 'none';
@@ -165,28 +165,20 @@
     });
 
     /* 회원가입 */
-    document.addEventListener('DOMContentLoaded', function() {
-        const joinBtn = document.getElementById('joinBtn');
+    document.getElementById('joinBtn').addEventListener('click', function() {
+        const emailValue = document.getElementById('email').value.trim();
+        const nameValue = document.getElementById('name').value.trim();
+        const nicknameValue = document.getElementById('nickname').value.trim();
+        const phoneNumberValue = document.getElementById('phoneNumber').value.trim();
+        const passwordValue = document.getElementById('password').value.trim();
+        const checkPasswordValue = document.getElementById('checkPassword').value.trim();
 
-        joinBtn.addEventListener('click', function() {
-            const emailValue = document.getElementById('email').value.trim();
-            const nameValue = document.getElementById('name').value.trim();
-            const nicknameValue = document.getElementById('nickname').value.trim();
-            const phoneNumberValue = document.getElementById('phoneNumber').value.trim();
-            const passwordValue = document.getElementById('password').value.trim();
-            const checkPasswordValue = document.getElementById('checkPassword').value.trim();
+        //유효성 검사 결과
+        const isValidated = getValidationStatus();
 
-            //각 input 값이 비어 있는지 확인
-            if (emailValue === '' || nameValue === '' || nicknameValue === '' || phoneNumberValue === '' || passwordValue === '' || checkPasswordValue === '') {
-                alert('개인정보를 입력해주세요.');
-                return;
-            }
-
-            if (!validateInputs()) {
-                alert('입력한 정보를 다시 확인해주세요.');
-                return; // 유효성 검사에 실패하면 처리 중단
-            }
-
+        if (!isValidated) {
+            alert('입력한 정보를 다시 확인해주세요.');
+        } else {
             //SignUpRequestDto 객체 생성
             const signUpReq = {
                 email: emailValue,
@@ -199,15 +191,16 @@
 
             //회원가입 요청
             axios.post('/auth/signup', signUpReq)
-                .then(response => {
+                .then(function (response) {
                     console.log(response.data);
                     alert(response.data);
                     //window.location.href = '/';
                 })
-                .catch(error => {
+                .catch(function (error) {
                     console.error(error);
+                    alert('회원가입에 실패했습니다. 다시 시도해주세요.')
                 });
-        });
+        }
     });
 </script>
 </body>

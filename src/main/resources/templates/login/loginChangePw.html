@@ -31,23 +31,29 @@
 <script>
     /* 비밀번호 재설정 링크 메일 전송 */
     document.getElementById('sendMailBtn').addEventListener('click', function() {
-      //ChangePwLinkRequestDto 객체 생성
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
+        //ChangePwLinkRequestDto 객체 생성
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
 
-      const changePwLinkReq = {
-        name: name,
-        email: email
-      };
+        //입력값이 비어 있는지 확인
+        if (name === '' || email === '') {
+            alert('정보를 입력해주세요.');
+            return;
+        }
 
-      axios.post('/auth/change-pw/email/send', changePwLinkReq)
-        .then(response => {
-          console.log(response);
-          alert(response.data)
-        })
-        .catch(error => {
-          console.error('메일 전송 실패:', error.response.data);
-        });
+        const changePwLinkReq = {
+            name: name,
+            email: email
+        };
+
+        axios.post('/auth/change-pw/email/send', changePwLinkReq)
+            .then(function (response) {
+                console.log(response);
+                alert(response.data)
+            })
+            .catch(function (error) {
+                console.error('메일 전송 실패:', error.response.data);
+            });
     });
 </script>
 </body>
