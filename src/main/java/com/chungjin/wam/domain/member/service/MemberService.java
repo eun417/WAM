@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.member.service;
 
+import com.chungjin.wam.domain.auth.dto.request.ChangePwRequestDto;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
@@ -77,6 +78,20 @@ public class MemberService {
 
         //MapStruct로 수정
         memberMapper.updateFromDto(updateMembmerDto, member);
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    public void updatePw(Long memberId, ChangePwRequestDto changePwReq) {
+        //memberId로 Member 객체 가져오기
+        Member member = getMember(memberId);
+
+        //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
+        if(!memberId.equals(member.getMemberId())) throw new CustomException(FORBIDDEN);
+
+        //비밀번호 암호화 후 변경
+        member.updatePw(passwordEncoder.encode(changePwReq.getNewPassword()));
     }
 
     /**

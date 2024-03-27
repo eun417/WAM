@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.member.controller;
 
 import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
+import com.chungjin.wam.domain.auth.dto.request.ChangePwRequestDto;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.response.MemberDto;
 import com.chungjin.wam.domain.member.service.MemberService;
@@ -34,9 +35,19 @@ public class MemberApiController {
      */
     @PutMapping("/profile-detail")
     public ResponseEntity<String> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                               @RequestBody @Valid UpdateMemberRequestDto updateMembmerDto) {
-        memberService.updateMember(userDetails.getMember().getMemberId(), updateMembmerDto);
+                                               @RequestBody @Valid UpdateMemberRequestDto updateMemberDto) {
+        memberService.updateMember(userDetails.getMember().getMemberId(), updateMemberDto);
         return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PutMapping("/profile-detail/pw")
+    public ResponseEntity<String> updatePw(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @RequestBody @Valid ChangePwRequestDto changePwReq) {
+        memberService.updatePw(userDetails.getMember().getMemberId(), changePwReq);
+        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 
     /**

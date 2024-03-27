@@ -1,50 +1,78 @@
-/* 비밀번호 유효성 검사 */
+/* 회원가입 유효성 검사 */
 document.addEventListener('DOMContentLoaded', function() {
-    const newPwInput = document.getElementById('newPw');
-    const checkPwInput = document.getElementById('checkPw');
+    const nameInput = document.getElementById('name');
+    const nicknameInput = document.getElementById('nickname');
+    const phoneNumberInput = document.getElementById('phoneNumber');
+    const passwordInput = document.getElementById('password');
+    const checkPasswordInput = document.getElementById('checkPassword');
     const regMsgs = document.querySelectorAll('.reg-msg');
-    const finBtn = document.getElementById('finBtn');
-    
-    //비밀번호 정규식 확인
-    function validatePw(newPw) {
-        const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-        return regex.test(newPw);
+    const checkCircles = document.querySelectorAll('.check-circle');
+
+    const nameMaxLength = 15;
+    const nicknameMaxLength = 40;
+    const phoneNumberPattern = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+    function validateInput(input, index) {
+        input.addEventListener('input', function() {
+            let errorMessage = '';
+
+            switch(index) {
+                case 0: //이름
+                    if (nameInput.value.trim().length === 0) {
+                        errorMessage = '이름을 입력하세요.';
+                    } else if (nameInput.value.trim().length > nameMaxLength) {
+                        errorMessage = '이름은 최대 15자까지 입력 가능합니다.';
+                    }
+                    break;
+                case 1: //닉네임
+                    if (nicknameInput.value.trim().length === 0) {
+                        errorMessage = '닉네임을 입력하세요.';
+                    } else if (nicknameInput.value.trim().length > nicknameMaxLength) {
+                        errorMessage = '닉네임은 최대 40자까지 입력 가능합니다.';
+                    }
+                    break;
+                case 2: //휴대폰 번호
+                    if (phoneNumberInput.value.trim().length === 0) {
+                        errorMessage = '휴대폰 번호를 입력하세요.';
+                    } else if (!phoneNumberPattern.test(phoneNumberInput.value.trim())) {
+                        errorMessage = '올바른 휴대폰 번호를 입력하세요.';
+                    }
+                    break;
+                case 3: //비밀번호
+                    if (passwordInput.value.trim().length === 0) {
+                        errorMessage = '비밀번호를 입력하세요.';
+                    } else if (!passwordPattern.test(passwordInput.value.trim())) {
+                        errorMessage = '영문, 숫자, 특수문자를 포함하여 8~15자로 입력하세요.';
+                    }
+                    break;
+                case 4: //비밀번호 재입력
+                    if (checkPasswordInput.value.trim().length === 0) {
+                        errorMessage = '비밀번호를 다시 입력하세요.';
+                    } else if (passwordInput.value.trim() !== checkPasswordInput.value.trim()) {
+                        errorMessage = '비밀번호가 일치하지 않습니다.';
+                    }
+                    break;
+            }
+
+            //에러 메시지 표시
+            if (errorMessage) {
+                input.classList.add('active-reg-input');
+                regMsgs[index].classList.add('active-reg-msg');
+                regMsgs[index].textContent = errorMessage;
+                checkCircles[index].style.display = "none";
+            } else {
+                input.classList.remove('active-reg-input');
+                regMsgs[index].classList.remove('active-reg-msg');
+                regMsgs[index].textContent = '';
+                checkCircles[index].style.display = "inline";
+            }
+        });
     }
 
-    //비밀번호 일치 확인
-    function checkPwsMatch(newPw, checkPw) {
-        return newPwInput.value == checkPwInput.value;
-    }
-
-    //UI 업데이트
-    function updateRegMsg(input, isValid, message) {
-        const regMsg = input.nextElementSibling;
-        if (isValid) {
-          regMsg.textContent = '';
-          input.classList.remove('active-reg-input');
-          regMsg.classList.remove('active-reg-msg');
-        } else {
-          regMsg.textContent = message;
-          input.classList.add('active-reg-input');
-          regMsg.classList.add('active-reg-msg');
-        }
-    }
-
-    //검증 결과에 따라 확인 버튼 제한
-    function updateButtonState() {
-        const isValidPw = validatePw(newPwInput.value);
-        updateRegMsg(newPwInput, isValidPw, '영문, 숫자, 특수문자 조합으로 이루어진 8~15자로 입력하세요');
-        const pwsMatch = checkPwsMatch(newPwInput.value, checkPwInput.value);
-        updateRegMsg(checkPwInput, pwsMatch, '비밀번호가 일치하지 않습니다.');
-        finBtn.disabled = !isValidPw || !pwsMatch;
-    }
-
-    newPwInput.addEventListener('input', function() {
-        updateButtonState();
-    });
-
-    checkPwInput.addEventListener('input', function() {
-        updateButtonState();
-    });
-
+    validateInput(nameInput, 0);
+    validateInput(nicknameInput, 1);
+    validateInput(phoneNumberInput, 2);
+    validateInput(passwordInput, 3);
+    validateInput(checkPasswordInput, 4);
 });

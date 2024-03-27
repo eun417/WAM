@@ -55,55 +55,50 @@
             <input type="hidden" name="memberId" id="memberId">
             <div class="update-input-wrap">
                 <div>
-                    <label for="memberEmail" class="user-bold">이메일</label>
+                    <label for="email" class="user-bold">이메일</label>
                     <div>
-                        <input type="email" name="email" id="memberEmail" class="input-form input-update" disabled>
+                        <input type="email" id="email" class="input-form input-update" disabled>
+                    </div>
+                </div>
+                <div>
+                    <label for="name" class="bold user-bold">이름</label>
+                    <div>
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" id="name" class="input-form">
                         <span class="reg-msg"></span>
                     </div>
                 </div>
                 <div>
-                    <label for="memberNickname" class="bold user-bold">닉네임</label>
+                    <label for="nickname" class="bold user-bold">닉네임</label>
                     <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="text" name="nickname" id="memberNickname" class="input-form input-update">
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" id="nickname" class="input-form input-update">
                         <span class="reg-msg"></span>
                     </div>
                 </div>
                 <div>
-                    <label for="memberName" class="bold user-bold">이름</label>
+                    <label for="phoneNumber" class="bold user-bold">휴대폰 번호</label>
                     <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="text" name="name" id="memberName" class="input-form">
-                    </div>
-                </div>
-                <div>
-                    <label for="memberPhoneNumber" class="bold user-bold">휴대폰 번호</label>
-                    <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="text" name="phoneNumber" id="memberPhoneNumber"
-                               class="input-form input-update">
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="text" id="phoneNumber" class="input-form input-update">
                         <span class="reg-msg"></span>
                     </div>
                 </div>
                 <div>
-                    <label for="nowPw" class="bold user-bold">비밀번호</label>
+                    <label for="password" class="bold user-bold">비밀번호</label>
                     <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="password" name="nowPassword" id="nowPw" placeholder="현재 비밀번호"
-                               class="input-form input-update">
-
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" id="password" placeholder="현재 비밀번호" class="input-form input-update password">
                         <span class="reg-msg"></span>
                     </div>
                     <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="password" name="newPassword" id="newPw" placeholder="새 비밀번호"
-                               class="input-form input-update">
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" id="newPw" placeholder="새 비밀번호" class="input-form input-update password">
                         <span class="reg-msg"></span>
                     </div>
                     <div>
-                        <span class="material-symbols-outlined check-circle" style="display: none;">check_circle</span>
-                        <input type="password" name="checkPassword" id="checkPw" placeholder="새 비밀번호 확인"
-                               class="input-form input-update">
+                        <span class="material-symbols-outlined check-circle">check_circle</span>
+                        <input type="password" id="checkPw" placeholder="새 비밀번호 확인" class="input-form input-update password">
                         <span class="reg-msg"></span>
                     </div>
                     <div class="pw-change-notice">
@@ -112,7 +107,7 @@
                             <li>· 영문, 숫자, 특수문자 조합으로 이루어진 8 ~ 15자로 입력해주세요.</li>
                             <li>· 입력 후 비밀번호 변경을 클릭해주세요.</li>
                         </ul>
-                        <button class="btn bc000 bc777">비밀번호 변경</button>
+                        <button id="updatePwBtn" class="btn bc000 bc777">비밀번호 변경</button>
                     </div>
                 </div>
             </div>
@@ -126,6 +121,77 @@
 <!-- footer 영역 참조 -->
 <footer th:insert="~{/footer :: footer}"></footer>
 
-<script src="/js/mypage/myMember.js"></script>
+<script th:src="@{/js/common/regex.js}"></script>
+<script th:src="@{/js/common/pwRegex.js}"></script>
+<script>
+    /* 회원 정보 수정 */
+    document.querySelector('.updateMember-btn').addEventListener('click', function() {
+        //새로운 닉네임, 이름, 휴대폰 번호 값 가져오기
+        const newNickname = document.getElementById('nickname').value;
+        const newName = document.getElementById('name').value;
+        const newPhoneNumber = document.getElementById('phoneNumber').value;
+
+        //HTTP 요청을 위한 데이터 객체 생성
+        const requestData = {
+            nickname: newNickname,
+            name: newName,
+            phoneNumber: newPhoneNumber
+        };
+
+        //로컬 스토리지에서 액세스 토큰 가져오기
+        const token = localStorage.getItem('accessToken');
+
+        axios.put('/member/profile-detail', requestData, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(function (response) {
+            alert(response.data);
+        })
+        .catch(function (error) {
+            console.error(error);
+
+            //에러 응답 처리
+            if (error.response && error.response.data && error.response.data.errors) {
+                //서버가 에러 응답을 반환한 경우
+                alert(error.response.data.errors[0].message); //서버가 반환한 에러 메시지 표시
+            } else {
+                alert(error.response.data.message);
+            }
+        });
+    });
+
+    /* 비밀번호 변경 요청 */
+    document.getElementById('updatePwBtn').addEventListener('click', function() {
+        //UpdatePwRequestDto 객체 생성
+        const nowPw = document.getElementById('password').value;
+        const newPw = document.getElementById('newPw').value;
+        const checkPw = document.getElementById('checkPw').value;
+
+        const updatePwReq = {
+            nowPassword: nowPw,
+            newPassword: newPw,
+            checkPassword: checkPw
+        };
+
+        //로컬 스토리지에서 액세스 토큰 가져오기
+        const token = localStorage.getItem('accessToken');
+
+        axios.put(`/member/profile-detail/pw`, updatePwReq, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(response => {
+          console.log(response);
+          alert(response.data)
+          window.location.href = '/member/profile';
+        })
+        .catch(error => {
+          console.error('비밀번호 변경 실패:', error.response.data);
+          alert(error.response.data.message);
+        });
+    });
+</script>
 </body>
 </html>

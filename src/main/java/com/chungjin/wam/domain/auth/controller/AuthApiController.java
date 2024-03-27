@@ -52,10 +52,10 @@ public class AuthApiController {
     /**
      * 이메일 중복 체크
      */
-    @GetMapping("/email-check")
-    public ResponseEntity<Boolean> emailCheck(@RequestParam String email) {
-        return ResponseEntity.ok(authService.checkEmailExists(email));
-    }
+//    @PostMapping("/email-check")
+//    public ResponseEntity<Boolean> emailCheck(@RequestBody String email) {
+//        return ResponseEntity.ok(authService.checkEmailExists(email));
+//    }
 
     /**
      * 로그인

@@ -1,14 +1,17 @@
 package com.chungjin.wam.domain.auth.controller;
 
+import com.chungjin.wam.domain.auth.service.RedisService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
+
+    private final RedisService redisService;
 
     /**
      * 회원가입
@@ -21,11 +24,6 @@ public class AuthController {
     @GetMapping("/signup/agree")
     public String goSignupAgree() {
         return "join/joinAgree";
-    }
-
-    @GetMapping("/signup/email")
-    public String goSignupEmail() {
-        return "join/joinEmail";
     }
 
     @GetMapping("/signup/form")

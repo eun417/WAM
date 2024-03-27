@@ -40,14 +40,15 @@
     line-height: 60px;
     padding-left: 20px;
 }
+.join-content>.typing-box>div{
+    margin-top: 10px;
+}
 .join-box>div{
     display: flex;
     margin-right: 15px;
     cursor: pointer;
 }
-.input-form{
-    background-color: #efefef;
-}
+
 
 /* join */
 .email-icon{

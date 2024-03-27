@@ -13,10 +13,10 @@ function loadProfileInformation() {
         renderMenu(memberData.authority);
 
         document.getElementById('memberId').value = memberData.memberId;
-        document.getElementById('memberEmail').value = memberData.email;
-        document.getElementById('memberNickname').value = memberData.nickname;
-        document.getElementById('memberName').value = memberData.name;
-        document.getElementById('memberPhoneNumber').value = memberData.phoneNumber;
+        document.getElementById('email').value = memberData.email;
+        document.getElementById('nickname').value = memberData.nickname;
+        document.getElementById('name').value = memberData.name;
+        document.getElementById('phoneNumber').value = memberData.phoneNumber;
     })
     .catch(function (error) {
         console.error(error);
