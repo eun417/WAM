@@ -67,12 +67,12 @@
         };
 
         axios.put(`/auth/change-pw/${authCode}`, changePwReq)
-            .then(response => {
+            .then(function (response) {
               console.log(response);
               alert(response.data)
               window.location.href = '/auth/login';
             })
-            .catch(error => {
+            .catch(function (error) {
               console.error('비밀번호 재설정 실패:', error.response.data);
             });
     });

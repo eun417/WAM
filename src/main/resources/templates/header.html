@@ -24,7 +24,7 @@
         <div class="header">
             <div class="left-box">
                 <div>
-                    <div class="logo"><img src="https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png" style="width:100%;" alt="Logo"></div>
+                    <a href="/" class="logo"><img src="https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png" alt="Logo"></a>
                 </div>
                 <div class="menu">
                     <a href="/animal-map/mml">야생동물 지도</a>
@@ -43,9 +43,34 @@
 
     <script th:src="@{/js/common/checkToken.js}"></script>
     <script>
-        //현재 있는 탭에 menu-acitve 클래스 추가하는 코드
+
         document.addEventListener('DOMContentLoaded', function() {
-            // 현재 URL에 따라 클래스 추가
+            checkLoginStatus(); //로그인 여부 따라 헤더 버튼 수정
+            moveMenuItem(); //현재 있는 탭 표시
+        });
+
+        //로그인 상태 확인, 헤더 버튼 표시 함수
+        function checkLoginStatus() {
+            const token = getToken();
+
+            if (token) {
+                //토큰이 있는 경우 (로그인)
+                document.querySelector('.button-login').style.display = 'none';
+                document.querySelector('.button-join').style.display = 'none';
+                document.querySelector('.button-mypage').style.display = 'block';
+                document.querySelector('.button-logout').style.display = 'block';
+            } else {
+                //토큰이 없는 경우 (로그아웃)
+                document.querySelector('.button-mypage').style.display = 'none';
+                document.querySelector('.button-logout').style.display = 'none';
+                document.querySelector('.button-login').style.display = 'block';
+                document.querySelector('.button-join').style.display = 'block';
+            }
+        }
+
+        //현재 있는 탭에 menu-acitve 클래스 추가 함수
+        function moveMenuItem() {
+            //현재 URL에 따라 클래스 추가
             var currentPath = window.location.pathname;
 
             var menuItems = document.querySelectorAll('.menu a');
@@ -64,7 +89,7 @@
             } else if (animalMapMenuItem && currentPath.startsWith("/animal-map")) {
                 animalMapMenuItem.classList.add('menu-active');
             }
-        });
+        }
 
         /*로그아웃 요청 함수*/
         function logout(token) {

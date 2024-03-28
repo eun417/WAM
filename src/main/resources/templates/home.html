@@ -1,0 +1,221 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="/css/common/home.css">
+    <title>WAM</title>
+</head>
+<body>
+<!-- header 영역 참조 -->
+<header th:insert="~{/header :: header}"></header>
+
+<div class="home-wrapper">
+    <div id="carouselExampleInterval" class="animal-images-box carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2015/10/12/15/46/animal-984573_1280.jpg" class="d-block w-100" alt="deer">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2018/03/11/20/42/mammals-3218028_1280.jpg" class="d-block w-100" alt="fox">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2016/07/29/21/41/jump-1555905_1280.jpg" class="d-block w-100" alt="polar-bear">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2016/11/12/14/07/dolphin-1818853_1280.jpg" class="d-block w-100" alt="dolphin">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2015/11/16/16/28/bird-1045954_1280.jpg" class="d-block w-100" alt="bird">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2018/08/26/13/59/barn-owl-3632277_1280.jpg" class="d-block w-100" alt="owl">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2018/10/18/11/29/birds-3756126_1280.jpg" class="d-block w-100" alt="swan">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2015/03/08/08/20/frog-663966_1280.jpg" class="d-block w-100" alt="frog">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2016/11/29/02/19/animal-1866808_1280.jpg" class="d-block w-100" alt="turtle">
+            </div>
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="https://cdn.pixabay.com/photo/2012/03/03/23/54/animal-21668_1280.jpg" class="d-block w-100" alt="fishes">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="home-content">
+        <div class="phrase-count-box">
+            <div class="phrase">
+                <p>함께 해주세요!<br>당신의 후원은 야생동물의 미래를 바꿀 힘이 됩니다.</p>
+            </div>
+            <div class="count-box">
+                <div class="deer-img"><img src="#" alt="icon"></div>
+                <div class="donation-total home-btn default">
+                    <p>모든 후원 <span>5,921,174</span>건</p>
+                </div>
+                <div class="donation-total-amount home-btn default">
+                    <p>총 후원금 <span>14,567,126</span>원</p>
+                </div>
+            </div>
+        </div>
+        <div class="deadline-donation-box box">
+            <div class="title-box">
+                <p class="title">마감일이 다가오고 있어요!⏰</p>
+                <p class="title-detail">지금 후원하여 야생동물 보호에 동참해주세요.</p>
+            </div>
+            <div class="content-box">
+                <div class="ending-soon-box">
+                    <div class="ending-soon-img-box">
+                        <div class="remaining-time"><span class="material-symbols-outlined">schedule</span><span>23:12:12</span></div>
+                        <div class="donation-status ending-soon">종료 임박</div>
+                        <div class="ending-soon-img"><img src="#" class="first-pic" alt="animal"></div>
+                    </div>
+                    <div class="ending-soon-detail">
+                        <div class="ending-soon-title">보호받지 못하는 야생동물, 시민이 보호합니다!</div>
+                        <div class="donation-nickname gray-text">사단법인 동물권행동 카라</div>
+                        <div class="ending-soon-content">
+                            <div class="ending-soon-amount">
+                                <div class="percent">
+                                    <div class="graph"></div>
+                                    <div class="graph-bottom"></div>
+                                </div>
+                                <div class="amount">
+                                    <p><span>5,466,300</span>원</p>
+                                    <p><span>25,000,000</span>원 목표</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tag-donation-box box">
+            <div class="title-box">
+                <p class="title">태그별로 찾아 볼 수 있어요.🔖</p>
+                <p class="title-detail">동물 분류별로 후원들을 모아놨어요.</p>
+            </div>
+            <div class="content-box">
+                <div class="tag-box">
+                    <div class="tag home-btn">#포유류</div>
+                    <div class="tag home-btn">#조류</div>
+                    <div class="tag home-btn">#양서파충류</div>
+                    <div class="tag home-btn">#어류</div>
+                </div>
+                <div class="donation-list">
+                    <div class="donation-line">
+                        <div class="donation-box">
+                            <div class="donation-img-box">
+                                <div class="donation-status start">후원 시작</div>
+                                <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
+                            </div>
+                            <div class="donation-title">야생동물, 우리 함께 살아요!</div>
+                            <div class="donation-nickname gray-text">사단법인 동물권행동 카라</div>
+                            <div class="donation-amount">
+                                <div class="percent">
+                                    <div class="graph"></div>
+                                    <div class="graph-bottom"></div>
+                                </div>
+                                <p><span>0</span>원</p>
+                            </div>
+                        </div>
+                        <div class="donation-box">
+                            <div class="donation-img-box">
+                                <div class="donation-status ing"></div>
+                                <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
+                            </div>
+                            <div class="donation-title">야생동물, 우리 함께 살아요!</div>
+                            <div class="donation-nickname gray-text">사단법인 동물권행동 카라</div>
+                            <div class="donation-amount">
+                                <div class="percent">
+                                    <div class="graph"></div>
+                                    <div class="graph-bottom"></div>
+                                </div>
+                                <p><span>19,699,200</span>원</p>
+                            </div>
+                        </div>
+                        <div class="donation-box">
+                            <div class="donation-img-box">
+                                <div class="donation-status end">후원 종료</div>
+                                <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
+                            </div>
+                            <div class="donation-title">야생동물, 우리 함께 살아요!</div>
+                            <div class="donation-nickname gray-text">사단법인 동물권행동 카라</div>
+                            <div class="donation-amount">
+                                <div class="percent">
+                                    <div class="graph"></div>
+                                    <div class="graph-bottom"></div>
+                                </div>
+                                <p><span>19,699,200</span>원</p>
+                            </div>
+                        </div>
+                        <div class="donation-box">
+                            <div class="donation-img-box">
+                                <div class="donation-status ending-soon" style="display: none;">종료 임박</div>
+                                <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
+                            </div>
+                            <div class="donation-title">야생동물, 우리 함께 살아요!</div>
+                            <div class="donation-nickname gray-text">사단법인 동물권행동 카라</div>
+                            <div class="donation-amount">
+                                <div class="percent">
+                                    <div class="graph"></div>
+                                    <div class="graph-bottom"></div>
+                                </div>
+                                <p><span>19,699,200</span>원</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="more-btn home-btn">더보기</button>
+            </div>
+        </div>
+        <div class="qna-box box">
+            <div class="title-box">
+                <p class="title">이곳에서 당신의 궁금증을 해결해보세요.💡</p>
+                <p class="title-detail">회원들이 올린 질문들을 함께 볼 수 있어요.</p>
+            </div>
+            <div class="content-box">
+                <div class="qna-list">
+                    <div class="qna-detail-box">
+                        <p class="qna-detail-title">강아지 귀엽지 않나요?</p>
+                        <p class="gray-text">2023.12.31</p>
+                        <p>강아지를 보았다. 귀여워서 한참을 보았다. 자꾸 보니까 데려가고 싶었다. 그래도 주인이 찾을 것 같아서 보기만 하고 안 데려왔다. 그 강아지는 주인을 좋아할까?
+                            나를 좋아할까? 내가 갈 때까지 계속 꼬리만 흔들고 있던데 정말 궁금하다.</p>
+                    </div>
+                    <div class="qna-detail-box">
+                        <p class="qna-detail-title">강아지 귀엽지 않나요?</p>
+                        <p class="gray-text">2023.12.31</p>
+                        <p>강아지를 보았다. 귀여워서 한참을 보았다. 자꾸 보니까 데려가고 싶었다. 그래도 주인이 찾을 것 같아서 보기만 하고 안 데려왔다. 그 강아지는 주인을 좋아할까?
+                            나를 좋아할까? 내가 갈 때까지 계속 꼬리만 흔들고 있던데 정말 궁금하다.</p>
+                    </div>
+                    <div class="qna-detail-box">
+                        <p class="qna-detail-title">강아지 귀엽지 않나요?</p>
+                        <p class="gray-text">2023.12.31</p>
+                        <p>강아지를 보았다. 귀여워서 한참을 보았다. 자꾸 보니까 데려가고 싶었다. 그래도 주인이 찾을 것 같아서 보기만 하고 안 데려왔다. 그 강아지는 주인을 좋아할까?
+                            나를 좋아할까? 내가 갈 때까지 계속 꼬리만 흔들고 있던데 정말 궁금하다.</p>
+                    </div>
+                </div>
+                <button class="more-btn home-btn">더보기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- footer 영역 참조 -->
+<footer th:insert="~{/footer :: footer}"></footer>
+</body>
+</html>

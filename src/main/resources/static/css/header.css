@@ -54,6 +54,11 @@
 .logo{
     width: 40px;
     height: 40px;
+    display: inline-block;
+}
+.logo>img{
+    width: 100%;
+    cursor: pointer;
 }
 
 .menu{
@@ -69,6 +74,7 @@
     height: 100%;
     line-height: 80px;
     display: block;
+    text-decoration: none;
 }
 .menu a:hover{
     font-weight: 600;

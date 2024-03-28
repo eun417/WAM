@@ -19,6 +19,7 @@
 }
 *>p {
     cursor: text;
+    margin: 0;
 }
 
 ul{

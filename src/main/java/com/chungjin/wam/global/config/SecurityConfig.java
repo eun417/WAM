@@ -38,6 +38,7 @@ public class SecurityConfig {
     private static final String[] ALLOWED_URLS = {
             //추후 수정 필요
 //            "/**",
+            "/",
             "/auth/**", "/oauth/**",
             "/admin/**",
             "/qna/**", "/support/**", "/member/**", "/email/**", "/payment/**", "/animal-map/**",

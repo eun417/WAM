@@ -51,12 +51,12 @@ function refreshAccessToken() {
 
     //refresh 요청
     return axios.post('/auth/refresh', tokenReq)
-        .then(response => {
+        .then(function(response) {
             //새로운 access token 발급
             const { accessToken } = response.data;
             localStorage.setItem('accessToken', accessToken);
         })
-        .catch(error => {
+        .catch(function(error) {
             console.error('새로운 access token 발급 실패:', error);
             localStorage.removeItem('refreshToken');
         });
@@ -81,27 +81,7 @@ function checkTokenExpiration() {
     }
 }
 
-/*로그인 상태 확인, 화면 표시 함수*/
-function checkLoginStatus() {
-    const token = getToken();
-
-    if (token) {
-        //토큰이 있는 경우 (로그인)
-        document.querySelector('.button-login').style.display = 'none';
-        document.querySelector('.button-join').style.display = 'none';
-        document.querySelector('.button-mypage').style.display = 'block';
-        document.querySelector('.button-logout').style.display = 'block';
-    } else {
-        //토큰이 없는 경우 (로그아웃)
-        document.querySelector('.button-mypage').style.display = 'none';
-        document.querySelector('.button-logout').style.display = 'none';
-        document.querySelector('.button-login').style.display = 'block';
-        document.querySelector('.button-join').style.display = 'block';
-    }
-}
-
 /*페이지 로드 시 토큰 만료 검사 실행*/
 document.addEventListener('DOMContentLoaded', function() {
     checkTokenExpiration();
-    checkLoginStatus();
 });
