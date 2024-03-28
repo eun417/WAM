@@ -6,14 +6,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- css -->
-    <link rel="stylesheet" href="/css/common/home.css">
+    <link rel="stylesheet" href="/css/home.css">
     <title>WAM</title>
 </head>
 <body>
 <!-- header 영역 참조 -->
-<header th:insert="~{/header :: header}"></header>
+<header th:insert="~{/common/header :: header}"></header>
 
-<div class="home-wrapper">
+<div class="home-wrapper wrapper">
     <div id="carouselExampleInterval" class="animal-images-box carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active" data-bs-interval="4000">
@@ -61,10 +61,10 @@
     <div class="home-content">
         <div class="phrase-count-box">
             <div class="phrase">
-                <p>함께 해주세요!<br>당신의 후원은 야생동물의 미래를 바꿀 힘이 됩니다.</p>
+                <p><span class="brand1">W</span><span class="brand2">A</span><span class="brand3">M</span>과 함께 해주세요!<br>당신의 후원은 야생동물의 미래를 바꿀 힘이 됩니다.</p>
             </div>
             <div class="count-box">
-                <div class="deer-img"><img src="#" alt="icon"></div>
+                <div class="deer-img"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" alt="icon"></div>
                 <div class="donation-total home-btn default">
                     <p>모든 후원 <span>5,921,174</span>건</p>
                 </div>
@@ -216,6 +216,6 @@
 </div>
 
 <!-- footer 영역 참조 -->
-<footer th:insert="~{/footer :: footer}"></footer>
+<footer th:insert="~{/common/footer :: footer}"></footer>
 </body>
 </html>

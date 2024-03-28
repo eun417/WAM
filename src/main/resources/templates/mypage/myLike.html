@@ -7,7 +7,7 @@
 </head>
 <body>
 <!-- header 영역 참조 -->
-<header th:insert="~{/header :: header}"></header>
+<header th:insert="~{/common/header :: header}"></header>
 
 <div class="likeList-wrapper page-content">
     <!-- mypageMenu 영역 참조 -->
@@ -37,7 +37,7 @@
 </div>
 
 <!-- footer 영역 참조 -->
-<footer th:insert="~{/footer :: footer}"></footer>
+<footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script th:src="@{/js/common/pagination.js}"></script>
 <script>
@@ -47,7 +47,7 @@
     //페이지 로드 시 좋아요한 목록을 테이블에 표시하는 함수
     function loadList(page) {
         //토큰을 로컬 스토리지에서 가져오기
-        const token = getToken();
+        const token = localStorage.getItem('accessToken');
 
         axios.get(`/member/like/${page}`, {
             headers: {

@@ -27,6 +27,11 @@ ul{
 }
 
 /* 기본화면 레이아웃 */
+.wrapper, .page-content{
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 200px;
+}
 .contbox{
     max-height: max-content;
     max-width: max-content;
@@ -38,7 +43,6 @@ ul{
     margin-top:170px !important;
     width: 1200px;
     margin: 0 auto;
-    margin-bottom: 130px;
     flex-grow: 1;
 }
 
@@ -46,6 +50,22 @@ ul{
     font-weight: 600;
     padding: 10px 0px;
     font-size: 1.5rem;
+}
+
+/*로고*/
+span.brand1 {
+    color: #445D48;
+    font-weight: 600;
+}
+
+span.brand2 {
+    color: #996F5E;
+    font-weight: 600;
+}
+
+span.brand3 {
+    color: #BFB374;
+    font-weight: 600;
 }
 
 /*check-circle*/

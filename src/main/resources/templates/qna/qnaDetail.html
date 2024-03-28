@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- header 영역 참조 -->
-<header th:insert="~{/header :: header}"></header>
+<header th:insert="~{/common/header :: header}"></header>
 
 <div class="QnADetail-wrapper page-content">
     <div class="QnADetail-contBox contbox">
@@ -52,7 +52,7 @@
 </div>
 
 <!-- footer 영역 참조 -->
-<footer th:insert="~{/footer :: footer}"></footer>
+<footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script th:src="@{/js/qna/qna.js}"></script>
 <script>
@@ -126,8 +126,10 @@
 
     //로그인 사용자가 관리자면 버튼 보이게 하는 함수
     function showAnswerBtnForAdmin(btnName) {
+        const token = localStorage.getItem('accessToken');
+
         //payload에서 데이터 가져오기
-        const payload = getPayloadData();
+        const payload = getPayloadData(token);
 
         //권한이 관리자이면 답변 작성 버튼 보이기
         if (payload.auth == "ADMIN") {
@@ -137,8 +139,10 @@
 
     //로그인 사용자가 관리자면 버튼 안 보이게 하는 함수
     function hideAnswerBtnForAdmin(btnName) {
+        const token = localStorage.getItem('accessToken');
+
         //payload에서 데이터 가져오기
-        const payload = getPayloadData();
+        const payload = getPayloadData(token);
 
         //권한이 관리자이면 답변 작성 버튼 보이기
         if (payload.auth == "ADMIN") {
@@ -176,8 +180,9 @@
 
     //로그인 사용자가 작성자인지 확인하는 함수
     function showUpDelBtnForWriter(memberId) {
+        const token = localStorage.getItem('accessToken');
         //payload에서 데이터 가져오기
-        const payload = getPayloadData();
+        const payload = getPayloadData(token);
         console.log('login memberId:'+payload.sub);
 
         //memberId가 같으면 버튼 보이기
@@ -195,7 +200,7 @@
         console.log("삭제할 QnA:"+qnaId);
 
         //토큰을 로컬 스토리지에서 가져오기
-        const token = getToken();
+        const token = localStorage.getItem('accessToken');
 
         if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
             //사용자가 확인을 누르면 컨트롤러 호출

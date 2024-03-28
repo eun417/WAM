@@ -11,7 +11,7 @@
     <!-- 로고 폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <!-- css -->
-    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
     <link rel="stylesheet" th:href="@{/css/common/default.css}">
     <link rel="stylesheet" th:href="@{/css/qna/qnaList.css}">
     <link rel="stylesheet" th:href="@{/css/qna/qnaDetail.css}">
@@ -51,7 +51,7 @@
 
         //로그인 상태 확인, 헤더 버튼 표시 함수
         function checkLoginStatus() {
-            const token = getToken();
+            const token = localStorage.getItem('accessToken');
 
             if (token) {
                 //토큰이 있는 경우 (로그인)
@@ -109,7 +109,7 @@
 
         //로그아웃
         document.querySelector('.button-logout').addEventListener('click', function() {
-            const token = getToken();
+            const token = localStorage.getItem('accessToken');
             logout(token);
         });
     </script>

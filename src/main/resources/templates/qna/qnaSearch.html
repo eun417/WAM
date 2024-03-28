@@ -8,9 +8,9 @@
 </head>
 <body>
 <!-- header 영역 참조 -->
-<header th:insert="~{/header :: header}"></header>
+<header th:insert="~{/common/header :: header}"></header>
 
-<div class="QnAlist-wrapper wrapper">
+<div class="QnAlist-wrapper page-content">
     <div class="QnAlist-ContBox contbox">
         <div class="QnAlist-header"><span>QnA</span></div>
         <div class="QnAlist-inputBox">
@@ -50,7 +50,7 @@
 </div>
 
 <!-- footer 영역 참조 -->
-<footer th:insert="~{/footer :: footer}"></footer>
+<footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script src="/js/qna/qnaList.js"></script>
 <script>
