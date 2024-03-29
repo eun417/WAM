@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
 
     private Long commentId;
-    private String email;
+    private String nickname;
     private String content;
     private String createDate;
 

@@ -65,7 +65,7 @@ public class CommentService {
         return comments.stream()
                 .map(comment -> CommentDto.builder()
                         .commentId(comment.getCommentId())
-                        .email(comment.getMember().getEmail())
+                        .nickname(comment.getMember().getNickname())
                         .content(comment.getContent())
                         .createDate(comment.getCreateDate())
                         .build())

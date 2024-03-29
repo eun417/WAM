@@ -14,7 +14,7 @@ public class SupportController {
      * 후원 목록 조회
      */
     @GetMapping("/list")
-    public String goQnaList() {
+    public String goSupportList() {
         return "donation/donationList";
     }
 
@@ -22,7 +22,7 @@ public class SupportController {
      * 후원 상세 조회
      */
     @GetMapping("/detail/{supportId}")
-    public String goQnaDetail(@PathVariable("supportId") Long supportId, Model model) {
+    public String goSupportDetail(@PathVariable("supportId") Long supportId, Model model) {
         model.addAttribute("supportId", supportId);
         return "donation/donationDetail";
     }

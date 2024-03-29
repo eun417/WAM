@@ -44,8 +44,8 @@ public class SupportApiController {
     /**
      * 후원 List 조회 (Pagination)
      */
-    @GetMapping("/page={page}")
-    public ResponseEntity<PageResponse> readAllSupport(@PathVariable(value = "page") int pageNo) {
+    @GetMapping
+    public ResponseEntity<PageResponse> readAllSupport(@RequestParam("page") int pageNo) {
         return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
     }
 

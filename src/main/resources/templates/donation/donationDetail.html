@@ -67,23 +67,6 @@
                         <p>댓글</p><span class="comment-count">13</span>
                     </div>
                     <div class="comment-list">
-                        <div class="commentBox">
-                            <div class="commentBox-R"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" width="55" height="55"></div>
-                            <div class="commentBox-L">
-                                <div class="commentBox-LT">
-                                    <div class="edit-box">
-                                        <div>수정하기</div>
-                                        <div>삭제하기</div>
-                                    </div>
-                                    <div class="commentBox-LTR comment-nickname"></div>
-                                    <div class="commentBox-LTL">
-                                        <span class="material-symbols-outlined">more_horiz</span>
-                                    </div>
-                                </div>
-                                <div class="commentBox-LM"><p class="comment-content"></p></div>
-                                <div class="commentBox-LB"><span class="comment-date gray-text"></span></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -93,5 +76,57 @@
 
 <!-- footer 영역 참조 -->
 <footer th:insert="~{/common/footer :: footer}"></footer>
+
+<script>
+    /*후원 상세 조회*/
+    document.addEventListener('DOMContentLoaded', function() {
+        const supportId = [[${supportId}]];
+        console.log(supportId);
+
+        axios.get(`/support/${supportId}`)
+            .then(function(response) {
+                const supportDetail = response.data;
+
+                document.querySelector('.donation-title').textContent = supportDetail.title;
+                document.querySelector('.donation-img img').src = supportDetail.firstImg;
+                document.querySelector('.start-date').textContent = supportDetail.startDate;
+                document.querySelector('.end-date').textContent = supportDetail.endDate;
+                document.querySelector('.tag-name').textContent = '#'+supportDetail.animalSubjects;
+                document.querySelector('.donation-amount span').textContent = supportDetail.supportAmount;
+                document.querySelector('.goal-amount span').textContent = supportDetail.goalAmount;
+                document.querySelector('.like-count').textContent = supportDetail.supportLike;
+                document.querySelector('.body2-wrapper').textContent = supportDetail.content;
+                document.querySelector('.comment-count').textContent = supportDetail.comments.length;
+
+                //댓글
+                const commentList = document.querySelector('.comment-list');
+                commentList.innerHTML = '';
+                supportDetail.comments.forEach(function(comment) {
+                    const commentBox = document.createElement('div');
+                    commentBox.classList.add('commentBox');
+                    commentBox.innerHTML = `
+                        <div class="commentBox-R"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" width="55" height="55"></div>
+                        <div class="commentBox-L">
+                            <div class="commentBox-LT">
+                                <div class="edit-box" style="display:none;">
+                                    <div>수정하기</div>
+                                    <div>삭제하기</div>
+                                </div>
+                                <div class="commentBox-LTR comment-nickname">${comment.nickname}</div>
+                                <div class="commentBox-LTL">
+                                    <span class="material-symbols-outlined">more_horiz</span>
+                                </div>
+                            </div>
+                            <div class="commentBox-LM"><p class="comment-content">${comment.content}</p></div>
+                            <div class="commentBox-LB"><span class="comment-date gray-text">${comment.createDate}</span></div>
+                        </div>`;
+                    commentList.appendChild(commentBox);
+                });
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    });
+</script>
 </body>
 </html>
