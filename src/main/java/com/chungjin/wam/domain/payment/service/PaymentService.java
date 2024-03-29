@@ -85,4 +85,10 @@ public class PaymentService {
         paymentRepository.save(paymentInfo);
     }
 
+    /**
+     * 총 후원금 조회
+     */
+    public Long readTotalPaymentAmount() {
+        return paymentRepository.findTotalPaymentAmount();
+    }
 }

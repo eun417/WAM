@@ -13,6 +13,7 @@ public class QnaResponseDto {
 
     private Long qnaId;
     private String title;
+    private String content;
     private String nickname;
     private String createDate;
     private Long viewCount;

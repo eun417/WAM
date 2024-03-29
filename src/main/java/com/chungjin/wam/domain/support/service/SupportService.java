@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.support.service;
 import com.chungjin.wam.domain.comment.service.CommentService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
+import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
@@ -105,23 +106,7 @@ public class SupportService {
     public PageResponse readAllSupport(int pageNo) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-        //Support를 페이지별 조회
-        Page<Support> supportPage = supportRepository.findAll(pageable);
-        //현재 페이지의 Support 목록
-        List<Support> supports = supportPage.getContent();
-        //EntityList -> DtoList
-        List<Object> supportDtos = new ArrayList<>();
-        for (Support support : supports) {
-            supportDtos.add(convertToDto(support)); // Support를 SupportDto로 변환하여 리스트에 추가
-        }
-        return PageResponse.builder()
-                .content(supportDtos)	//Support 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(supportPage.getSize()) //페이지당 항목 수
-                .totalElements(supportPage.getTotalElements())   //전체 Support 수
-                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
-                .last(supportPage.isLast())  //마지막 페이지 여부
-                .build();
+        return getSupportPageResponse(supportRepository.findAll(pageable), pageNo);
     }
 
     /**
@@ -190,6 +175,22 @@ public class SupportService {
     }
 
     /**
+     * 검색 - 제목+내용
+     */
+    public PageResponse searchSupport(String keyword, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
+        return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(keyword, pageable), pageNo);
+    }
+
+    /**
+     * 검색 - 태그
+     */
+    public PageResponse searchSupportTag(String keyword, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
+        return getSupportPageResponse(supportRepository.findByAnimalSubjectsContaining(keyword, pageable), pageNo);
+    }
+
+    /**
      * memberId로 Member 객체 조회
      */
     private Member getMember (Long memberId) {
@@ -203,26 +204,6 @@ public class SupportService {
     private Support getSupport (Long supportId) {
         return supportRepository.findById(supportId)
                 .orElseThrow(() -> new CustomException(SUPPORT_NOT_FOUND));
-    }
-
-    /**
-     * 검색 - 제목+내용
-     */
-    public List<SupportResponseDto> searchSupport(String keyword, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<Support> supportPage = supportRepository.findByTitleOrContentContaining(keyword, pageable);
-        List<Support> supports = supportPage.getContent();
-        return convertToDtoList(supports);
-    }
-
-    /**
-     * 검색 - 태그
-     */
-    public List<SupportResponseDto> searchSupportTag(String keyword, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<Support> supportPage = supportRepository.findByAnimalSubjectsContaining(keyword, pageable);
-        List<Support> supports = supportPage.getContent();
-        return convertToDtoList(supports);
     }
 
     /**
@@ -258,6 +239,24 @@ public class SupportService {
                         .createDate(support.getCreateDate())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    //Pagination 결과 함수
+    private PageResponse getSupportPageResponse(Page<Support> supportPage, int pageNo) {
+        //현재 페이지의 Support 목록
+        List<Support> supports = supportPage.getContent();
+        //EntityList -> DtoList
+        List<Object> supportDtos = supports.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return PageResponse.builder()
+                .content(supportDtos)	//Support 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(supportPage.getSize()) //페이지당 항목 수
+                .totalElements(supportPage.getTotalElements())   //전체 Support 수
+                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
+                .last(supportPage.isLast())  //마지막 페이지 여부
+                .build();
     }
 
 }

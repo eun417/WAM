@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -72,19 +73,19 @@ public class SupportApiController {
     /**
      * 검색 - 제목+내용
      */
-    @GetMapping("/search/page={page}")
-    public ResponseEntity<List<SupportResponseDto>> searchSupport(@RequestParam("keyword") String keyword,
-                                                                  @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(supportService.searchSupport(keyword, page));
+    @GetMapping("/search/tc")
+    public ResponseEntity<PageResponse> searchSupport(@RequestParam("keyword") String keyword,
+                                                      @RequestParam("page") int pageNo) {
+        return ResponseEntity.ok().body(supportService.searchSupport(keyword, pageNo));
     }
 
     /**
      * 검색 - 태그(동물 분류)
      */
-    @GetMapping("/search/tag/page={page}")
-    public ResponseEntity<List<SupportResponseDto>> searchSupportTag(@RequestParam("keyword") String keyword,
-                                                             @PathVariable(value = "page") int page) {
-        return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, page));
+    @GetMapping("/search/tag")
+    public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") String keyword,
+                                                         @RequestParam("page") int pageNo) {
+        return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, pageNo));
     }
 
 }

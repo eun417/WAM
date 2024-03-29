@@ -172,6 +172,7 @@ public class QnaService {
         return QnaResponseDto.builder()
                 .qnaId(qna.getQnaId())
                 .title(qna.getTitle())
+                .content(qna.getContent())
                 .createDate(qna.getCreateDate())
                 .viewCount(qna.getViewCount())
                 .qnaCheck(qna.getQnaCheck())

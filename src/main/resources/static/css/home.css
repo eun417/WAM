@@ -20,6 +20,9 @@
 }
 .content-box .more-btn{
     border: 1px solid #d1d1d1;
+    color: #2f343d;
+    text-decoration: none;
+    height: 55px;
 }
 
 .title-box>.title{
@@ -64,7 +67,7 @@
 }
 .phrase span{
     font-family: 'Righteous';
-    font-size: 28px;
+    font-size: 42px;
 }
 .phrase-count-box{
     display: flex;
@@ -208,17 +211,23 @@
     color: #a86e57;
     border: 2px solid #a86e57;
 }
+.tag-active{
+    color: #a86e57;
+    border: 2px solid #a86e57;
+}
 
 .donation-list{
     width: 100%;
     margin: 60px 0 30px 0;
 }
 .donation-line{
+    width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 .donation-box{
-    width: 25%;
+    width: 24%;
     text-align: justify;
 }
 .donation-img-box{
@@ -258,4 +267,6 @@
 }
 .qna-box>.content-box{
     display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +39,14 @@ public class PaymentApiController {
     public Payment paymentComplete(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @RequestBody PaymentRequestDto paymentReq) {
         return paymentService.createPayment(iamportClient, userDetails.getMember().getMemberId(), paymentReq);
+    }
+
+    /**
+     * 총 후원금 조회
+     */
+    @GetMapping("/total-amount")
+    public Long getTotalPaymentAmount() {
+        return paymentService.readTotalPaymentAmount();
     }
 
 }

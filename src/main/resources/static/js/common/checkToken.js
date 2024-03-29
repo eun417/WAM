@@ -17,7 +17,7 @@ function getPayloadData(accessToken) {
         return null;
     }
     //토큰의 payload 부분 추출
-    var base64Payload = token.split('.')[1];    //value 0: header, 1: payload, 2: VERIFY SIGNATURE
+    var base64Payload = accessToken.split('.')[1];    //value 0: header, 1: payload, 2: VERIFY SIGNATURE
     //base64 디코딩 및 JSON 객체로 변환
     return JSON.parse(atob(base64Payload.replace(/-/g, '+').replace(/_/g, '/')));
 }
