@@ -17,9 +17,10 @@
 *:not(a, input, textarea, span) {
     cursor: default;
 }
-*>p {
+*>p, *>span {
     cursor: text;
     margin: 0;
+    text-align: justify;
 }
 
 ul{
@@ -68,6 +69,182 @@ span.brand3 {
     font-weight: 600;
 }
 
+/*목록 페이지*/
+.contBox{
+    text-align: center;
+}
+.inputBox{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.list-header{
+    margin-bottom: 90px;
+}
+.list-header span{
+    font-size: 48px;
+    font-weight: 600;
+    border-bottom: 5px solid #445D48;
+    padding-bottom: 10px;
+}
+.searchBox{
+    position: relative;
+    display: flex;
+}
+.search{
+    margin-right: 5px;
+}
+#search-btn{
+    cursor: pointer;
+    padding: 12px 15px 12px 15px;
+    font-weight: 500;
+}
+.searchBox>.search{
+    width: 600px;
+}
+
+.searchBox>.select{
+    width: 15%;
+    height: 50px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 15px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+}
+
+.inputBox>.writer-btn{
+    text-decoration: none;
+    padding: 10px 15px 10px 15px;
+}
+.writer-btn>div{
+    display: flex;
+    cursor: pointer;
+}
+.writer-btn span{
+    color: #fff;
+}
+
+/*메인, 후원 페이지 버튼*/
+.home-btn{
+    display: inline-block;
+    cursor: pointer;
+    padding: 15px 25px 15px 25px;
+    border: 2px solid #b1b3b4;
+    border-radius: 10rem;
+    background-color: #fff;
+    transition-duration: 0.3s;
+}
+
+/*후원 상태 따른 버튼*/
+.donation-status{
+    font-size: 12px;
+    font-weight: 300;
+    display: inline-block;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+.start{
+    background-color: #3f7a4a;
+}
+.end{
+    background-color: #454e49;
+}
+.ending-soon{
+    background-color: #e45d45;
+}
+
+/*후원 썸네일*/
+.first-pic{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    border-radius: 10px;
+}
+
+/*그래프*/
+.percent{
+    position: relative;
+}
+.percent>.graph{
+    width: 70%;
+    border: 3px solid #cfb73e;
+    border-radius: 10px;
+    position: absolute;
+}
+.percent>.graph-bottom{
+    border: 3px solid #e7e7e7;
+    border-radius: 10px;
+}
+
+/*글 title*/
+.title-hover{
+    cursor: pointer;
+}
+.title-hover:hover{
+    color: #808080;
+    transition: 0.2s ease-out;
+}
+
+/*태그 후원*/
+.tag-donation-box>.content-box,
+.qna-box>.content-box{
+    text-align: center;
+}
+.tag-box{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 60%;
+    padding-bottom: 30px;
+    border-bottom: 3px solid #EDEDED;
+}
+.tag:hover{
+    color: #a86e57;
+    border: 2px solid #a86e57;
+}
+.tag-active{
+    color: #a86e57;
+    border: 2px solid #a86e57;
+}
+
+.donation-list{
+    width: 100%;
+    margin: 60px 0 30px 0;
+}
+.donation-line{
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.donation-box{
+    width: 24%;
+    text-align: justify;
+}
+.donation-img-box{
+    position: relative;
+    margin-bottom: 10px;
+}
+.donation-img{
+    height: 150px;
+    border-radius: 10px;
+}
+.gray-text{
+    font-size: 14px;
+    font-weight: 300;
+    color: #7A7A7A;
+    margin: 3px 0 10px 0;
+}
+.donation-amount>p{
+    margin-top: 8px;
+}
+
 /*check-circle*/
 .update-input-wrap>div>div{
     position: relative;
@@ -102,27 +279,6 @@ div>.active-reg-input{
     display: none;
 }
 
-/* font 클래스 */
-.f-thin {
-    font-weight: 300;
-}
-
-.f-light {
-    font-weight: 400;
-}
-
-.f-medium {
-    font-weight: 500;
-}
-
-.f-bold {
-    font-weight: 700;
-}
-
-.f-black {
-    font-weight: 900;
-}
-
 
 /* 글씨 색 */
 .fc-1 {
@@ -151,36 +307,6 @@ div>.active-reg-input{
 
 .fc-7 {
     color: #d6b822;
-}
-
-
-/* 배경 색*/
-.bg-1 {
-    background-color: #2f343d;
-}
-
-.bg-2 {
-    background-color: #59516e;
-}
-
-.bg-3 {
-    background-color: #eeeeee;
-}
-
-.bg-4 {
-    background-color: #003154;
-}
-
-.bg-5 {
-    background-color: #4d7a55;
-}
-
-.bg-6 {
-    background-color: #8f533b;
-}
-
-.bg-7 {
-    background-color: #daba65;
 }
 
 

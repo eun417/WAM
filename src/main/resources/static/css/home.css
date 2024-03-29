@@ -6,15 +6,6 @@
     margin: auto;
 }
 
-.home-btn{
-    display: inline-block;
-    cursor: pointer;
-    padding: 15px 25px 15px 25px;
-    border: 2px solid #b1b3b4;
-    border-radius: 10rem;
-    background-color: #fff;
-    transition-duration: 0.3s;
-}
 .default{
     cursor: default;
 }
@@ -124,27 +115,6 @@
 .remaining-time * {
     color: #fff;
 }
-/*후원 상태 따른 버튼*/
-.donation-status{
-    font-size: 12px;
-    font-weight: 300;
-    display: inline-block;
-    padding: 5px 10px 5px 10px;
-    border-radius: 5px;
-    color: #fff;
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-}
-.start{
-    background-color: #3f7a4a;
-}
-.end{
-    background-color: #454e49;
-}
-.ending-soon{
-    background-color: #e45d45;
-}
 
 .ending-soon-img{
     width: 100%;
@@ -152,12 +122,6 @@
 }
 .ending-soon-img>.first-pic{
     border-radius: 0 0 10px 10px;
-}
-.first-pic{
-    width: 100%;
-    height: 100%;
-    object-fit:cover;
-    border-radius: 10px;
 }
 
 .ending-soon-detail{
@@ -175,77 +139,6 @@
 .amount *{
     font-size: 20px;
     font-weight: 600;
-}
-
-/*그래프*/
-.percent{
-    position: relative;
-}
-.percent>.graph{
-    width: 70%;
-    border: 3px solid #cfb73e;
-    border-radius: 10px;
-    position: absolute;
-}
-.percent>.graph-bottom{
-    border: 3px solid #e7e7e7;
-    border-radius: 10px;
-}
-
-
-/*태그*/
-.tag-donation-box>.content-box,
-.qna-box>.content-box{
-    text-align: center;
-}
-.tag-box{
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    width: 60%;
-    padding-bottom: 30px;
-    border-bottom: 3px solid #EDEDED;
-}
-.tag:hover{
-    color: #a86e57;
-    border: 2px solid #a86e57;
-}
-.tag-active{
-    color: #a86e57;
-    border: 2px solid #a86e57;
-}
-
-.donation-list{
-    width: 100%;
-    margin: 60px 0 30px 0;
-}
-.donation-line{
-    width: 100%;
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-.donation-box{
-    width: 24%;
-    text-align: justify;
-}
-.donation-img-box{
-    position: relative;
-    margin-bottom: 10px;
-}
-.donation-img{
-    height: 150px;
-    border-radius: 10px;
-}
-.gray-text{
-    font-size: 14px;
-    font-weight: 300;
-    color: #7A7A7A;
-    margin: 3px 0 10px 0;
-}
-.donation-amount>p{
-    margin-top: 8px;
 }
 
 

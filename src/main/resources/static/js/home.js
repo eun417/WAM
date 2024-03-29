@@ -52,12 +52,12 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
         const keyword = btn.id; //클릭된 버튼의 id 값을 keyword로 설정
 
-        axios.get('/support/search/tag', {
-            params: {
-                keyword: keyword,
-                page: 0
-            }
-        })
+axios.get('/support/search/tag', {
+params: {
+    keyword: keyword,
+    page: 0
+}
+})
         .then(function(response) {
             //모든 후원 건수
             const totalSupport = response.data.totalElements;
@@ -77,10 +77,15 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
                     var row = `<div class="donation-box">
                                     <div class="donation-img-box">
-                                        <div class="donation-status start ${support.supportStatus.toLowerCase()}"></div>
+                                        <div class="donation-status start">
+                                            ${support.supportStatus === 'START' ? '후원 시작' :
+                                            support.supportStatus === 'SUPPORTING' ? '후원중' :
+                                            support.supportStatus === 'ENDING_SOON' ? '종료 임박' :
+                                            support.supportStatus === 'END' ? '후원 종료' : ''}
+                                        </div>
                                         <div class="donation-img"><img src="${support.firstImg}" class="first-pic" alt="animal"></div>
                                     </div>
-                                    <div class="donation-title">${support.title}</div>
+                                    <div class="donation-title title-hover">${support.title}</div>
                                     <div class="donation-nickname gray-text">${support.nickname}</div>
                                     <div class="donation-amount">
                                         <div class="percent">

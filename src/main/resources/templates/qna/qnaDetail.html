@@ -128,12 +128,14 @@
     function showAnswerBtnForAdmin(btnName) {
         const token = localStorage.getItem('accessToken');
 
-        //payload에서 데이터 가져오기
-        const payload = getPayloadData(token);
+        if (token) {
+            //payload에서 데이터 가져오기
+            const payload = getPayloadData(token);
 
-        //권한이 관리자이면 답변 작성 버튼 보이기
-        if (payload.auth == "ADMIN") {
-            showHideElement(btnName);
+            //권한이 관리자이면 답변 작성 버튼 보이기
+            if (payload.auth == "ADMIN") {
+                showHideElement(btnName);
+            }
         }
     }
 
@@ -141,12 +143,14 @@
     function hideAnswerBtnForAdmin(btnName) {
         const token = localStorage.getItem('accessToken');
 
-        //payload에서 데이터 가져오기
-        const payload = getPayloadData(token);
+        if (token) {
+            //payload에서 데이터 가져오기
+            const payload = getPayloadData(token);
 
-        //권한이 관리자이면 답변 작성 버튼 보이기
-        if (payload.auth == "ADMIN") {
-            document.querySelector(btnName).style.display = 'none';
+            //권한이 관리자이면 답변 작성 버튼 보이기
+            if (payload.auth == "ADMIN") {
+                document.querySelector(btnName).style.display = 'none';
+            }
         }
     }
 
@@ -181,13 +185,15 @@
     //로그인 사용자가 작성자인지 확인하는 함수
     function showUpDelBtnForWriter(memberId) {
         const token = localStorage.getItem('accessToken');
-        //payload에서 데이터 가져오기
-        const payload = getPayloadData(token);
-        console.log('login memberId:'+payload.sub);
+        if (token) {
+            //payload에서 데이터 가져오기
+            const payload = getPayloadData(token);
+            console.log('login memberId:'+payload.sub);
 
-        //memberId가 같으면 버튼 보이기
-        if (payload.sub == memberId) {
-            document.querySelector('.D-writer').style.removeProperty('display'); //display 속성 제거
+            //memberId가 같으면 버튼 보이기
+            if (payload.sub == memberId) {
+                document.querySelector('.D-writer').style.removeProperty('display'); //display 속성 제거
+            }
         }
     }
 

@@ -7,72 +7,12 @@
 }
 
 /* 본문 */
-.QnAlist-ContBox{
-    text-align: center;
-}
-.QnAlist-inputBox{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-.QnAlist-header{
-    margin-bottom: 90px;
-}
-.QnAlist-header span{
-    font-size: 48px;
-    font-weight: 600;
-    border-bottom: 5px solid #445D48;
-    padding-bottom: 10px;
-}
-.QnAlist-searchBox{
-    position: relative;
-    display: flex;
-}
-.QnAsearch{
-    margin-right: 5px;
-}
-#search-btn{
-    cursor: pointer;
-    padding: 12px 15px 12px 15px;
-    font-weight: 500;
-}
-.QnAlist-searchBox>.QnAsearch{
-    width: 600px;
-}
-
-.QnAlist-searchBox>.select{
-    width: 15%;
-    height: 50px;
-    padding: 10px;
-    border-radius: 8px;
-    margin-right: 15px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
-    border: none;
-}
-
-.QnAlist-inputBox>.writer-btn{
-    text-decoration: none;
-    padding: 10px 15px 10px 15px;
-}
-.writer-btn>div{
-    display: flex;
-    cursor: pointer;
-}
-.writer-btn span{
-    color: #fff;
-}
 .material-symbols-outlined {
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
     'GRAD' 0,
     'opsz' 15
-}
-
-.list-header{
-    margin-top: 30px;
-    min-width: 1150px;
-    height: 50px;
 }
 
 /* table */
@@ -109,13 +49,6 @@
 }
 .header-list tr:hover{
     background-color: #fafafa;
-}
-#qnaDetail{
-    cursor: pointer;
-}
-#qnaDetail:hover{
-    color: #808080;
-    transition: 0.2s ease-out;
 }
 #qnaTableBody .answer-btn{
     pointer-events: none;

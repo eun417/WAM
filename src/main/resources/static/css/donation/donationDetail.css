@@ -1,0 +1,170 @@
+body>.donationDetail-wrapper{
+    width: 700px;
+}
+
+
+/*제목*/
+.detail-header div{
+    font-size: 36px;
+    font-weight: 600;
+}
+.header-line{
+    width: 60px;
+    display: inline-block;
+    border-bottom: 5px solid #445D48;
+    margin: 20px 0 40px 0;
+}
+
+
+/*body 1 - 정보*/
+.donation-img-box{
+    height: 480px;
+}
+.donation-img-box>.donation-img{
+    height: 100%;
+}
+.donation-img-box>.donation-status{
+    top: 10px;
+    bottom: auto;
+}
+
+.deadline{
+    display: flex;
+    justify-content: left;
+    gap: 8px;
+}
+.bold{
+    font-weight: 700;
+}
+
+.amount{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0 20px 0;
+}
+.donation-tag>.tag-name{
+    font-size: 14px;
+    border: none;
+    background-color: rgb(243, 243, 243);
+    padding: 10px 20px 10px 20px;
+}
+.donation-amount{
+    text-align: right;
+    font-size: 24px;
+    font-weight: 600;
+}
+.donation-amount>span{
+    font-size: 38px;
+    font-weight: 700;
+    color: #DBC244;
+}
+.goal-amount, .goal-amount>span{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.bottomline{
+    display: flex;
+    justify-content: space-between;
+}
+.bottomline-left{
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+.donation-icon{
+    display: flex;
+    gap: 5px;
+}
+.bottomline-right{
+    width: 60%;
+}
+.support-btn{
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+/*body2 - 아랫글*/
+.body2-wrapper{
+    text-align: justify;
+    margin-top: 50px;
+    padding: 50px 10px 130px 10px;
+    border-top: 3px solid #EDEDED;
+}
+
+
+/*body3 - 댓글*/
+.CommentWrite{
+    text-align: left;
+}
+.CommentWrite>p{
+    font-size: 22px;
+    font-weight: 700;
+}
+.C-textarea{
+    margin: 10px 0 10px 0;
+}
+.C-btn{
+    width: 100%;
+}
+
+.C-listHeader{
+    display: flex;
+    gap: 5px;
+    margin-top: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #EDEDED;
+}
+.C-listHeader>*{
+    font-size: 18px;
+    font-weight: 600;
+}
+.comment-count{
+    color: #996F5E;
+}
+
+.commentBox{
+    display: flex;
+    gap: 15px;
+    padding: 30px 10px 0 10px;
+}
+.commentBox-L{
+    width: 100%;
+}
+.commentBox-LT{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+.commentBox-LTR{
+    font-weight: 600;
+}
+.commentBox-LTL{
+    cursor: pointer;
+}
+.edit-box{
+    border: 1px solid #445D48;
+    border-radius: 10px;
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    background-color: rgb(255, 255, 255, 0.3);
+}
+.edit-box>div{
+    padding: 10px;
+    cursor: pointer;
+}
+.edit-box>div:first-child{
+    border-bottom: 1px solid #445D48;
+}
+.commentBox-LM{
+    text-align: left;
+    padding: 20px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
+.commentBox-LB{
+    text-align: right;
+}

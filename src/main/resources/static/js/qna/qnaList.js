@@ -1,29 +1,7 @@
 /*qnaDetail 페이지 이동*/
 function goToQnaDetail(event, qnaId) {
     event.preventDefault(); //기본 이벤트 실행 방지
-
-    //로컬 스토리지에서 액세스 토큰 가져오기
-    const token = localStorage.getItem('accessToken') || null;
-
-    const config = {
-        headers: {}
-    };
-
-    if (token) {
-        config.headers['Authorization'] = 'Bearer ' + token;
-    }
-
-//    window.location.href = "/qna/detail/" + qnaId;
-
-    /*서버의 컨트롤러로 이동*/
-    axios.get(`/qna/detail/${qnaId}`, config)
-        .then(function(response) {
-            window.location.href = "/qna/detail/" + qnaId;
-        })
-        .catch(function(error) {
-            console.error(error);
-            alert('QnA를 불러오지 못했습니다.');
-        });
+    window.location.href = "/qna/detail/" + qnaId;
 }
 
 /*qnaWrite 페이지 이동*/

@@ -4,52 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--    <link rel="stylesheet" href="css/donation.css">-->
-    <link rel="stylesheet" th:href="@{/css/qna/qnaDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/donation/donationDetail.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     
     <title>donationDetail</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <body>
 <!-- header 영역 참조 -->
-<header th:insert="~{/header :: header}"></header>
+<header th:insert="~{/common/header :: header}"></header>
 
 <div class="donationDetail-wrapper page-content">
-    <div class="donationDetail-ContBox">
-        <div class="donationDetail-header"><span>제목</span></div>
-        <div class="donationDetail-body-1">
+    <div class="contBox">
+        <div class="detail-header">
+            <div class="donation-title"></div>
+            <div class="header-line"></div>
+        </div>
+        <div class="detail-body-1">
             <div class="body1-wrapper">
-                <div class="background">
-                    <div class="donation-review">후기</div>
+                <div class="donation-img-box">
+                    <div class="donation-status start">후원 시작</div>
+                    <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
                 </div>
-                <div class="event-deadline">
-                    <span>후원기간</span><span>20xx.xx.xx</span>
+                <div class="deadline">
+                    <span class="bold">후원기간</span>
+                    <span class="start-date"></span><span>~</span><span class="end-date"></span>
                 </div>
                 <div class="amount">
-                    <div class="donationTag">
-                        <div class="tag1">포유류</div>
+                    <div class="donation-tag">
+                        <div id="mml" class="tag-name home-btn"></div>
                     </div>
                     <div class="donation-amount">
-                        <div class="taget-amount"><span>100,000</span><span>원</span></div>
-                        <div class="maximum-amount"><span>700</span><span>원</span></div>
+                        <p class="donation-amount"><span></span> 원</p>
+                        <p class="goal-amount">목표 금액 <span></span>원</p>
                     </div>
                 </div>
                 <div class="bottomline">
                     <div class="bottomline-left">
-                        <button>하트버튼</button><span>4400</span><button>공유버튼</button><span>|</span><span>공유하기</span>
+                        <div class="donation-icon"><span class="material-symbols-outlined">favorite</span><span class="like-count"></span></div>
+                        <span> | </span>
+                        <div class="donation-icon"><span class="material-symbols-outlined">share</span><span>공유하기</span></div>
                     </div>
-                    <div class="bottomline-right"><button>후원하기</button></div>
+                    <div class="bottomline-right">
+                        <button class="support-btn btn bc5">후원하기</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="donationDetail-body-2">
-            <div class="body2-wrapper">아랫글</div>
+        <div class="detail-body-2">
+            <div class="body2-wrapper"></div>
         </div>
-        <div class="donationDetail-body-3">
+        <div class="detail-body-3">
             <div class="body3-wrapper">
-                <!-- 댓글 태그 작성할 차례-->
+                <div class="CommentWrite">
+                    <p>댓글 작성하기</p>
+                    <div class="C-textarea">
+                        <textarea class="input-form" placeholder="응원의 메세지를 남겨주세요."></textarea>
+                    </div>
+                    <div class="C-btnBox"><button class="C-btn btn bc2">등록</button></div>
+                </div>
+                <div class="CommentList">
+                    <div class="C-listHeader">
+                        <p>댓글</p><span class="comment-count">13</span>
+                    </div>
+                    <div class="comment-list">
+                        <div class="commentBox">
+                            <div class="commentBox-R"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" width="55" height="55"></div>
+                            <div class="commentBox-L">
+                                <div class="commentBox-LT">
+                                    <div class="edit-box">
+                                        <div>수정하기</div>
+                                        <div>삭제하기</div>
+                                    </div>
+                                    <div class="commentBox-LTR comment-nickname"></div>
+                                    <div class="commentBox-LTL">
+                                        <span class="material-symbols-outlined">more_horiz</span>
+                                    </div>
+                                </div>
+                                <div class="commentBox-LM"><p class="comment-content"></p></div>
+                                <div class="commentBox-LB"><span class="comment-date gray-text"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- footer 영역 참조 -->
+<footer th:insert="~{/common/footer :: footer}"></footer>
 </body>
 </html>
