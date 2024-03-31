@@ -14,7 +14,7 @@ function promptAmount() {
     }
 }
 
-//결제 함수
+/*후원하기(결제) 함수*/
 function requestPay(amount) {
     var impKey = document.getElementById('impKey').getAttribute('href');
     IMP.init(impKey);
@@ -25,7 +25,7 @@ function requestPay(amount) {
     IMP.request_pay({
         pg: 'html5_inicis.INIpayTest',
         pay_method: "card",
-        merchant_uid: "IMP" + makeMerchantUid,    // 주문번호
+        merchant_uid: "IMP" + makeMerchantUid,    //주문번호
         name: "WAM 후원", //결제 이름
         amount: amount, //결제금액
         buyer_email: "eunahchung0417@gmail.com",    //나중에 로그인한 사용자 정보로 수정
@@ -34,7 +34,13 @@ function requestPay(amount) {
         buyer_postcode: "57098"
     }, function (rsp) {
         if (rsp.success) {
-            var supportId = 100 //document.getElementById("supportId").value;
+            //토큰을 로컬 스토리지에서 가져오기
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                alert("로그인 후 이용해주세요.")
+            }
+
+            var supportId = document.getElementById("supportId").value;
             var impUid = rsp.imp_uid;
             var inputAmount = amount;
 
@@ -46,15 +52,20 @@ function requestPay(amount) {
             };
 
             //결제 검증
-            axios.post('/payment/validate', paymentReq)
-                .then(function(response) {
-                    alert("후원해주셔서 감사합니다!");
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    alert("후원을 실패했습니다.");
-                    console.error(error);
-                });
+            axios.post('/payment/validate', paymentReq, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(function(response) {
+                console.log(response);
+                alert("후원해주셔서 감사합니다!");
+                window.location.href = `/support/detail/${supportId}`   //새로고침
+            })
+            .catch(function (error) {
+                console.error(error);
+                alert("후원을 실패했습니다.");
+            });
         } else {
             alert("결제 실패");
             console.log(rsp);

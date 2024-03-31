@@ -52,12 +52,12 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
         const keyword = btn.id; //클릭된 버튼의 id 값을 keyword로 설정
 
-axios.get('/support/search/tag', {
-params: {
-    keyword: keyword,
-    page: 0
-}
-})
+        axios.get('/support/search/tag', {
+        params: {
+            keyword: keyword,
+            page: 0
+        }
+        })
         .then(function(response) {
             //모든 후원 건수
             const totalSupport = response.data.totalElements;
@@ -85,7 +85,7 @@ params: {
                                         </div>
                                         <div class="donation-img"><img src="${support.firstImg}" class="first-pic" alt="animal"></div>
                                     </div>
-                                    <div class="donation-title title-hover">${support.title}</div>
+                                    <a href="/support/detail/${support.supportId}" class="donation-title title-hover">${support.title}</a>
                                     <div class="donation-nickname gray-text">${support.nickname}</div>
                                     <div class="donation-amount">
                                         <div class="percent">

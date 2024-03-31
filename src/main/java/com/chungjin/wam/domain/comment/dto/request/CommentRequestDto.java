@@ -7,10 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CommentRequestDto {
 
     @NotBlank(message = "내용을 입력해주세요.")
