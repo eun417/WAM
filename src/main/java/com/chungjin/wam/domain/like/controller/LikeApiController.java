@@ -25,6 +25,15 @@ public class LikeApiController {
     }
 
     /**
+     * 좋아요 상태 조회
+     */
+    @GetMapping("/{supportId}/likeStatus")
+    public ResponseEntity<Boolean> readLikeStatus(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                  @PathVariable(value = "supportId") Long supportId) {
+        return ResponseEntity.ok(likeService.readLikeStatus(userDetails.getMember().getMemberId(), supportId));
+    }
+
+    /**
      * 좋아요 삭제
      */
     @DeleteMapping("/{supportId}/like")

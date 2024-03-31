@@ -9,8 +9,11 @@ import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.DUPLICATE_EMAIL;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,14 @@ public class LikeService {
     }
 
     /**
+     * 좋아요 상태 조회
+     */
+    public boolean readLikeStatus(Long memberId, Long supportId) {
+        //memberId, supportId로 좋아요 조회
+        return supportLikeRepository.existsBySupport_SupportIdAndMember_MemberId(supportId, memberId);
+    }
+
+    /**
      * 좋아요 삭제
      */
     public void deleteLike(Long memberId, Long supportId) {
@@ -64,9 +75,7 @@ public class LikeService {
         supportLikeRepository.delete(supportLike);
     }
 
-    /**
-     * supportId로 Support 객체 조회
-     */
+    //supportId로 Support 객체 조회
     private Support getSupport (long supportId) {
         return supportRepository.findById(supportId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));

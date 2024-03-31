@@ -2,6 +2,12 @@ body>.donationDetail-wrapper{
     width: 700px;
 }
 
+/*active 클래스*/
+.liked{
+    color: #f05650;
+    font-variation-settings:
+    'FILL' 1 !important
+}
 
 /*제목*/
 .detail-header div{
@@ -76,6 +82,9 @@ body>.donationDetail-wrapper{
     display: flex;
     gap: 5px;
 }
+.donation-icon>#likeBtn{
+    cursor: pointer;
+}
 .bottomline-right{
     width: 60%;
 }
@@ -141,7 +150,7 @@ body>.donationDetail-wrapper{
 .commentBox-LTR{
     font-weight: 600;
 }
-.commentBox-LTL{
+.commentBox-LTL *{
     cursor: pointer;
 }
 .edit-box{
@@ -150,14 +159,15 @@ body>.donationDetail-wrapper{
     position: absolute;
     top: 20px;
     right: 0px;
-    background-color: rgb(255, 255, 255, 0.3);
+    background-color: rgb(255, 255, 255);
+    transition-duration: 0.3s;
+}
+.edit-box:hover{
+    background-color: #f7f7f7;
 }
 .edit-box>div{
     padding: 10px;
     cursor: pointer;
-}
-.edit-box>div:first-child{
-    border-bottom: 1px solid #445D48;
 }
 .commentBox-LM{
     text-align: left;
