@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  jQuery, bootstrap -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <!-- summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+    <!-- css -->
+    <link rel="stylesheet" th:href="@{/css/donation/donationWrite.css}">
+    <title>donationWrite</title>
+<body>
+<!-- header 영역 참조 -->
+<header th:insert="~{/common/header :: header}"></header>
+
+<div class="donationWriter-wrapper page-content">
+    <div class="contBox">
+        <div class="detail-header">
+            <div>후원글 작성하기</div>
+            <div class="header-line"></div>
+        </div>
+        <div class="detail-body">
+            <div class="body-wrapper">
+                <div class="title-box input-box">
+                    <p>제목</p>
+                    <input type="text" id="title" class="input-form" placeholder="제목을 입력해주세요" required>
+                </div>
+<!--                <div class="wrtier-box input-box">-->
+<!--                    <p>작성자</p>-->
+<!--                    <input type="text" id="wrtier" class="input-form" readonly>-->
+<!--                </div>-->
+                <div class="suject-box input-box">
+                    <p>동물 분류</p>
+                    <select id="suject" class="select input-form" required>
+                        <option value="mml">포유류</option>
+                        <option value="bird">조류</option>
+                        <option value="amnrp">양서파충류</option>
+                        <option value="fishes">어류</option>
+                        <option value="etc">etc</option>
+                    </select>
+                </div>
+                <div class="goal-amount-box input-box">
+                    <p>목표 금액</p>
+                    <input type="text" id="goalAmount" class="input-form" placeholder="숫자만 입력해주세요 (ex: 10000)"
+                           required>
+                </div>
+                <div class="date-box input-box">
+                    <p>후원 기간</p>
+                    <div>
+                        <span>시작일</span><input type="date" id="startDate" class="input-form"
+                                               pattern="\d{4}.\d{2}.\d{2}" required>
+                    </div>
+                    <div>
+                        <span>마감일</span><input type="date" id="endDate" class="input-form"
+                                               pattern="\d{4}.\d{2}.\d{2}" required>
+                    </div>
+                </div>
+                <div class="first-pic-box input-box">
+                    <p>대표 이미지</p>
+                    <input type="file" id="firstPic">
+                </div>
+                <div class="subheading-box input-box">
+                    <p>소제목</p>
+                    <input type="text" id="subheading" class="input-form" placeholder="소제목을 입력해주세요" required>
+                </div>
+                <div class="content-box input-box">
+                    <p>내용</p>
+                    <div class="text-editor">
+                        <textarea id="summernote"></textarea>
+                    </div>
+                </div>
+                <div class="comment-option-box input-box">
+                    <p>댓글 허용</p>
+                    <span id="commentOption" class="material-symbols-outlined comment-check">check_circle</span>
+                </div>
+            </div>
+            <button id="createDonation" class="donation-btn btn bc4">등록</button>
+        </div>
+    </div>
+</div>
+
+<!-- footer 영역 참조 -->
+<footer th:insert="~{/common/footer :: footer}"></footer>
+
+<script th:src="@{/js/common/summernote.js}"></script>
+<script>
+    //달력 오늘 날짜로 설정
+    var today = new Date().toISOString().substring(0, 10);
+    document.getElementById('startDate').value = today; //오늘 날짜로 설정
+    document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+    document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+</script>
+</body>
+</html>

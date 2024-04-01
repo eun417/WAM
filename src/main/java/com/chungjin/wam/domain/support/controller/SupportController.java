@@ -29,6 +29,14 @@ public class SupportController {
     }
 
     /**
+     * 후원 작성폼
+     */
+    @GetMapping("/write")
+    public String goSupportWrite() {
+        return "donation/donationWrite";
+    }
+
+    /**
      * 검색
      */
     @GetMapping("/search")

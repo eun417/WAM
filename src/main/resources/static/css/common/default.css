@@ -14,11 +14,11 @@
     text-decoration-line: none;
 }
 
-*:not(a, input, textarea, span) {
+/* *:not(a, input, textarea, span, i) {
     cursor: default;
-}
+} */
 *>p, *>span {
-    cursor: text;
+    /* cursor: text; */
     margin: 0;
     text-align: justify;
 }
@@ -114,6 +114,7 @@ span.brand3 {
     margin-right: 15px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
     border: none;
+    cursor: pointer;
 }
 
 .inputBox>.writer-btn{
@@ -248,6 +249,31 @@ span.brand3 {
 }
 .donation-amount>p{
     margin-top: 8px;
+}
+
+
+/*후원 상세 페이지 제목*/
+.detail-header div{
+    font-size: 36px;
+    font-weight: 600;
+}
+.header-line{
+    width: 60px;
+    display: inline-block;
+    border-bottom: 5px solid #445D48;
+    margin: 20px 0 40px 0;
+}
+
+.detail-body{
+    text-align: right;
+}
+
+/*summernote*/
+.text-editor{
+    text-align: left;
+}
+.text-editor .btn{
+    padding: 5px 10px !important;
 }
 
 /*check-circle*/
@@ -604,6 +630,7 @@ textarea.input-form {
 .input-form:read-only:not(select),
 .input-form:disabled {
     background-color: #f7f7f7;
+    cursor: default;
 }
 
 

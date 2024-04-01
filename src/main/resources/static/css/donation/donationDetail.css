@@ -9,18 +9,6 @@ body>.donationDetail-wrapper{
     'FILL' 1 !important
 }
 
-/*제목*/
-.detail-header div{
-    font-size: 36px;
-    font-weight: 600;
-}
-.header-line{
-    width: 60px;
-    display: inline-block;
-    border-bottom: 5px solid #445D48;
-    margin: 20px 0 40px 0;
-}
-
 
 /*body 1 - 정보*/
 .donation-img-box{

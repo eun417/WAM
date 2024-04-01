@@ -1,0 +1,53 @@
+.body-wrapper{
+    margin-bottom: 20px;
+}
+
+.body-wrapper>.input-box{
+    display: flex;
+    justify-content: left;
+    padding: 20px 10px 20px 10px;
+    border-bottom: 2px solid #ededed;
+    text-align: justify;
+}
+
+.input-box>p,
+.input-box>div>span,
+.input-box>span,
+.input-box input{
+    line-height: 50px;
+}
+.input-box>p{
+    width: 13%;
+    font-weight: 600;
+    margin: 0;
+}
+.input-box>.input-form{
+    width: 87%;
+}
+
+.suject-box>.select{
+    width: 18%;
+    cursor: pointer;
+}
+
+.date-box .input-form{
+    margin-right: 20px;
+}
+.date-box>div{
+    display: flex;
+}
+.date-box>div>span{
+    font-size: 14px;
+    display: inline-block;
+    width: 35%;
+    color: #7a7a7a;
+}
+
+.text-editor{
+    width: 87%;
+}
+
+.comment-check{
+    color: #cccccc;
+    cursor: pointer;
+}
