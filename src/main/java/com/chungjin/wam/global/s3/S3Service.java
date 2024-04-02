@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
@@ -65,14 +67,14 @@ public class S3Service {
     /**
      * S3에서 이미지 삭제
      */
-    public void deleteImage(String fileName) {
-        log.info("delete fileName: " + fileName);
+    public void deleteImage(String fileUrl) {
+        log.info("delete fileUrl: " + fileUrl);
 
         try {
             //fileName 문자열에서 url 문자열의 인덱스 찾음
-            int index = fileName.indexOf(url);
+            int index = fileUrl.indexOf(url);
             //url 이후의 파일 경로(key) 추출
-            String fileRoute = fileName.substring(index + url.length());
+            String fileRoute = fileUrl.substring(index + url.length());
 
             //객체의 존재 여부를 확인
             boolean isObjectExist = s3Client.doesObjectExist(bucket, fileRoute);

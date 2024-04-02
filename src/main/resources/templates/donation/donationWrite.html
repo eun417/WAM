@@ -33,9 +33,9 @@
 <!--                    <p>작성자</p>-->
 <!--                    <input type="text" id="wrtier" class="input-form" readonly>-->
 <!--                </div>-->
-                <div class="suject-box input-box">
+                <div class="subject-box input-box">
                     <p>동물 분류</p>
-                    <select id="suject" class="select input-form" required>
+                    <select id="subject" class="select input-form" required>
                         <option value="mml">포유류</option>
                         <option value="bird">조류</option>
                         <option value="amnrp">양서파충류</option>
@@ -51,17 +51,15 @@
                 <div class="date-box input-box">
                     <p>후원 기간</p>
                     <div>
-                        <span>시작일</span><input type="date" id="startDate" class="input-form"
-                                               pattern="\d{4}.\d{2}.\d{2}" required>
+                        <span>시작일</span><input type="date" id="startDate" class="input-form" required>
                     </div>
                     <div>
-                        <span>마감일</span><input type="date" id="endDate" class="input-form"
-                                               pattern="\d{4}.\d{2}.\d{2}" required>
+                        <span>마감일</span><input type="date" id="endDate" class="input-form" required>
                     </div>
                 </div>
-                <div class="first-pic-box input-box">
+                <div class="first-Img-box input-box">
                     <p>대표 이미지</p>
-                    <input type="file" id="firstPic">
+                    <input type="file" id="firstImg">
                 </div>
                 <div class="subheading-box input-box">
                     <p>소제목</p>
@@ -78,7 +76,8 @@
                     <span id="commentOption" class="material-symbols-outlined comment-check">check_circle</span>
                 </div>
             </div>
-            <button id="createDonation" class="donation-btn btn bc4">등록</button>
+            <button id="createDonationBtn" class="donation-btn btn bc4">등록</button>
+            <button id="updateDonationBtn" class="donation-btn btn bc4" style="display:none;">수정</button>
         </div>
     </div>
 </div>
@@ -87,12 +86,37 @@
 <footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script th:src="@{/js/common/summernote.js}"></script>
+<script th:src="@{/js/donation/donationWrite.js}"></script>
 <script>
-    //달력 오늘 날짜로 설정
+    /*달력 설정*/
     var today = new Date().toISOString().substring(0, 10);
-    document.getElementById('startDate').value = today; //오늘 날짜로 설정
+    document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
     document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
     document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+
+    //이미지 업로드 요청 함수
+    function uploadImage(file) {
+        var formData = new FormData();
+        formData.append('file', file);
+
+        return axios.post('/support/image-upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    }
+
+    //이미지 삭제 요청 함수
+    function deleteImage(imgUrl) {
+        const formData = new FormData();
+        formData.append('fileUrl', imgUrl);
+
+        return axios.post('/support/image-delete', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    }
 </script>
 </body>
 </html>

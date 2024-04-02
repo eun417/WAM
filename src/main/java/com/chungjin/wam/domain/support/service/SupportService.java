@@ -42,17 +42,16 @@ public class SupportService {
     private final SupportMapper supportMapper;
 
     private final S3Service s3Service;
-    private final String S3_FOLDER = "support";
 
     /**
      * 후원 생성
      */
-    public void createSupport(Long memberId, SupportRequestDto supportReq) {
+    public void createSupport(Long memberId, SupportRequestDto supportReq, MultipartFile firstImg) {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //파일 업로드
-        String imgPath = uploadFileAtS3(supportReq.getFirstImg());
+        //파일 업로드(대표 이미지)
+        String imgPath = uploadFileAtS3(firstImg);
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -144,8 +143,6 @@ public class SupportService {
     public void deleteSupport(Long memberId, Long supportId) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
-        //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
         if(!memberId.equals(support.getMember().getMemberId())) {
@@ -158,19 +155,24 @@ public class SupportService {
         supportRepository.delete(support);
     }
 
-    //파일 업로드 메소드
+    /**
+     * 파일 업로드 메소드
+     */
     public String uploadFileAtS3(MultipartFile img) {
         String imgPath = null;
         if (img != null) {
-            imgPath = s3Service.uploadFile(img, S3_FOLDER);
+            String s3Directory = "support";
+            imgPath = s3Service.uploadFile(img, s3Directory);
         }
         return imgPath;
     }
 
-    //파일 삭제 메소드
-    public void deleteFileAtS3(String fileName) {
-        if(fileName != null) {
-            s3Service.deleteImage(fileName);
+    /**
+     * 파일 삭제 메소드
+     */
+    public void deleteFileAtS3(String fileUrl) {
+        if(fileUrl != null) {
+            s3Service.deleteImage(fileUrl);
         }
     }
 
@@ -219,6 +221,7 @@ public class SupportService {
                 .createDate(support.getCreateDate())
                 .nickname(support.getMember().getNickname())
                 .supportStatus(support.getSupportStatus())
+                .commentCheck(support.getCommentCheck())
                 .build();
     }
 

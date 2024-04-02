@@ -9,6 +9,7 @@ import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,27 @@ public class SupportApiController {
      */
     @PostMapping("/")
     public ResponseEntity<String> createSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @RequestPart("supportReq") @Valid SupportRequestDto supportReq) {
-        supportService.createSupport(userDetails.getMember().getMemberId(), supportReq);
+                                                @RequestPart("supportReq") @Valid SupportRequestDto supportReq,
+                                                @RequestPart("firstImg") MultipartFile firstImg) {
+        supportService.createSupport(userDetails.getMember().getMemberId(), supportReq, firstImg);
         return ResponseEntity.ok("후원이 생성되었습니다.");
+    }
+
+    /**
+     * 이미지 업로드
+     */
+    @PostMapping("/image-upload")
+    public ResponseEntity<String> uploadImage(@RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok().body(supportService.uploadFileAtS3(file));
+    }
+
+    /**
+     * 이미지 삭제
+     */
+    @PostMapping("/image-delete")
+    public ResponseEntity<String> deleteImage(@RequestPart("fileUrl") String fileUrl) {
+        supportService.deleteFileAtS3(fileUrl);
+        return ResponseEntity.ok().body("이미지 삭제 완료");
     }
 
     /**

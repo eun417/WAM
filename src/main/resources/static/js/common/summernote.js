@@ -43,5 +43,48 @@ $(document).ready(function () {
             },  // 어두운 코드 스타일 옵션
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6',  // 제목 스타일 옵션
         ],
+        //callbacks: 이미지 업로드 처리
+        callbacks : {
+            //이미지 업로드
+            onImageUpload : function(files, editor, welEditable){
+                for (var i = files.length - 1; i >= 0; i--) {
+                    console.log('fileName: ' + files[i].name);
+                    uploadSummernoteImageFile(files[i], this);
+                }
+            },
+            //이미지 삭제
+            onMediaDelete: function ($target, editor, $editable) {
+                if (confirm('이미지를 삭제 하시겠습니까?')) {
+                    var deletedImageUrl = $target.attr('src');  //이미지의 URL 반환
+                    console.log('deletedImageUrl: ' + deletedImageUrl);
+                    deleteSummernoteImageFile(deletedImageUrl);
+                }
+            }
+        }
     });
 });
+
+/*이미지 업로드 함수*/
+function uploadSummernoteImageFile(file, editor) {
+    uploadImage(file)
+        .then(function(response) {
+            var imageUrl = response.data; //이미지 업로드 후의 이미지 URL
+            var $image = $('<img>').attr('src', imageUrl);
+            $(editor).summernote('insertNode', $image[0]);
+            console.log(response.data); //값이 잘 넘어오는지 확인
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+}
+
+/*이미지 삭제 함수*/
+function deleteSummernoteImageFile(imgUrl) {
+    deleteImage(imgUrl)
+        .then(function(response) {
+            console.log(response.data);
+        })
+        .catch(function(error) {
+            console.error('이미지 삭제 실패:', error);
+        });
+}

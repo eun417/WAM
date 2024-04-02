@@ -90,6 +90,9 @@ body>.donationDetail-wrapper{
     padding: 50px 10px 130px 10px;
     border-top: 3px solid #EDEDED;
 }
+.body2-wrapper img{
+    max-width: 680px;
+}
 
 
 /*body3 - 댓글*/
