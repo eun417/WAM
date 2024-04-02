@@ -264,8 +264,19 @@ span.brand3 {
     margin: 20px 0 40px 0;
 }
 
-.detail-body{
+.detail-body>.btn-box{
+    display: flex;
+    justify-content: right;
+}
+
+/*상세 페이지 수정&삭제 버튼*/
+.writer{
     text-align: right;
+    padding-top: 20px;
+    border-top: 3px solid #EDEDED;
+}
+.writer>button{
+    width: 90px;
 }
 
 /*summernote*/
@@ -301,6 +312,9 @@ div>.active-reg-msg{
 div>.active-reg-input{
     margin-bottom: 2px;
     outline: 2px solid #f86697;
+}
+.active-comment-check{
+    color: #a86e57;
 }
 
 .display-block{
@@ -378,6 +392,7 @@ div>.active-reg-input{
 .bc2:hover {
     background-color: #403950;
     border: 2px solid #403950;
+    color: #fff;
 }
 
 .bc3 {
@@ -402,6 +417,7 @@ div>.active-reg-input{
     background-color: #042b49;
     border: 2px solid #042b49;
     cursor: pointer;
+    color: #fff;
 }
 
 .bc5 {

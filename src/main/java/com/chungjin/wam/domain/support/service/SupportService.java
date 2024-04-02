@@ -84,6 +84,7 @@ public class SupportService {
         //Entity -> Dto
         return SupportDetailDto.builder()
                 .supportId(support.getSupportId())
+                .memberId(support.getMember().getMemberId())
                 .animalSubjects(support.getAnimalSubjects())
                 .title(support.getTitle())
                 .goalAmount(support.getGoalAmount())
@@ -95,6 +96,7 @@ public class SupportService {
                 .content(support.getContent())
                 .supportLike(support.getSupportLike())
                 .supportAmount(support.getSupportAmount())
+                .commentCheck(support.getCommentCheck())
                 .comments(comments)
                 .build();
     }

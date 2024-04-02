@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.support.dto.response;
 
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
+import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import jakarta.persistence.EnumType;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SupportDetailDto {
 
     private Long supportId;
+    private Long memberId;
     private AnimalSubjects animalSubjects;
     private String title;
     private Long goalAmount;
@@ -31,6 +33,7 @@ public class SupportDetailDto {
     private String content;
     private Long supportLike;
     private Long supportAmount;
+    private Boolean commentCheck;
 
     private List<CommentDto> comments;
 

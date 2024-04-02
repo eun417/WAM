@@ -24,12 +24,9 @@ public class SupportRequestDto {
     private String startDate;
     @NotBlank(message = "종료일을 선택해주세요.")
     private String endDate;
-//    @NotNull(message = "대표이미지를 선택해주세요.")
-    private MultipartFile firstImg;
     private String subheading;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @Enumerated(EnumType.STRING)
-    private CommentCheck commentCheck;
+    private Boolean commentCheck;
 
 }

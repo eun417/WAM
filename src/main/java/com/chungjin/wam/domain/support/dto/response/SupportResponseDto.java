@@ -21,5 +21,6 @@ public class SupportResponseDto {
     private Long goalAmount;
     private Long supportAmount;
     private String createDate;
+    private Boolean commentCheck;
 
 }

@@ -31,7 +31,6 @@ public class UpdateSupportRequestDto {
     private String subheading;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @Enumerated(EnumType.STRING)
-    private CommentCheck commentCheck;
+    private Boolean commentCheck;
 
 }

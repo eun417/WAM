@@ -25,14 +25,11 @@
         </div>
         <div class="detail-body">
             <div class="body-wrapper">
+                <input type="hidden" id="supportId">
                 <div class="title-box input-box">
                     <p>제목</p>
                     <input type="text" id="title" class="input-form" placeholder="제목을 입력해주세요" required>
                 </div>
-<!--                <div class="wrtier-box input-box">-->
-<!--                    <p>작성자</p>-->
-<!--                    <input type="text" id="wrtier" class="input-form" readonly>-->
-<!--                </div>-->
                 <div class="subject-box input-box">
                     <p>동물 분류</p>
                     <select id="subject" class="select input-form" required>
@@ -59,7 +56,14 @@
                 </div>
                 <div class="first-Img-box input-box">
                     <p>대표 이미지</p>
-                    <input type="file" id="firstImg">
+                    <div>
+                        <div class="file-box">
+                            <label for="firstImg" class="btn bs1 bc2">파일 선택</label>
+                            <input type="file" id="firstImg" accept=".jpg,.png,.jpeg" style="display:none;">
+                            <div class="file-name">파일을 선택해주세요</div>
+                        </div>
+                        <div class="img-preview"></div>
+                    </div>
                 </div>
                 <div class="subheading-box input-box">
                     <p>소제목</p>
@@ -76,8 +80,10 @@
                     <span id="commentOption" class="material-symbols-outlined comment-check">check_circle</span>
                 </div>
             </div>
-            <button id="createDonationBtn" class="donation-btn btn bc4">등록</button>
-            <button id="updateDonationBtn" class="donation-btn btn bc4" style="display:none;">수정</button>
+            <div class="btn-box">
+                <button id="createDonationBtn" class="donation-btn btn bc4">등록</button>
+                <button id="updateDonationBtn" class="donation-btn btn bc4" style="display:none;">수정</button>
+            </div>
         </div>
     </div>
 </div>
@@ -93,6 +99,25 @@
     document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
     document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
     document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+
+
+    /*댓글 옵션 선택*/
+    document.getElementById('commentOption').addEventListener('click', function() {
+        const isCommentCheck = checkCommentOption();
+
+        if (isCommentCheck) {
+            this.classList.remove('active-comment-check');
+        } else {
+            this.classList.add('active-comment-check');
+        }
+    });
+
+    //댓글 허용 여부 반환 함수
+    function checkCommentOption() {
+        const commentOption = document.getElementById('commentOption');
+        return commentOption.classList.contains('active-comment-check');
+    }
+
 
     //이미지 업로드 요청 함수
     function uploadImage(file) {

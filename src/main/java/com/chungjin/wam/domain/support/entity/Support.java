@@ -44,8 +44,7 @@ public class Support extends BaseTimeEntity {
     private String content;
 
     @Column(name = "comment_check")
-    @Enumerated(EnumType.STRING)
-    private CommentCheck commentCheck;
+    private Boolean commentCheck;
 
     @Column(name = "support_like")
     private Long supportLike;

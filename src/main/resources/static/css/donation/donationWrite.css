@@ -2,12 +2,24 @@
     margin-bottom: 20px;
 }
 
-.body-wrapper>.input-box{
+.body-wrapper .input-box{
     display: flex;
     justify-content: left;
     padding: 20px 10px 20px 10px;
     border-bottom: 2px solid #ededed;
     text-align: justify;
+}
+
+.body-wrapper>.first-Img-box>p{
+    line-height: 30px;
+}
+.file-box{
+    display: flex;
+    gap: 5px;
+}
+.file-name{
+    display: flex;
+    align-items: center;
 }
 
 .input-box>p,
@@ -25,7 +37,7 @@
     width: 87%;
 }
 
-.suject-box>.select{
+.subject-box>.select{
     width: 18%;
     cursor: pointer;
 }
