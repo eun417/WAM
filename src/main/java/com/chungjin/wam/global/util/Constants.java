@@ -12,6 +12,13 @@ public final class Constants {
     public static final String PHONE_NUMBER_REGEXP = "^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$";
 
     /**
+     * S3 디렉토리
+     */
+    public static final String S3_SUPPORT = "support";
+    public static final String S3_SUPPORT_FIRST = "support/firstImg";
+    public static final String S3_QNA = "qna";
+
+    /**
      * 자연환경조사 데이터 조회에 필요한 상수
      */
     public static final String BASE_URL = "https://www.nie-ecobank.kr/ecoapi/EcpeInfoService/wfs";

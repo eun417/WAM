@@ -13,7 +13,6 @@
     border: 1px solid #d1d1d1;
     color: #2f343d;
     text-decoration: none;
-    height: 55px;
 }
 
 .title-box>.title{
@@ -153,6 +152,8 @@
     padding: 30px 20px 40px 20px;
     border: 1px solid #BCC2CA;
     border-radius: 10px;
+    max-height: 400px;
+    overflow: hidden;   /*내용이 크기 넘어갔을 때 숨김*/
 }
 .qna-detail-title{
     font-size: 20px;
@@ -162,4 +163,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.qna-detail-box p{
+    width: 100%;
+}
+.qna-detail-box img{
+    width: 100%;
+    object-fit:cover;
+}
+.content-box>.qna-more-btn{
+    padding: 25px 20px 25px 20px;
 }

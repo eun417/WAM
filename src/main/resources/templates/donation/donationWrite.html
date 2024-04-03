@@ -119,6 +119,45 @@
     }
 
 
+    getSupportDetail();
+    /*수정폼인 경우 후원 데이터를 가져오는 함수*/
+    function getSupportDetail() {
+        const supportId = [[${supportId}]];
+        console.log('수정할 후원: ' + supportId);
+        document.getElementById('supportId').value = supportId;
+        //supportId가 있는 경우에만 서버로부터 데이터 조회
+        if (supportId !== null) {
+            //작성폼, 수정폼에 따라 버튼 변경
+            showHideElement('#createDonationBtn');
+            showHideElement('#updateDonationBtn');
+
+            axios.get('/support/' + supportId)
+                .then(function (response) {
+                    var supportDetail = response.data;
+                    fillSupportDetail(supportDetail);   //supportDetail 값을 채우는 함수 실행
+                })
+                .catch(function (error) {
+                    console.error('후원 정보를 가져오는 중 오류 발생:', error);
+                });
+        }
+    }
+
+
+    //파일 선택 input
+    var fileInput = document.getElementById('firstImg');
+
+    //파일 변경되면 이름 변경 함수
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            var fileName = fileInput.files[0].name;
+            //파일 이름을 file-name 요소에 업데이트
+            document.querySelector('.file-name').textContent = fileName;
+        } else {
+            document.querySelector('.file-name').textContent = "파일을 선택해주세요";
+        }
+    });
+
+
     //이미지 업로드 요청 함수
     function uploadImage(file) {
         var formData = new FormData();

@@ -3,7 +3,6 @@ package com.chungjin.wam.domain.support.service;
 import com.chungjin.wam.domain.comment.service.CommentService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
@@ -25,11 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
+import static com.chungjin.wam.global.util.Constants.S3_SUPPORT;
+import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +39,8 @@ public class SupportService {
     private final SupportRepository supportRepository;
     private final MemberRepository memberRepository;
     private final CommentService commentService;
-    private final SupportMapper supportMapper;
-
     private final S3Service s3Service;
+    private final SupportMapper supportMapper;
 
     /**
      * 후원 생성
@@ -51,7 +50,7 @@ public class SupportService {
         Member member = getMember(memberId);
 
         //파일 업로드(대표 이미지)
-        String imgPath = uploadFileAtS3(firstImg);
+        String imgPath = s3Service.uploadFile(firstImg, S3_SUPPORT_FIRST);
 
         //Dto -> Entity
         Support support = Support.builder()
@@ -113,7 +112,7 @@ public class SupportService {
     /**
      * 후원 수정
      */
-    public void updateSupport(Long memberId, Long supportId, UpdateSupportRequestDto updateSupportReq) {
+    public void updateSupport(Long memberId, Long supportId, UpdateSupportRequestDto updateSupportReq, MultipartFile newFirstImg) {
         //supportId로 support 객체 가져오기
         Support support = getSupport(supportId);
 
@@ -123,14 +122,13 @@ public class SupportService {
         //기존 대표 이미지를 삭제한 경우
         if (updateSupportReq.getFirstImgDeleted()) {
             //S3에서 파일 삭제
-            deleteFileAtS3(support.getFirstImg());
+            s3Service.deleteImage(support.getFirstImg());
         }
 
-        MultipartFile newFirstImg = updateSupportReq.getNewFirstImg();
         //새로운 대표 이미지 업로드, 수정
         if (newFirstImg != null) {
             //파일 업로드
-            String newImgPath = uploadFileAtS3(newFirstImg);
+            String newImgPath = s3Service.uploadFile(newFirstImg, S3_SUPPORT_FIRST);
             //새로운 대표 이미지로 수정
             support.updateFirstImg(newImgPath);
         }
@@ -152,30 +150,9 @@ public class SupportService {
         }
 
         //S3에서 파일 삭제
-        deleteFileAtS3(support.getFirstImg());
+        s3Service.deleteImage(support.getFirstImg());
         //DB에서 영구 삭제
         supportRepository.delete(support);
-    }
-
-    /**
-     * 파일 업로드 메소드
-     */
-    public String uploadFileAtS3(MultipartFile img) {
-        String imgPath = null;
-        if (img != null) {
-            String s3Directory = "support";
-            imgPath = s3Service.uploadFile(img, s3Directory);
-        }
-        return imgPath;
-    }
-
-    /**
-     * 파일 삭제 메소드
-     */
-    public void deleteFileAtS3(String fileUrl) {
-        if(fileUrl != null) {
-            s3Service.deleteImage(fileUrl);
-        }
     }
 
     /**

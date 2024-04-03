@@ -7,6 +7,7 @@ import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
+import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.chungjin.wam.global.util.Constants.S3_SUPPORT;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/support")
 public class SupportApiController {
 
     private final SupportService supportService;
+    private final S3Service s3Service;
 
     /**
      * 후원 생성
@@ -33,23 +37,6 @@ public class SupportApiController {
                                                 @RequestPart("firstImg") MultipartFile firstImg) {
         supportService.createSupport(userDetails.getMember().getMemberId(), supportReq, firstImg);
         return ResponseEntity.ok("후원이 생성되었습니다.");
-    }
-
-    /**
-     * 이미지 업로드
-     */
-    @PostMapping("/image-upload")
-    public ResponseEntity<String> uploadImage(@RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok().body(supportService.uploadFileAtS3(file));
-    }
-
-    /**
-     * 이미지 삭제
-     */
-    @PostMapping("/image-delete")
-    public ResponseEntity<String> deleteImage(@RequestPart("fileUrl") String fileUrl) {
-        supportService.deleteFileAtS3(fileUrl);
-        return ResponseEntity.ok().body("이미지 삭제 완료");
     }
 
     /**
@@ -74,8 +61,9 @@ public class SupportApiController {
     @PutMapping("/{supportId}")
     public ResponseEntity<String> updateSupport(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @PathVariable(value = "supportId") Long supportId,
-                                                @RequestPart("updateSupportReq") @Valid UpdateSupportRequestDto updateSupportReq) {
-        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, updateSupportReq);
+                                                @RequestPart("updateSupportReq") @Valid UpdateSupportRequestDto updateSupportReq,
+                                                @RequestPart(name = "newFirstImg", required = false) MultipartFile newFirstImg) {
+        supportService.updateSupport(userDetails.getMember().getMemberId(), supportId, updateSupportReq, newFirstImg);
         return ResponseEntity.ok("후원이 수정되었습니다.");
     }
 
@@ -105,6 +93,23 @@ public class SupportApiController {
     public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") String keyword,
                                                          @RequestParam("page") int pageNo) {
         return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, pageNo));
+    }
+
+    /**
+     * 후원 - 이미지 업로드
+     */
+    @PostMapping("/image-upload")
+    public ResponseEntity<String> uploadSupportImage(@RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok().body(s3Service.uploadFile(file, S3_SUPPORT));
+    }
+
+    /**
+     * 후원 - 이미지 삭제
+     */
+    @PostMapping("/image-delete")
+    public ResponseEntity<String> deleteSupportImage(@RequestPart("fileUrl") String fileUrl) {
+        s3Service.deleteImage(fileUrl);
+        return ResponseEntity.ok().body("이미지 삭제 완료");
     }
 
 }

@@ -31,7 +31,7 @@
                 </div>
                 <div class="amount">
                     <div class="donation-tag">
-                        <div id="mml" class="tag-name home-btn"></div>
+                        <a class="tag-name home-btn"></a>
                     </div>
                     <div class="donation-amount">
                         <p class="donation-amount"><span></span> 원</p>
@@ -52,13 +52,16 @@
             </div>
         </div>
         <div class="detail-body-2">
-            <div class="body2-wrapper"></div>
+            <div class="body2-wrapper">
+                <div class="subheading"></div>
+                <div class="content"></div>
+            </div>
+            <div class="writer" style="display:none;">
+                <button id="updateDonationBtn" class="update-btn btn bs1 bc4">수정</button>
+                <button id="deleteDonationBtn" class="delete-btn btn bs1 bc66">삭제</button>
+            </div>
         </div>
-        <div class="writer">
-            <button class="update-btn btn bs1 bc4">수정</button>
-            <button id="deleteDonationBtn" class="delete-btn btn bs1 bc66">삭제</button>
-        </div>
-        <div class="detail-body-3">
+        <div class="detail-body-3" style="display:none;">
             <div class="body3-wrapper">
                 <div class="CommentWrite">
                     <p>댓글 작성하기</p>
@@ -85,6 +88,7 @@
 <script th:src="@{/js/donation/payment.js}"></script>
 <script th:src="@{/js/donation/comment.js}"></script>
 <script th:src="@{/js/donation/like.js}"></script>
+<script th:src="@{/js/donation/donationList.js}"></script>
 <script>
     /*후원 상세 조회*/
     document.addEventListener('DOMContentLoaded', function() {
@@ -103,14 +107,30 @@
                 document.querySelector('.donation-img img').src = supportDetail.firstImg;
                 document.querySelector('.start-date').textContent = supportDetail.startDate;
                 document.querySelector('.end-date').textContent = supportDetail.endDate;
-                document.querySelector('.tag-name').textContent = '#'+supportDetail.animalSubjects;
+                const animalSubjects = supportDetail.animalSubjects;
+                const tagName = animalSubjects === 'mml' ? '포유류' :
+                                animalSubjects === 'bird' ? '조류' :
+                                animalSubjects === 'amnrp' ? '양서파충류' :
+                                animalSubjects === 'fishes' ? '어류' :
+                                animalSubjects === 'etc' ? 'etc' : '';
+                document.querySelector('.tag-name').textContent = '#' + tagName;
+                document.querySelector('.tag-name').setAttribute('id', tagName);
                 document.querySelector('.donation-amount span').textContent = supportDetail.supportAmount;
                 document.querySelector('.goal-amount span').textContent = supportDetail.goalAmount;
                 document.querySelector('.like-count').textContent = supportDetail.supportLike;
-                document.querySelector('.body2-wrapper').innerHTML = supportDetail.content; //HTML 문자열을 그대로 출력
+                document.querySelector('.subheading').textContent = supportDetail.subheading;
+                document.querySelector('.content').innerHTML = supportDetail.content; //HTML로 렌더링
                 document.querySelector('.comment-count').textContent = supportDetail.comments.length;
 
-                //댓글
+                //로그인 사용자에 따라 다른 버튼 보이기
+                showUpDelBtnForWriter(supportDetail.memberId);
+
+                //댓글 여부에 따라 댓글 보이기&숨기기
+                if (supportDetail.commentCheck) {
+                    showHideElement('.detail-body-3');  //댓글 숨김
+                }
+
+                //댓글 리스트
                 const commentList = document.querySelector('.comment-list');
                 commentList.innerHTML = '';
                 supportDetail.comments.forEach(function(comment) {
@@ -135,21 +155,62 @@
                     commentList.appendChild(commentBox);
                 });
 
-                //댓글 삭제
+                //댓글 삭제 함수 실행
                 deleteComment(supportId);
-
             })
             .catch(function(error) {
                 console.error(error);
             });
     });
 
-    /* 후원 삭제 */
+    //요소를 보이게 하거나 숨기는 함수
+    function showHideElement(element) {
+        var element = document.querySelector(element);
+        if (element.style.display === 'none') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+
+    //로그인 사용자가 작성자인지 확인, 수정&삭제 버튼 보이는 함수
+    function showUpDelBtnForWriter(memberId) {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            //payload에서 데이터 가져오기
+            const payload = getPayloadData(token);
+            console.log('login memberId:'+payload.sub);
+
+            //memberId가 같으면 버튼 보이기
+            if (payload.sub == memberId) {
+                showHideElement('.writer');
+            }
+        }
+    }
+
+    /*supportWrite 페이지 이동*/
+    document.getElementById('updateDonationBtn').addEventListener('click', function() {
+        var supportId = document.getElementById('supportId').value;
+        console.log('수정할 후원: ' + supportId);
+
+        //로컬 스토리지에서 액세스 토큰 가져오기
+        const token = localStorage.getItem('accessToken');
+
+        if (!token) {
+            alert('로그인 후 이용해주세요.');
+            return;
+        }
+
+        //토큰이 있는 경우 페이지 이동
+        window.location.href = "/support/update/" + supportId;
+    });
+
+    /*후원 삭제*/
     document.getElementById('deleteDonationBtn').addEventListener('click', function() {
         var supportId = document.getElementById('supportId').value;
         console.log('삭제할 후원: ' + supportId);
 
-        // 토큰을 로컬 스토리지에서 가져오기
+        //토큰을 로컬 스토리지에서 가져오기
         const token = localStorage.getItem('accessToken');
         if (!token) {
             alert("로그인 후 이용해주세요.");
@@ -158,7 +219,7 @@
         }
 
         if (confirm("정말로 후원을 삭제하시겠습니까?")) {
-            // 사용자가 확인을 누르면 컨트롤러 호출
+            //사용자가 확인을 누르면 컨트롤러 호출
             axios.delete(`/support/${supportId}`, {
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -166,7 +227,8 @@
             }).then(function(response) {
                 console.log(response.data);
                 alert(response.data);
-            }).catch(function(error) { // 요청이 실패한 경우
+                window.location.href = "/support/list";
+            }).catch(function(error) {
                 console.error(error);
                 alert(error.response.data.message);
             });

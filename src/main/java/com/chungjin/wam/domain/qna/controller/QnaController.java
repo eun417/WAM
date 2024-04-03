@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Slf4j
 @Controller
 @RequestMapping("/qna")
@@ -35,8 +37,11 @@ public class QnaController {
     /**
      * QnA 작성폼
      */
-    @GetMapping("/write")
-    public String goQnaWrite() {
+    @GetMapping({"/write", "/update/{qnaId}"})
+    public String goQnaWrite(@PathVariable("qnaId") Optional<Long> qnaId, Model model) {
+        if (qnaId.isPresent()) {
+            model.addAttribute("qnaId", qnaId);
+        }
         return "qna/qnaWrite";
     }
 

@@ -67,9 +67,10 @@
     padding: 50px 10px 130px 10px;
     border-bottom: 3px solid #f0f0f0;
     width: 1150px;
-}
-.D-textarea>p{
     min-height: 200px;
+}
+.D-textarea img{
+    max-width: 1150px;
 }
 .D-writer{
     display: flex;

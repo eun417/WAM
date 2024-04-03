@@ -8,14 +8,18 @@ import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import com.chungjin.wam.global.common.PageResponse;
+import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static com.chungjin.wam.global.util.Constants.S3_QNA;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ import java.util.List;
 public class QnaApiController {
 
     private final QnaService qnaService;
+    private final S3Service s3Service;
 
     /**
      * QnA 생성
@@ -97,6 +102,24 @@ public class QnaApiController {
     public ResponseEntity<PageResponse> searchQnaWriter(@RequestParam("search") String keyword,
                                                         @RequestParam("page") int pageNo) {
         return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, pageNo));
+    }
+
+
+    /**
+     * QnA - 이미지 업로드
+     */
+    @PostMapping("/image-upload")
+    public ResponseEntity<String> uploadQnAImage(@RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok().body(s3Service.uploadFile(file, S3_QNA));
+    }
+
+    /**
+     * QnA - 이미지 삭제
+     */
+    @PostMapping("/image-delete")
+    public ResponseEntity<String> deleteQnAImage(@RequestPart("fileUrl") String fileUrl) {
+        s3Service.deleteImage(fileUrl);
+        return ResponseEntity.ok().body("이미지 삭제 완료");
     }
 
 }

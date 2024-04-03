@@ -23,10 +23,17 @@
             <div class="header-line"></div>
         </div>
         <div class="detail-body">
+            <input type="hidden" id="qnaId">
+            <div class="title-box input-box" style="margin-bottom:10px;">
+                <input type="text" id="title" class="input-form" placeholder="제목을 입력해주세요" required>
+            </div>
             <div class="text-editor">
                 <textarea id="summernote"></textarea>
             </div>
-            <button class="btn bc4">등록</button>
+            <div class="btn-box">
+                <button id="createQnaBtn" class="qna-btn btn bc4">등록</button>
+                <button id="updateQnaBtn" class="qna-btn btn bc4" style="display:none;">수정</button>
+            </div>
         </div>
     </div>
 </div>
@@ -35,39 +42,65 @@
 <footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script th:src="@{/js/common/summernote.js}"></script>
+<script th:src="@{/js/qna/qnaWrite.js}"></script>
 <script>
-    /*QnA 생성*/
-    document.getElementById('createQnaButton').addEventListener('click', function() {
-        var title = document.getElementsByName('title')[0].value;
-        var content = document.getElementsByName('content')[0].value;
+    getQnaDetail();
+    /*수정폼인 경우 QnA 데이터를 가져오는 함수*/
+    function getQnaDetail() {
+        const qnaId = [[${qnaId}]];
+        console.log('수정할 QnA: ' + qnaId);
+        document.getElementById('qnaId').value = qnaId;
+        //qnaId가 있는 경우에만 서버로부터 데이터 조회
+        if (qnaId !== null) {
+            //작성폼, 수정폼에 따라 버튼 변경
+            showHideElement('#createQnaBtn');
+            showHideElement('#updateQnaBtn');
 
-        //QnaRequestDto 객체 생성
-        const qnaReq = {
-            title: title,
-            content: content,
-        };
+            axios.get('/qna/' + qnaId)
+                .then(function (response) {
+                    var qnaDetail = response.data;
+                    fillQnaDetail(qnaDetail);
+                })
+                .catch(function (error) {
+                    console.error('QnA 정보를 가져오는 중 오류 발생:', error);
+                });
+        }
+    }
 
-        //토큰을 로컬 스토리지에서 가져오기
-        const token = localStorage.getItem('accessToken');
+    //요소를 보이게 하거나 숨기는 함수
+    function showHideElement(element) {
+        var element = document.querySelector(element);
+        if (element.style.display === 'none') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
 
-        //후원 생성 요청을 보냄
-        axios.post('/qna/', qnaReq, {
+
+    //이미지 업로드 요청 함수
+    function uploadImage(file) {
+        var formData = new FormData();
+        formData.append('file', file);
+
+        return axios.post('/qna/image-upload', formData, {
             headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(function(response) {
-            alert(response.data);
-        })
-        .catch(function(error) {
-            console.error(error);
-
-            if (error.response && error.response.data && error.response.data.errors) {
-                alert(error.response.data.errors[0].message);
-            } else {
-                alert('서버 요청 중 에러가 발생했습니다.');
+                'Content-Type': 'multipart/form-data'
             }
         });
-    });
+    }
+
+    //이미지 삭제 요청 함수
+    function deleteImage(imgUrl) {
+        const formData = new FormData();
+        formData.append('fileUrl', imgUrl);
+
+        return axios.post('/qna/image-delete', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    }
 </script>
 </body>
 </html>
