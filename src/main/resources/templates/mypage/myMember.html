@@ -3,43 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        div>.user-bold{
-            font-weight: 500;
-        }
-        .update-input-wrap>div{
-            padding: 15px 0px 15px 0px;
-        }
-        .content-wrap>div:first-child{
-            padding-top: 20px;
-            padding-bottom: 15px;
-        }
-
-        /* input */
-        .input-form{
-            margin: 10px 0px 10px 0px;
-            font-weight: 300;
-        }
-
-        /* 비밀번호 */
-        .pw-change-notice{
-            padding: 10px 0px 10px 0px;
-            font-size: 14px;
-        }
-        .pw-change-notice>ul{
-            padding: 5px 5px 10px 5px;
-            list-style-position: inside;
-        }
-        .pw-change-notice li{
-            padding: 3px 0px 3px 0px;
-            font-weight: 300;
-        }
-        .pw-change-notice>.bold{
-            font-weight: 400;
-        }
-
-    </style>
+    <title>회원 정보 수정</title>
 </head>
 <body>
 <!-- header 영역 참조 -->
@@ -113,7 +77,7 @@
             </div>
         </div>
         <div class="foot-btn">
-            <button class="updateMember-btn btn bc4">정보 수정</button>
+            <button id="updateMemberBtn" class="updateMember-btn btn bc4">정보 수정</button>
         </div>
     </div>
 </div>
@@ -124,45 +88,69 @@
 <script th:src="@{/js/common/regex.js}"></script>
 <script th:src="@{/js/common/pwRegex.js}"></script>
 <script>
-    /* 회원 정보 수정 */
-    document.querySelector('.updateMember-btn').addEventListener('click', function() {
-        //새로운 닉네임, 이름, 휴대폰 번호 값 가져오기
-        const newNickname = document.getElementById('nickname').value;
-        const newName = document.getElementById('name').value;
-        const newPhoneNumber = document.getElementById('phoneNumber').value;
+    /*회원 정보 조회*/
+    loadProfileInformation();
 
-        //HTTP 요청을 위한 데이터 객체 생성
-        const requestData = {
+    //회원 정보를 가져와서 처리하는 함수
+    function loadProfileInformation() {
+        axios.get('/member/profile-detail', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(function (response) {
+            const memberData = response.data;
+            document.getElementById('memberId').value = memberData.memberId;
+            document.getElementById('email').value = memberData.email;
+            document.getElementById('nickname').value = memberData.nickname;
+            document.getElementById('name').value = memberData.name;
+            document.getElementById('phoneNumber').value = memberData.phoneNumber;
+        })
+        .catch(function (error) {
+            console.error(error);
+        });
+    }
+
+    /*회원 정보 수정*/
+    document.querySelector('#updateMemberBtn').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password').value.trim();
+        if (passwordInput !== '') {
+            alert('비밀번호는 따로 변경해주세요.');
+            return;
+        }
+
+        //UpdateMemberRequestDto 객체 생성
+        const newNickname = document.getElementById('nickname').value.trim();
+        const newName = document.getElementById('name').value.trim();
+        const newPhoneNumber = document.getElementById('phoneNumber').value.trim();
+
+        const updateMemberReq = {
             nickname: newNickname,
             name: newName,
             phoneNumber: newPhoneNumber
         };
 
-        //로컬 스토리지에서 액세스 토큰 가져오기
-        const token = localStorage.getItem('accessToken');
-
-        axios.put('/member/profile-detail', requestData, {
+        axios.put('/member/profile-detail', updateMemberReq, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
         })
         .then(function (response) {
             alert(response.data);
+            window.location.href = '/member/profile';
         })
         .catch(function (error) {
             console.error(error);
-
-            //에러 응답 처리
+            //서버가 반환한 에러 메시지 표시
             if (error.response && error.response.data && error.response.data.errors) {
-                //서버가 에러 응답을 반환한 경우
-                alert(error.response.data.errors[0].message); //서버가 반환한 에러 메시지 표시
+                alert(error.response.data.errors[0].message);
             } else {
                 alert(error.response.data.message);
             }
         });
     });
 
-    /* 비밀번호 변경 요청 */
+    /*비밀번호 변경*/
     document.getElementById('updatePwBtn').addEventListener('click', function() {
         //UpdatePwRequestDto 객체 생성
         const nowPw = document.getElementById('password').value;
@@ -175,9 +163,6 @@
             checkPassword: checkPw
         };
 
-        //로컬 스토리지에서 액세스 토큰 가져오기
-        const token = localStorage.getItem('accessToken');
-
         axios.put(`/member/profile-detail/pw`, updatePwReq, {
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -188,8 +173,13 @@
           window.location.href = '/member/profile';
         })
         .catch(error => {
-          console.error('비밀번호 변경 실패:', error.response.data);
-          alert(error.response.data.message);
+            console.error('비밀번호 변경 실패', error);
+            //서버가 반환한 에러 메시지 표시
+            if (error.response && error.response.data && error.response.data.errors) {
+                alert(error.response.data.errors[0].message);
+            } else {
+                alert(error.response.data.message);
+            }
         });
     });
 </script>

@@ -3,35 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .check-pw>.check-title{
-            padding-top: 40px;
-        }
-        .check-pw .input-form{
-            width: 40%;
-        }
-        .detail-title{
-            margin: 30px 0 15px 0;
-        }
-        .check-notice{
-            background-color: #eeeeeee6;
-            height: 30px;
-            line-height: 30px;
-            padding-left: 10px;
-            font-size: 14px;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-        .check-agree{
-            text-align: center;
-            padding: 30px;
-            padding-top: 50px;
-        }
-        .check-agree #quit-agreement{
-            margin-right: 5px;
-        }
-    </style>
+    <title>회원 탈퇴</title>
 </head>
 <body>
 <!-- header 영역 참조 -->
@@ -45,15 +17,15 @@
         <div class="mypage-title page-title">회원 탈퇴</div>
         <div class="content-wrap">
             <div class="check-pw">
-                <div class="detail-title">본인 확인을 위해 비밀번호를 입력해주세요.</div>
+                <div class="mypage-detail-title">본인 확인을 위해 비밀번호를 입력해주세요.</div>
                 <div>
-                    <input type="hidden" name="memberId" id="memberId">
-                    <input type="password" name="password" id="password" placeholder="비밀번호 입력" class="input-form" required>
+                    <input type="hidden" id="memberId">
+                    <input type="password" id="password" placeholder="비밀번호 입력" class="input-form" required>
                 </div>
                 <div class="check-notice">※ 탈퇴가 완료된 계정은 다시 복구할 수 없습니다.</div>
             </div>
             <div class="check-agree">
-                <label><input type="checkbox" name="quit-agreement" id="quit-agreement" value="agree" required>위 내용을 이해했습니다.</label>
+                <label><input type="checkbox" id="quit-agreement" value="agree">위 내용을 이해했습니다.</label>
             </div>
         </div>
         <div class="foot-btn">
@@ -63,12 +35,12 @@
 </div>
 
 <!-- footer 영역 참조 -->
-<footer th:insert="~{/footer :: footer}"></footer>
+<footer th:insert="~{/common/footer :: footer}"></footer>
 
 <script>
     document.querySelector('.leaveMember-btn').addEventListener('click', function() {
         var memberId = document.getElementById('memberId').value;
-        console.log(memberId);
+        console.log('탈퇴할 회원: ' + memberId);
         var password = document.getElementById('password').value;
         var quitAgreement = document.getElementById('quit-agreement').checked; //탈퇴 동의 여부 가져오기
 
@@ -79,9 +51,6 @@
         }
 
         if (confirm("정말로 탈퇴하시겠습니까?")) {
-            //토큰을 로컬 스토리지에서 가져오기
-            const token = localStorage.getItem('accessToken');
-
             //회원 탈퇴 요청
             axios.delete('/member/leave', {
                 headers: {
@@ -91,18 +60,11 @@
                     password: password
                 }
             }).then(function(response) {
-                alert(response.data); //응답 메시지 표시
+                alert(response.data);
             })
             .catch(function(error) {
                 console.error(error);
-
-                //에러 응답 처리
-                if (error.response && error.response.data) {
-                    //서버가 에러 응답을 반환한 경우
-                    alert(error.response.data.message); //서버가 반환한 에러 메시지 표시
-                } else {
-                    alert('서버 요청 중 에러가 발생했습니다.');
-                }
+                alert(error.response.data.message);
             });
         }
     });

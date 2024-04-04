@@ -1,68 +1,20 @@
-.product-wrapper{
-    position: relative;
-}
-
 .list-wrapper{
     width: 80%;
 }
 
-/*테이블 내용 디테일*/
-.list-title{
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-th:first-child, td:first-child{
-    width: 80px;
-}
 
-.list-top>table{
-    width: 100%;
-    table-layout: fixed;
-    text-align: center;
-    border-spacing: 0;
-    margin-bottom: 25px;
-}
-table th{
-    background-color: #f6f6f1;
-    color: #333536;
-}
-table th:first-child{
-    border-top-left-radius: 10px;
-    border-top-left-radius: 10px;
-}
-table th:last-child{
-    border-top-right-radius: 10px;
-    border-top-right-radius: 10px;
-}
-table td:nth-child(3){
-	overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-table th, td{
-    height: 70px;
-    border-bottom: 1px solid rgb(202, 202, 202);
-    word-break:break-all;
-}
-table tr:hover{
-    background-color: #fafafa;
-}
-
-.list-top>table td:nth-child(4)>a:hover{
-	color: #83888a;
-}
-
-.list-top>table td:nth-child(3)>a:hover{
-	color: #83888a;
-}
-
+/*리스트 뼈대*/
 .list-top{
     padding: 35px;
     border: 2px solid rgb(238, 238, 238);
     border-bottom: none;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+}
+.list-title{
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 .list-bottom{
     background-color: rgb(241, 241, 241);
@@ -79,10 +31,76 @@ table tr:hover{
     bottom: 30px;
 }
 
+
+/*테이블 내용 디테일*/
+.list-top>table{
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    border-spacing: 0;
+    margin-bottom: 25px;
+}
+table th{
+    background-color: #f6f6f1;
+    color: #333536;
+    font-weight: 600;
+}
+table th:first-child{
+    border-top-left-radius: 10px;
+}
+table th:last-child{
+    border-top-right-radius: 10px;
+}
+table td:nth-child(3){
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+table th, td{
+    height: 70px;
+    border-bottom: 1px solid rgb(202, 202, 202);
+    word-break:break-all;
+}
+table tr:hover{
+    background-color: #fafafa;
+}
+
+
+/*th 크기*/
+.th-id{
+    width: 10%;
+}
+.th-writer{
+    width: 20%;
+}
+.th-create-date{
+    width: 15%;
+}
+.th-status{
+    width: 15%;
+}
+.th-delete-btn{
+    width: 10%;
+}
+.th-amount{
+    width: 15%;
+}
+
+
+/*상태 버튼*/
+#likeTableBody .answer-btn,
+#supportTableBody .answer-btn,
+#qnaTableBody .answer-btn{
+    pointer-events: none;
+    width: 85px;
+}
+
+
 /*select*/
 .grade-change {
     height: 30px;
 }
+
 
 /*조회된 정보 없을때*/
 table .noInfo-wrapper>div{
