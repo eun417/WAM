@@ -7,9 +7,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  //의미 없는 객체 생성 막음
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -35,6 +33,19 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
 
+    //생성자에 @Builder 선언
+    @Builder
+    public Member(String oauthId, String email, String password, String name, String phoneNumber, Authority authority, String nickname, LoginType loginType) {
+        this.oauthId = oauthId;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.authority = authority;
+        this.nickname = nickname;
+        this.loginType = loginType;
+    }
+
     //비밀번호 변경
     public void updatePw(String newPassword) {
         this.password = newPassword;
@@ -44,6 +55,5 @@ public class Member extends BaseTimeEntity {
     public void updateAuthority(Authority authority) {
         this.authority = authority;
     }
-
 
 }

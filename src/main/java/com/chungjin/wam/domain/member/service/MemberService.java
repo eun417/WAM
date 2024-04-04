@@ -1,20 +1,16 @@
 package com.chungjin.wam.domain.member.service;
 
-import com.chungjin.wam.domain.auth.dto.request.ChangePwRequestDto;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
-import com.chungjin.wam.domain.member.dto.response.MemberDto;
+import com.chungjin.wam.domain.member.dto.request.UpdatePwRequestDto;
+import com.chungjin.wam.domain.member.dto.response.MemberResponseDto;
 import com.chungjin.wam.domain.member.dto.response.MyLikeResponseDto;
 import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.domain.member.dto.response.MyQnaResponseDto;
-import com.chungjin.wam.domain.member.dto.response.MySupportResponseDto;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
-import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
@@ -37,7 +33,6 @@ import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -46,15 +41,13 @@ public class MemberService {
     private final SupportLikeRepository supportLikeRepository;
 
     private final MemberMapper memberMapper;
-    private final QnaMapper qnaMapper;
-    private final SupportMapper supportMapper;
 
     private final PasswordEncoder passwordEncoder;
 
     /**
      * 로그인 회원의 email로 회원 정보 조회
      */
-    public MemberDto getMemberProfile(Long memberId) {
+    public MemberResponseDto getMemberProfile(Long memberId) {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
         //Entity -> Dto
@@ -64,12 +57,10 @@ public class MemberService {
     /**
      * 회원 수정
      */
-    public void updateMember(Long memberId, UpdateMemberRequestDto updateMembmerDto) {
+    @Transactional
+    public void updateMember(Long memberId, UpdateMemberRequestDto updateMemberReq) {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
-
-        //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!memberId.equals(member.getMemberId())) throw new CustomException(FORBIDDEN);
 
         //이름, 휴대폰 번호 입력하면 GUEST인 사용자의 권한을 USER로 변경
         if (member.getAuthority() == Authority.GUEST) {
@@ -77,26 +68,31 @@ public class MemberService {
         }
 
         //MapStruct로 수정
-        memberMapper.updateFromDto(updateMembmerDto, member);
+        memberMapper.updateFromDto(updateMemberReq, member);
     }
 
     /**
      * 비밀번호 변경
      */
-    public void updatePw(Long memberId, ChangePwRequestDto changePwReq) {
+    @Transactional
+    public void updatePw(Long memberId, UpdatePwRequestDto updatePwReq) {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //로그인한 사용자가 마이페이지의 회원이 아닌 경우 에러 발생
-        if(!memberId.equals(member.getMemberId())) throw new CustomException(FORBIDDEN);
+        //입력한 비밀번호가 암호화된 비밀번호와 맞는지 확인
+        if (!passwordEncoder.matches(updatePwReq.getNowPassword(), member.getPassword())) {
+            log.info("비밀번호 일치 여부: {}", passwordEncoder.matches(updatePwReq.getNowPassword(), member.getPassword()));
+            throw new CustomException(INVALID_PASSWORD);
+        }
 
         //비밀번호 암호화 후 변경
-        member.updatePw(passwordEncoder.encode(changePwReq.getNewPassword()));
+        member.updatePw(passwordEncoder.encode(updatePwReq.getNewPassword()));
     }
 
     /**
      * 회원 탈퇴
      */
+    @Transactional
     public void deleteMember(Long memberId, String password) {
         //memberId로 로그인 한 Member 객체 가져오기
         Member member = getMember(memberId);
@@ -111,7 +107,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    //memberId로 Member 객체 조회
+    //memberId로 Member 객체 조회하는 함수
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
@@ -130,7 +126,7 @@ public class MemberService {
         //EntityList -> DtoList
         List<Object> qnaDtos = new ArrayList<>();
         for (Qna qna : qnas) {
-            qnaDtos.add(convertToQnaDto(qna)); // Qna를 MyQnaDto로 변환하여 리스트에 추가
+            qnaDtos.add(memberMapper.toDto(qna)); //Qna를 MyQnaDto로 변환하여 리스트에 추가
         }
         return PageResponse.builder()
                 .content(qnaDtos)	//Qna 목록
@@ -139,17 +135,6 @@ public class MemberService {
                 .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
                 .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
                 .last(qnaPage.isLast())  //마지막 페이지 여부
-                .build();
-    }
-
-    //Entity -> Dto
-    public MyQnaResponseDto convertToQnaDto(Qna qna) {
-        return MyQnaResponseDto.builder()
-                .qnaId(qna.getQnaId())
-                .title(qna.getTitle())
-                .createDate(qna.getCreateDate())
-                .viewCount(qna.getViewCount())
-                .qnaCheck(qna.getQnaCheck())
                 .build();
     }
 
@@ -166,7 +151,7 @@ public class MemberService {
         //EntityList -> DtoList
         List<Object> supportDtos = new ArrayList<>();
         for (Support support : supports) {
-            supportDtos.add(convertToSupportDto(support)); // Support를 MySupportDto로 변환하여 리스트에 추가
+            supportDtos.add(memberMapper.toDto(support)); //Support를 MySupportDto로 변환하여 리스트에 추가
         }
         return PageResponse.builder()
                 .content(supportDtos)	//Support 목록
@@ -175,18 +160,6 @@ public class MemberService {
                 .totalElements(supportPage.getTotalElements())   //전체 Support 수
                 .totalPages(supportPage.getTotalPages()) //전체 페이지 수
                 .last(supportPage.isLast())  //마지막 페이지 여부
-                .build();
-    }
-
-    //Entity -> Dto
-    public MySupportResponseDto convertToSupportDto(Support support) {
-        return MySupportResponseDto.builder()
-                .supportId(support.getSupportId())
-                .title(support.getTitle())
-                .goalAmount(support.getGoalAmount())
-                .supportAmount(support.getSupportAmount())
-                .createDate(support.getCreateDate())
-                .supportStatus(support.getSupportStatus())
                 .build();
     }
 
@@ -203,7 +176,7 @@ public class MemberService {
         //EntityList -> DtoList
         List<Object> likeDtos = new ArrayList<>();
         for (Support support : supports) {
-            likeDtos.add(convertToLikeDto(support)); // Support를 MyLikeDto로 변환하여 리스트에 추가
+            likeDtos.add(convertToLikeDto(support)); //Support를 MyLikeDto로 변환하여 리스트에 추가
         }
         return PageResponse.builder()
                 .content(likeDtos)	//Support 목록
@@ -215,7 +188,7 @@ public class MemberService {
                 .build();
     }
 
-    //Entity -> Dto
+    //Entity -> Dto (Like)
     public MyLikeResponseDto convertToLikeDto(Support support) {
         return MyLikeResponseDto.builder()
                 .supportId(support.getSupportId())
@@ -232,14 +205,14 @@ public class MemberService {
     public PageResponse readAllMember(int pageNo) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("memberId").descending());
-        //Member를 페이지별 조회
+        //회원을 페이지별 조회
         Page<Member> memberPage = memberRepository.findAll(pageable);
         //현재 페이지의 Member 목록
         List<Member> members = memberPage.getContent();
         //EntityList -> DtoList
         List<Object> memberDtos = new ArrayList<>();
         for (Member member : members) {
-            memberDtos.add(memberMapper.toDto(member)); // Member를 MemberDto로 변환하여 리스트에 추가
+            memberDtos.add(memberMapper.toDto(member)); //Member를 MemberDto로 변환하여 리스트에 추가
         }
         return PageResponse.builder()
                 .content(memberDtos)	//Member 목록
