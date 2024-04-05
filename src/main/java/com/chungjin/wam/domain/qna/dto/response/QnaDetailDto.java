@@ -26,4 +26,6 @@ public class QnaDetailDto {
     @Enumerated(EnumType.STRING)
     private QnaCheck qnaCheck;
 
+
+
 }

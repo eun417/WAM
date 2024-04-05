@@ -8,12 +8,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  //의미 없는 객체 생성 막음
 public class Qna extends BaseTimeEntity {
 
     @Id
@@ -40,9 +38,18 @@ public class Qna extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Builder
+    public Qna(String title, String content, Long viewCount, QnaCheck qnaCheck, Member member) {
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+        this.qnaCheck = qnaCheck;
+        this.member = member;
+    }
+
     @PreUpdate
     protected void onAnswer() {
-        //answer 필드가 업데이트되면 answer_date를 현재 날짜로 설정
+        //answer 필드가 업데이트되면 answer_date 를 현재 날짜로 설정
         if (this.answer != null) {
             this.answerDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
             this.qnaCheck = QnaCheck.ANSWERED;
@@ -50,7 +57,7 @@ public class Qna extends BaseTimeEntity {
     }
 
     //조회수 증가
-    public void updateViewCount(Long viewCount) {
+    public void upViewCount(Long viewCount) {
         this.viewCount++;
     }
 

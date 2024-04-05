@@ -9,7 +9,6 @@ import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
-import com.chungjin.wam.domain.qna.entity.QnaCheck;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.exception.CustomException;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chungjin.wam.domain.qna.entity.QnaCheck.CHECKING;
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Service
@@ -33,25 +33,32 @@ public class QnaService {
 
     private final QnaRepository qnaRepository;
     private final MemberRepository memberRepository;
+
     private final QnaMapper qnaMapper;
 
     /**
      * QnA 생성
      */
     public void createQna(Long memberId, QnaRequestDto qnaReq) {
-        //이메일로 사용자 확인
+        //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
         //Dto -> Entity
         Qna qna = Qna.builder()
                 .title(qnaReq.getTitle())
                 .content(qnaReq.getContent())
-                .qnaCheck(QnaCheck.CHECKING)
+                .qnaCheck(CHECKING)
                 .member(member)
                 .build();
 
         //DB에 저장
         qnaRepository.save(qna);
+    }
+
+    //memberId로 Member 객체 조회하는 함수
+    private Member getMember (Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     /**
@@ -62,13 +69,13 @@ public class QnaService {
         Qna qna = getQna(qnaId);
 
         //조회수 증가
-        qna.updateViewCount(qna.getViewCount());
+        qna.upViewCount(qna.getViewCount());
 
         //Entity -> Dto
         return QnaDetailDto.builder()
                 .qnaId(qna.getQnaId())
                 .memberId(qna.getMember().getMemberId())
-                .nickname(qna.getMember().getNickname())
+                .nickname(getMemberNickname(qna))
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .createDate(qna.getCreateDate())
@@ -77,6 +84,12 @@ public class QnaService {
                 .answerDate(qna.getAnswerDate())
                 .qnaCheck(qna.getQnaCheck())
                 .build();
+    }
+
+    //닉네임 null 처리하는 함수
+    private String getMemberNickname(Qna qna) {
+        Member member = qna.getMember();
+        return member != null ? member.getNickname() : "(알 수 없음)";
     }
 
     /**
@@ -92,31 +105,34 @@ public class QnaService {
      * QnA 수정
      */
     public void updateQna(Long memberId, Long qnaId, UpdateQnaRequestDto updateQnaReq) {
-        //qnaId로 QnA 확인
+        //qnaId로 QnA 객체 가져오기
         Qna qna = getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(qna.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
+        checkQnaWriter(qna.getMember().getMemberId(), memberId);
 
-        //MapStruct로 수정
+        //MapStruct 로 수정
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
+    }
+
+    ////로그인한 사용자가 작성자인지 확인하는 함수
+    private void checkQnaWriter(Long writerId, Long loginMemberId) {
+        if (!loginMemberId.equals(writerId)) {
+            throw new CustomException(FORBIDDEN);
+        }
     }
 
     /**
      * QnA 삭제
      */
     public void deleteQna(Long memberId, Long qnaId) {
-        //qnaId로 QnA 확인
+        //qnaId로 QnA 객체 가져오기
         Qna qna = getQna(qnaId);
-        //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(qna.getMember().getMemberId())) {
-            throw new CustomException(FORBIDDEN);
-        }
+        checkQnaWriter(qna.getMember().getMemberId(), memberId);
 
-        //DB에서 영구 삭제
+        //DB 에서 영구 삭제
         qnaRepository.delete(qna);
     }
 
@@ -124,10 +140,10 @@ public class QnaService {
      * QnA 답변 등록
      */
     public void updateQnaAnswer(Long qnaId, QnaAnswerRequestDto qnaAnswerReq) {
-        //qnaId로 QnA 확인
+        //qnaId로 QnA 객체 가져오기
         Qna qna = getQna(qnaId);
 
-        //MapStruct로 수정
+        //MapStruct 로 수정
         qnaMapper.updateFromAnswerDto(qnaAnswerReq, qna);
     }
 
@@ -149,53 +165,10 @@ public class QnaService {
         return getQnaPageResponse(qnaRepository.findByNicknameContaining(keyword, pageable), pageNo);
     }
 
-    /**
-     * memberId로 Member 객체 조회
-     */
-    private Member getMember (Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-    }
-
-    /**
-     * qnaId로 Qna 객체 조회
-     */
+    //qnaId로 Qna 객체 조회하는 함수
     private Qna getQna (long qnaId) {
         return qnaRepository.findById(qnaId)
                 .orElseThrow(() -> new CustomException(QNA_NOT_FOUND));
-    }
-
-    /**
-     * Entity -> Dto
-     */
-    public QnaResponseDto convertToDto(Qna qna) {
-        return QnaResponseDto.builder()
-                .qnaId(qna.getQnaId())
-                .title(qna.getTitle())
-                .content(qna.getContent())
-                .createDate(qna.getCreateDate())
-                .viewCount(qna.getViewCount())
-                .qnaCheck(qna.getQnaCheck())
-                .nickname(qna.getMember().getNickname())
-                .build();
-    }
-
-    /**
-     * EntityList -> DtoList
-     * map()으로 각 QnA를 QnaResponseDto로 변환
-     * collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
-     */
-    public List<QnaResponseDto> convertToDtoList(List<Qna> qnas) {
-        return qnas.stream()
-                .map(qna -> QnaResponseDto.builder()
-                        .qnaId(qna.getQnaId())
-                        .title(qna.getTitle())
-                        .nickname(qna.getMember().getNickname())
-                        .createDate(qna.getCreateDate())
-                        .viewCount(qna.getViewCount())
-                        .qnaCheck(qna.getQnaCheck())
-                        .build())
-                .collect(Collectors.toList());
     }
 
     //Pagination 결과 함수
@@ -207,12 +180,25 @@ public class QnaService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return PageResponse.builder()
-                .content(qnaDtos)   // Qna 목록
-                .pageNo(pageNo) // 현재 페이지 번호
-                .pageSize(10) // 페이지당 항목 수
-                .totalElements(qnaPage.getTotalElements())   // 전체 Qna 수
-                .totalPages(qnaPage.getTotalPages()) // 전체 페이지 수
-                .last(qnaPage.isLast())  // 마지막 페이지 여부
+                .content(qnaDtos)   //Qna 목록
+                .pageNo(pageNo) //현재 페이지 번호
+                .pageSize(qnaPage.getSize()) //페이지당 항목 수
+                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
+                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
+                .last(qnaPage.isLast())  //마지막 페이지 여부
+                .build();
+    }
+
+    //Entity -> Dto
+    public QnaResponseDto convertToDto(Qna qna) {
+        return QnaResponseDto.builder()
+                .qnaId(qna.getQnaId())
+                .title(qna.getTitle())
+                .content(qna.getContent())
+                .createDate(qna.getCreateDate())
+                .viewCount(qna.getViewCount())
+                .qnaCheck(qna.getQnaCheck())
+                .nickname(qna.getMember().getNickname())
                 .build();
     }
 

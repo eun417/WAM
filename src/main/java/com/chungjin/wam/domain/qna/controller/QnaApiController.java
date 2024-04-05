@@ -5,19 +5,15 @@ import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.UpdateQnaRequestDto;
 import com.chungjin.wam.domain.qna.dto.response.QnaDetailDto;
-import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 import static com.chungjin.wam.global.util.Constants.S3_QNA;
 
@@ -43,7 +39,7 @@ public class QnaApiController {
      * QnA 조회
      */
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaDetailDto> readQna(@PathVariable(value = "qnaId") Long qnaId) {
+    public ResponseEntity<QnaDetailDto> readQna(@PathVariable("qnaId") Long qnaId) {
         return ResponseEntity.ok().body(qnaService.readQna(qnaId));
     }
 
@@ -60,7 +56,7 @@ public class QnaApiController {
      */
     @PutMapping("/{qnaId}")
     public ResponseEntity<String> updateQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable(value = "qnaId") Long qnaId,
+                                            @PathVariable("qnaId") Long qnaId,
                                             @RequestBody @Valid  UpdateQnaRequestDto updateQnaReq) {
         qnaService.updateQna(userDetails.getMember().getMemberId(), qnaId, updateQnaReq);
         return ResponseEntity.ok("QnA 게시물이 수정되었습니다.");
@@ -71,7 +67,7 @@ public class QnaApiController {
      */
     @DeleteMapping("/{qnaId}")
     public ResponseEntity<String> deleteQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable(value = "qnaId") Long qnaId) {
+                                            @PathVariable("qnaId") Long qnaId) {
         qnaService.deleteQna(userDetails.getMember().getMemberId(), qnaId);
         return ResponseEntity.ok("QnA 게시물이 삭제되었습니다.");
     }
@@ -80,7 +76,7 @@ public class QnaApiController {
      * QnA 답변 등록 (관리자만 가능)
      */
     @PutMapping("/{qnaId}/answer")
-    public ResponseEntity<String> updateQnaAnswer(@PathVariable(value = "qnaId") Long qnaId,
+    public ResponseEntity<String> updateQnaAnswer(@PathVariable("qnaId") Long qnaId,
                                                   @RequestBody @Valid QnaAnswerRequestDto qnaAnswerReq) {
         qnaService.updateQnaAnswer(qnaId, qnaAnswerReq);
         return ResponseEntity.ok("QnA 답변이 등록되었습니다.");
