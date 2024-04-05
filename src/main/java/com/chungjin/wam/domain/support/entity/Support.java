@@ -76,4 +76,9 @@ public class Support extends BaseTimeEntity {
         this.supportAmount += paymentAmount;
     }
 
+    //상태 수정
+    public void updateSupportStatus(SupportStatus supportStatus) {
+        this.supportStatus = supportStatus;
+    }
+
 }
