@@ -27,8 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chungjin.wam.domain.support.entity.SupportStatus.ENDING_SOON;
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
-import static com.chungjin.wam.global.util.Constants.S3_SUPPORT;
 import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 
 @Service
@@ -107,6 +107,13 @@ public class SupportService {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
         return getSupportPageResponse(supportRepository.findAll(pageable), pageNo);
+    }
+
+    /**
+     * 종료 임박 후원 List 조회
+     */
+    public List<SupportResponseDto> readEndingSoonSupport() {
+        return convertToDtoList(supportRepository.findBySupportStatus(ENDING_SOON));
     }
 
     /**
@@ -194,12 +201,12 @@ public class SupportService {
         return SupportResponseDto.builder()
                 .supportId(support.getSupportId())
                 .title(support.getTitle())
+                .nickname(support.getMember().getNickname())
+                .supportStatus(support.getSupportStatus())
                 .firstImg(support.getFirstImg())
                 .goalAmount(support.getGoalAmount())
                 .supportAmount(support.getSupportAmount())
                 .createDate(support.getCreateDate())
-                .nickname(support.getMember().getNickname())
-                .supportStatus(support.getSupportStatus())
                 .commentCheck(support.getCommentCheck())
                 .build();
     }
@@ -217,8 +224,10 @@ public class SupportService {
                         .nickname(support.getMember().getNickname())
                         .supportStatus(support.getSupportStatus())
                         .firstImg(support.getFirstImg())
+                        .goalAmount(support.getGoalAmount())
                         .supportAmount(support.getSupportAmount())
                         .createDate(support.getCreateDate())
+                        .commentCheck(support.getCommentCheck())
                         .build())
                 .collect(Collectors.toList());
     }

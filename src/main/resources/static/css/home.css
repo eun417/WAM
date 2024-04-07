@@ -13,6 +13,8 @@
     border: 1px solid #d1d1d1;
     color: #2f343d;
     text-decoration: none;
+    width: 100px;
+    cursor: pointer;
 }
 
 .title-box>.title{
@@ -147,12 +149,13 @@
     gap: 30px;
 }
 .qna-detail-box{
-    width: 30%;
+    width: 300px;
     text-align: justify;
     padding: 30px 20px 40px 20px;
     border: 1px solid #BCC2CA;
     border-radius: 10px;
-    max-height: 400px;
+    min-height: 300px;
+    max-height: 300px;
     overflow: hidden;   /*내용이 크기 넘어갔을 때 숨김*/
 }
 .qna-detail-title{
@@ -170,7 +173,4 @@
 .qna-detail-box img{
     width: 100%;
     object-fit:cover;
-}
-.content-box>.qna-more-btn{
-    padding: 25px 20px 25px 20px;
 }

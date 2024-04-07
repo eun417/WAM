@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentRepository extends JpaRepository<PaymentInfo, Long> {
 
-    @Query("SELECT SUM(p.paymentAmount) FROM PaymentInfo p")
+    //총 후원금 조회 (기본값: 0)
+    @Query("SELECT COALESCE(SUM(p.paymentAmount), 0) FROM PaymentInfo p")
     Long findTotalPaymentAmount();
 
 }

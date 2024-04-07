@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
+import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.s3.S3Service;
@@ -53,6 +54,14 @@ public class SupportApiController {
     @GetMapping
     public ResponseEntity<PageResponse> readAllSupport(@RequestParam("page") int pageNo) {
         return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
+    }
+
+    /**
+     * 종료 임박 후원 List 조회
+     */
+    @GetMapping("/ending-soon")
+    public ResponseEntity<List<SupportResponseDto>> readEndingSoonSupport() {
+        return ResponseEntity.ok().body(supportService.readEndingSoonSupport());
     }
 
     /**

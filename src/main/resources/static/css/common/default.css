@@ -9,7 +9,6 @@
     font-family: "Hahmlet", serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-weight: 500;
     font-size: 16px;
     text-decoration-line: none;
 }
@@ -32,7 +31,7 @@ ul{
 
 /* 기본화면 레이아웃 */
 .wrapper, .page-content{
-    min-height: 100%;
+    /*min-height: 100%;*/
     position: relative;
     padding-bottom: 200px;
 }
@@ -73,9 +72,6 @@ span.brand3 {
 }
 
 /*목록 페이지*/
-.contBox{
-    text-align: center;
-}
 .inputBox{
     display: flex;
     justify-content: space-between;
@@ -83,12 +79,16 @@ span.brand3 {
 }
 .list-header{
     margin-bottom: 90px;
+    text-align: center;
 }
 .list-header span{
     font-size: 48px;
     font-weight: 600;
     border-bottom: 5px solid #445D48;
     padding-bottom: 10px;
+}
+.detail-header{
+    text-align: center;
 }
 .searchBox{
     position: relative;
@@ -97,10 +97,9 @@ span.brand3 {
 .search{
     margin-right: 5px;
 }
-#search-btn{
+#searchBtn{
     cursor: pointer;
     padding: 12px 15px 12px 15px;
-    font-weight: 500;
 }
 .searchBox>.search{
     width: 600px;
@@ -132,12 +131,12 @@ span.brand3 {
 /*메인, 후원 페이지 버튼*/
 .home-btn{
     display: inline-block;
-    cursor: pointer;
     padding: 15px 25px 15px 25px;
     border: 2px solid #b1b3b4;
     border-radius: 10rem;
     background-color: #fff;
     transition-duration: 0.3s;
+    cursor: pointer;
 }
 
 /*후원 상태 따른 버튼*/
@@ -273,19 +272,20 @@ span.brand3 {
 .writer{
     text-align: right;
     padding-top: 20px;
-    border-top: 3px solid #EDEDED;
 }
 .writer>button{
     width: 90px;
 }
 
 /*summernote*/
+/*
 .text-editor{
     text-align: left;
-}
+}*/
 .text-editor .btn{
     padding: 5px 10px !important;
 }
+
 
 /*check-circle*/
 .update-input-wrap>div>div{
@@ -454,6 +454,17 @@ div>.active-reg-input{
 .bc7:hover {
     background-color: #cfb73e;
     border: 2px solid #cfb73e;
+    cursor: pointer;
+}
+
+.bc8 {
+    background-color: #e45d45;
+    color: #fff;
+    border: 2px solid #e45d45;
+}
+.bc8:hover {
+    background-color: #cb533e;
+    border: 2px solid #cb533e;
     cursor: pointer;
 }
 
