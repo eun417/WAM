@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
+import java.util.OptionalLong;
 
 @Controller
 @RequestMapping("/qna")
@@ -34,8 +36,8 @@ public class QnaController {
      * QnA 작성폼
      */
     @GetMapping({"/write", "/update/{qnaId}"})
-    public String goQnaWrite(@PathVariable("qnaId") Optional<Long> qnaId, Model model) {
-        if (qnaId.isPresent()) {
+    public String goQnaWrite(@PathVariable(value = "qnaId", required = false) Long qnaId, Model model) {
+        if (qnaId != null) {
             model.addAttribute("qnaId", qnaId);
         }
         return "qna/qnaWrite";
@@ -45,8 +47,7 @@ public class QnaController {
      * 검색
      */
     @GetMapping("/search")
-    public String goQnaSearch(@RequestParam("select") String select,
-                              @RequestParam("search") String search) {
+    public String goQnaSearch(@RequestParam("q") String search) {
         return "qna/qnaSearch";
     }
 

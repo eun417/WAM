@@ -1,82 +1,40 @@
-/*QnA 생성*/
-document.getElementById('createQnaBtn').addEventListener('click', function() {
-    //토큰을 로컬 스토리지에서 가져오기
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/support/list";
-        return;
-    }
+//이미지 업로드 요청 함수
+function uploadImage(file) {
+    var formData = new FormData();
+    formData.append('file', file);
 
-    const title = document.getElementById('title').value.trim();
-    const content = $('#summernote').summernote('code');
-
-    //QnaRequestDto 객체 생성
-    const qnaReq = {
-        title: title,
-        content: content,
-    };
-
-    //QnA 생성 요청
-    axios.post('/qna/', qnaReq, {
+    return axios.post('/qna/image-upload', formData, {
         headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    }).then(function(response) {
-        alert(response.data);
-    })
-    .catch(function(error) {
-        console.error(error);
-
-        if (error.response && error.response.data && error.response.data.errors) {
-            alert(error.response.data.errors[0].message);
-        } else {
-            alert('서버 요청 중 에러가 발생했습니다.');
+            'Content-Type': 'multipart/form-data'
         }
     });
-});
+}
 
-/*QnA 수정*/
-document.getElementById('updateQnaBtn').addEventListener('click', function() {
-    //토큰을 로컬 스토리지에서 가져오기
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/qna/list";
-        return;
-    }
+//이미지 삭제 요청 함수
+function deleteImage(imgUrl) {
+    const formData = new FormData();
+    formData.append('fileUrl', imgUrl);
 
-    const title = document.getElementById('title').value.trim();
-    const content = $('#summernote').summernote('code');
-
-    const qnaId = document.getElementById('qnaId').value;
-    console.log('수정할 QnA: ' + qnaId);
-
-    //UpdateQnaRequestDto 객체 생성
-    const updateQnaReq = {
-        title: title,
-        content: content,
-    };
-
-    //QnA 수정 요청
-    axios.put('/qna/' + qnaId, updateQnaReq, {
+    return axios.post('/qna/image-delete', formData, {
         headers: {
-            'Authorization': 'Bearer ' + token
+            'Content-Type': 'multipart/form-data'
         }
-    }).then(function(response) {
-        console.log(response.data);
-        alert(response.data);
-        window.location.href = "/qna/detail/" + qnaId;
-    })
-    .catch(function(error) {
-        console.error(error);
-        alert(error.response.data.message);
     });
-});
+}
 
 
 //qnaDetail 값을 채우는 함수
 function fillQnaDetail(qnaDetail) {
     document.getElementById('title').value = qnaDetail.title;
     $('#summernote').summernote('code', qnaDetail.content);
+}
+
+//요소를 보이게 하거나 숨기는 함수
+function showHideElement(element) {
+    var element = document.querySelector(element);
+    if (element.style.display === 'none') {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'none';
+    }
 }

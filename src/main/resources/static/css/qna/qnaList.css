@@ -2,55 +2,53 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center; /* 사용자 화면 창과 관계 없이 가운데로 정렬하기 3종 세트 */
-    text-align: center; /* 텍스트 가운데 정렬 플러스*/
+    justify-content: center;
+    text-align: center;
 }
 
-/* 본문 */
-.material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 15
-}
 
-/* table */
+/*테이블*/
 .header-list{
     min-width: 1150px;
     height: 50px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-radius: 7px;
     border: 2px solid #F5F5F5;
     border-spacing: 0;
 }
 .header-list th{
     background-color: #f6f6f1;
-    color: #333536;
-}
-/*크기 지정*/
-.header-list th:nth-child(1){
-    width: 8%;
-}
-.header-list th:nth-child(3){
-    width: 15%;
-}
-.header-list th:nth-child(4){
-    width: 15%;
-}
-.header-list th:nth-child(5){
-    width: 10%;
-}
-.header-list th:nth-child(6){
-    width: 12%;
-}
-.header-list tr{
-    height: 50px;
+    font-weight: 600;
 }
 .header-list tr:hover{
     background-color: #fafafa;
 }
+.header-list th, td{
+    border-bottom: 1px solid #f2f2f2;
+    word-break:break-all;
+    padding: 10px 5px 10px 5px;
+}
+
+
+/*th 크기*/
+.header-list th:nth-child(1){
+    width: 8%;
+}
+.header-list th:nth-child(3){
+    width: 17%;
+}
+.header-list th:nth-child(4){
+    width: 13%;
+}
+.header-list th:nth-child(5){
+    width: 12%;
+}
+.header-list th:nth-child(6){
+    width: 10%;
+}
+
+
+/*QnA 상태 버튼*/
 #qnaTableBody .answer-btn{
     pointer-events: none;
-    width: 70%;
+    width: 80%;
 }

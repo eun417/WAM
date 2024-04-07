@@ -47,7 +47,7 @@ public class QnaApiController {
      * QnA List 조회 (Pagination)
      */
     @GetMapping
-    public ResponseEntity<PageResponse> readAllQna(@RequestParam("page") int pageNo) {
+    public ResponseEntity<PageResponse> readAllQna(@RequestParam("pageNo") int pageNo) {
         return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
     }
 
@@ -83,23 +83,13 @@ public class QnaApiController {
     }
 
     /**
-     * 검색 - 제목+내용
+     * 검색 - 제목, 내용, 작성자
      */
-    @GetMapping("/search/tc")
+    @GetMapping("/search-keyword")
     public ResponseEntity<PageResponse> searchQna(@RequestParam("search") String keyword,
-                                                  @RequestParam("page") int pageNo) {
+                                                  @RequestParam("pageNo") int pageNo) {
         return ResponseEntity.ok().body(qnaService.searchQna(keyword, pageNo));
     }
-
-    /**
-     * 검색 - 작성자
-     */
-    @GetMapping("/search/writer")
-    public ResponseEntity<PageResponse> searchQnaWriter(@RequestParam("search") String keyword,
-                                                        @RequestParam("page") int pageNo) {
-        return ResponseEntity.ok().body(qnaService.searchQnaWriter(keyword, pageNo));
-    }
-
 
     /**
      * QnA - 이미지 업로드

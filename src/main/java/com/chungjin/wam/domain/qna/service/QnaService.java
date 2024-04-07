@@ -115,13 +115,6 @@ public class QnaService {
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
     }
 
-    ////로그인한 사용자가 작성자인지 확인하는 함수
-    private void checkQnaWriter(Long writerId, Long loginMemberId) {
-        if (!loginMemberId.equals(writerId)) {
-            throw new CustomException(FORBIDDEN);
-        }
-    }
-
     /**
      * QnA 삭제
      */
@@ -136,6 +129,13 @@ public class QnaService {
         qnaRepository.delete(qna);
     }
 
+    ////로그인한 사용자가 작성자인지 확인하는 함수
+    private void checkQnaWriter(Long writerId, Long loginMemberId) {
+        if (!loginMemberId.equals(writerId)) {
+            throw new CustomException(FORBIDDEN);
+        }
+    }
+
     /**
      * QnA 답변 등록
      */
@@ -148,21 +148,12 @@ public class QnaService {
     }
 
     /**
-     * 검색 - 제목+내용
+     * 검색 - 제목, 내용, 작성자
      */
     public PageResponse searchQna(String keyword, int pageNo) {
         //한 페이지당 10개 항목 표시
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
-        return getQnaPageResponse(qnaRepository.findByTitleOrContentContaining(keyword, pageable), pageNo);
-    }
-
-    /**
-     * 검색 - 작성자
-     */
-    public PageResponse searchQnaWriter(String keyword, int pageNo) {
-        //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("qnaId").descending());
-        return getQnaPageResponse(qnaRepository.findByNicknameContaining(keyword, pageable), pageNo);
+        return getQnaPageResponse(qnaRepository.findByTitleOrContentOrNicknameContaining(keyword, pageable), pageNo);
     }
 
     //qnaId로 Qna 객체 조회하는 함수

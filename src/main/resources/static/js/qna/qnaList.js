@@ -1,10 +1,4 @@
-/*qnaDetail 페이지 이동*/
-function goToQnaDetail(event, qnaId) {
-    event.preventDefault(); //기본 이벤트 실행 방지
-    window.location.href = "/qna/detail/" + qnaId;
-}
-
-/*qnaWrite 페이지 이동*/
+/*qnaWrite 페이지 이동(create)*/
 function goToQnaWrite(event) {
     event.preventDefault(); //기본 이벤트 실행 방지
 
@@ -21,8 +15,8 @@ function goToQnaWrite(event) {
 }
 
 /*qnaSearch 페이지 이동*/
-document.getElementById('search-btn').addEventListener('click', function() {
-    var selectValue = document.querySelector('.select').value;
+document.getElementById('searchBtn').addEventListener('click', function() {
     var searchValue = document.querySelector('.search').value;
-    window.location.href = "/qna/search?select=" + selectValue + "&search=" + searchValue;
+    console.log(searchValue);
+    window.location.href = "/qna/search?q=" + searchValue;
 });

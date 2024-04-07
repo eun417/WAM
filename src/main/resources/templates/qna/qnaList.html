@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/qna/qnaList.css}">
-    <title>QnAList</title>
+    <title>QnA 목록</title>
 </head>
 <body>
 <!-- header 영역 참조 -->
@@ -15,13 +15,8 @@
         <div class="list-header"><span>QnA</span></div>
         <div class="inputBox">
             <div class="searchBox">
-                <select class="select">
-                    <option value="tc">제목+내용</option>
-                    <option value="writer">작성자</option>
-                </select>
-                <!-- QnA 검색창 name : QnAsearch -->
-                <input type="text" class="search input-form" name="QnAsearch" placeholder="내용을 입력해주세요.">
-                <button id="search-btn" class="btn bc3">Search</button>
+                <input type="text" class="search input-form" placeholder="검색어를 입력해주세요.">
+                <button id="searchBtn" class="btn bc4">검색</button>
             </div>
             <button class="writer-btn btn bc6" onclick="goToQnaDetail(event, ${qnaId})">
                 <div onclick="goToQnaWrite(event)">
@@ -33,7 +28,7 @@
         <div class="tableBox">
             <table id="qnaTable" class="header-list">
                 <tr>
-                    <th>번호</th>
+                    <th>No</th>
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일</th>
@@ -55,49 +50,48 @@
 <script th:src="@{/js/common/pagination.js}"></script>
 <script th:src="@{/js/qna/qnaList.js}"></script>
 <script>
+    window.onload = function() {
+        loadList(0);
+    };
+
     /*QnA 목록 조회*/
-    loadList(0);   //첫 번째 페이지 QnA 목록 불러옴
+    function loadList(pageNo) {
+        axios.get('/qna', {
+            params: {
+                pageNo: pageNo
+            }
+        }).then(function(response) {
+            var qnaList = response.data.content;
+            var tableBody = document.querySelector('#qnaTableBody');
 
-    //페이지 로드 시 QnA 목록을 테이블에 표시하는 함수
-    function loadList(page) {
-        axios.get(`/qna?page=${page}`)
-            .then(function(response) {
-                var qnaList = response.data.content;
-                var tableBody = document.querySelector('#qnaTableBody');
+            //DocumentFragment 생성
+            var fragment = new DocumentFragment();
 
-                // DocumentFragment 생성
-                var fragment = new DocumentFragment();
+            qnaList.forEach(function(qna) {
+                var row = `<tr>
+                            <td>${qna.qnaId}</td>
+                            <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
+                            <td>${qna.nickname}</td>
+                            <td>${qna.createDate}</td>
+                            <td>${qna.viewCount}</td>
+                            <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                        </tr>`;
+                var tr = document.createElement('tr');
+                tr.innerHTML = row;
 
-                qnaList.forEach(function(qna) {
-                    var row = `<tr>
-                                <td>${qna.qnaId}</td>
-                                <td id="qnaDetail" class="title-hover">${qna.title}</td>
-                                <td>${qna.nickname}</td>
-                                <td>${qna.createDate}</td>
-                                <td>${qna.viewCount}</td>
-                                <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
-                            </tr>`;
-                    var tr = document.createElement('tr');
-                    tr.innerHTML = row;
-
-                    //QnA 상세 조회
-                    tr.querySelector('#qnaDetail').addEventListener('click', function(event) {
-                        goToQnaDetail(event, qna.qnaId);
-                    });
-
-                    fragment.appendChild(tr);
-                });
-
-                // 테이블 내용을 한 번에 추가
-                tableBody.innerHTML = '';
-                tableBody.appendChild(fragment);
-
-                // 페이지 내비게이션 업데이트
-                renderPagination(response.data.totalPages, page);
-            })
-            .catch(function(error) {
-                console.error(error);
+                fragment.appendChild(tr);
             });
+
+            //테이블 내용을 한 번에 추가
+            tableBody.innerHTML = '';
+            tableBody.appendChild(fragment);
+
+            //페이지 내비게이션 업데이트
+            renderPagination(response.data.totalPages, pageNo);
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
     }
 </script>
 </body>

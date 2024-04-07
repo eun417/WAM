@@ -4,27 +4,24 @@
     margin-bottom: 30px;
 }
 
+
+/*이미지*/
 .D-left-box {
     float: left; /* 왼쪽으로 정렬 */
     border-radius: 100%;
     background-color: #f0f0f0;
     height: 80px;
     width: 80px;
-}
-.D-left-box {
-    border-radius: 100%;
-    background-color: #f0f0f0;
-    overflow:hidden;
-    margin:0 auto;
     margin-right: 15px;
 }
-
 .D-left-box img {
     width:100%;
     height:100%;
     object-fit:cover;
 }
 
+
+/*사용자, 게시글 정보*/
 .D-right-box {
     overflow: hidden; /* 자식 요소의 float 속성에 영향을 받지 않도록 처리 */
     align-items: center;
@@ -52,9 +49,12 @@
     margin-left: 10px;
     margin-right: 5px;
 }
+
+
+/*제목*/
 .D-title{
     font-size: 30px;
-    font-weight: bolder;
+    font-weight: 600;
 }
 .D-titleBox{
     width: 100%;
@@ -63,6 +63,9 @@
     padding-bottom: 10px;
     border-bottom: 3px solid #f0f0f0;
 }
+
+
+/*본문*/
 .D-textarea{
     padding: 50px 10px 130px 10px;
     border-bottom: 3px solid #f0f0f0;
@@ -72,6 +75,7 @@
 .D-textarea img{
     max-width: 1150px;
 }
+/*작성자 버튼*/
 .D-writer{
     display: flex;
     justify-content: right;
@@ -83,6 +87,7 @@
 .D-writer>button{
     width: 8%;
 }
+/*답변 작성 버튼*/
 .btn-answer{
     margin-top: 30px;
     min-width: 800px;
@@ -90,16 +95,12 @@
 .D-answer .btn{
     width: 100%;
 }
+/*답변 상태 버튼*/
 .answer-comp{
     pointer-events: none;
 }
-.answer-nyet{
-    border-radius: 8px;
-    font-weight: 700;
-    background-color: #BFBFBF;
-    color: #ffffff;
-    padding: 6px;
-}
+
+
 /*답변 입력창*/
 .D-answer>.input-form{
     margin-top: 50px;
