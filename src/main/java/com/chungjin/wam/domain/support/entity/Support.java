@@ -39,8 +39,6 @@ public class Support extends BaseTimeEntity {
     @Column(name = "first_img")
     private String firstImg;
 
-    private String subheading;
-
     private String content;
 
     @Column(name = "comment_check")

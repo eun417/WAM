@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- iamport.payment.js -->
     <script type="text/javascript" th:src="@{https://cdn.iamport.kr/js/iamport.payment-1.2.0.js}"></script>
-    <title>donationDetail</title>
+    <title>wam/support</title>
 <body>
 <!-- header 영역 참조 -->
 <header th:insert="~{/common/header :: header}"></header>
@@ -22,7 +22,7 @@
             <div class="body1-wrapper">
                 <input type="hidden" id="supportId">
                 <div class="donation-img-box">
-                    <div class="donation-status start">후원 시작</div>
+                    <div class="donation-status"></div>
                     <div class="donation-img"><img src="#" class="first-pic" alt="animal"></div>
                 </div>
                 <div class="deadline">
@@ -31,29 +31,28 @@
                 </div>
                 <div class="amount">
                     <div class="donation-tag">
-                        <a class="tag-name home-btn"></a>
+                        <button class="tag-name home-btn"></button>
                     </div>
                     <div class="donation-amount">
                         <p class="donation-amount"><span></span> 원</p>
                         <p class="goal-amount">목표 금액 <span></span>원</p>
                     </div>
                 </div>
-                <div class="bottomline">
-                    <div class="bottomline-left">
-                        <div class="donation-icon"><span id="likeBtn" class="material-symbols-outlined" onclick="toggleLike()">favorite</span><span class="like-count"></span></div>
+                <div class="bottom-line">
+                    <div class="bottom-line-left">
+                        <div class="donation-icon"><span id="likeBtn" class="material-symbols-outlined">favorite</span><span class="like-count"></span></div>
                         <span> | </span>
                         <div class="donation-icon"><span class="material-symbols-outlined">share</span><span>공유하기</span></div>
                     </div>
-                    <div class="bottomline-right">
+                    <div class="bottom-line-right">
                         <a id="impKey" th:href="${@environment.getProperty('imp.code')}"></a>
-                        <button class="support-btn btn bc5" onclick="promptAmount()">후원하기</button>
+                        <button id="paymentBtn" class="support-btn btn bc5">후원하기</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="detail-body-2">
             <div class="body2-wrapper">
-                <div class="subheading"></div>
                 <div class="content"></div>
             </div>
             <div class="writer" style="display:none;">
@@ -64,7 +63,7 @@
         <div class="detail-body-3" style="display:none;">
             <div class="body3-wrapper">
                 <div class="CommentWrite">
-                    <p>댓글 작성하기</p>
+                    <p class="bold">댓글 작성하기</p>
                     <div class="C-textarea">
                         <textarea class="comment-content input-form" placeholder="응원의 메세지를 남겨주세요."></textarea>
                     </div>
@@ -85,45 +84,60 @@
 <!-- footer 영역 참조 -->
 <footer th:insert="~{/common/footer :: footer}"></footer>
 
+<script th:src="@{/js/donation/donationDetail.js}"></script>
 <script th:src="@{/js/donation/payment.js}"></script>
 <script th:src="@{/js/donation/comment.js}"></script>
 <script th:src="@{/js/donation/like.js}"></script>
-<script th:src="@{/js/donation/donationList.js}"></script>
 <script>
+    //로컬 스토리지에서 액세스 토큰 가져오기
+    const token = localStorage.getItem('accessToken');
+
     /*후원 상세 조회*/
     document.addEventListener('DOMContentLoaded', function() {
         const supportId = [[${supportId}]];
         console.log(supportId);
 
         //좋아요 상태 확인
-        checkLikeStatus(supportId);
+        checkLikeStatus(token, supportId);
 
         axios.get(`/support/${supportId}`)
             .then(function(response) {
                 const supportDetail = response.data;
 
+                document.title = supportDetail.title;   //페이지 제목 설정
+
                 document.querySelector('#supportId').value = supportId;
                 document.querySelector('.donation-title').textContent = supportDetail.title;
+                var donationStatusElement = document.querySelector('.donation-status');
+                if (supportDetail.supportStatus === 'START') {
+                    donationStatusElement.classList.add('start');
+                    donationStatusElement.textContent = '후원 시작';
+                } else if (supportDetail.supportStatus === 'ENDING_SOON') {
+                    donationStatusElement.classList.add('ending-soon');
+                    donationStatusElement.textContent = '종료 임박';
+                } else if (supportDetail.supportStatus === 'END') {
+                    donationStatusElement.classList.add('end');
+                    donationStatusElement.textContent = '후원 종료';
+                }
                 document.querySelector('.donation-img img').src = supportDetail.firstImg;
                 document.querySelector('.start-date').textContent = supportDetail.startDate;
                 document.querySelector('.end-date').textContent = supportDetail.endDate;
                 const animalSubjects = supportDetail.animalSubjects;
+                document.querySelector('.tag-name').setAttribute('id', animalSubjects);
                 const tagName = animalSubjects === 'mml' ? '포유류' :
                                 animalSubjects === 'bird' ? '조류' :
                                 animalSubjects === 'amnrp' ? '양서파충류' :
                                 animalSubjects === 'fishes' ? '어류' :
                                 animalSubjects === 'etc' ? 'etc' : '';
                 document.querySelector('.tag-name').textContent = '#' + tagName;
-                document.querySelector('.tag-name').setAttribute('id', tagName);
                 document.querySelector('.donation-amount span').textContent = supportDetail.supportAmount;
                 document.querySelector('.goal-amount span').textContent = supportDetail.goalAmount;
                 document.querySelector('.like-count').textContent = supportDetail.supportLike;
-                document.querySelector('.subheading').textContent = supportDetail.subheading;
                 document.querySelector('.content').innerHTML = supportDetail.content; //HTML로 렌더링
                 document.querySelector('.comment-count').textContent = supportDetail.comments.length;
 
                 //로그인 사용자에 따라 다른 버튼 보이기
-                showUpDelBtnForWriter(supportDetail.memberId);
+                showUpDelBtnForWriter(token, supportDetail.memberId);
 
                 //댓글 여부에 따라 댓글 보이기&숨기기
                 if (supportDetail.commentCheck) {
@@ -156,45 +170,18 @@
                 });
 
                 //댓글 삭제 함수 실행
-                deleteComment(supportId);
+                deleteComment(token, supportId);
             })
             .catch(function(error) {
                 console.error(error);
             });
     });
 
-    //요소를 보이게 하거나 숨기는 함수
-    function showHideElement(element) {
-        var element = document.querySelector(element);
-        if (element.style.display === 'none') {
-            element.style.display = 'block';
-        } else {
-            element.style.display = 'none';
-        }
-    }
 
-    //로그인 사용자가 작성자인지 확인, 수정&삭제 버튼 보이는 함수
-    function showUpDelBtnForWriter(memberId) {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            //payload에서 데이터 가져오기
-            const payload = getPayloadData(token);
-            console.log('login memberId:'+payload.sub);
-
-            //memberId가 같으면 버튼 보이기
-            if (payload.sub == memberId) {
-                showHideElement('.writer');
-            }
-        }
-    }
-
-    /*supportWrite 페이지 이동*/
+    /*supportWrite 페이지 이동(update)*/
     document.getElementById('updateDonationBtn').addEventListener('click', function() {
         var supportId = document.getElementById('supportId').value;
         console.log('수정할 후원: ' + supportId);
-
-        //로컬 스토리지에서 액세스 토큰 가져오기
-        const token = localStorage.getItem('accessToken');
 
         if (!token) {
             alert('로그인 후 이용해주세요.');
@@ -205,13 +192,38 @@
         window.location.href = "/support/update/" + supportId;
     });
 
+
+    /*좋아요 상태에 따라 생성 or 삭제*/
+    document.getElementById('likeBtn').addEventListener('click', function() {
+        var likeBtn = document.getElementById('likeBtn');
+        const supportId = document.getElementById('supportId').value;
+
+        if (likeBtn.classList.contains('liked')) {
+            //이미 좋아요를 누름 -> 좋아요 취소
+            deleteLike(token, supportId);
+
+        } else {
+            //좋아요를 누르지 않음 -> 좋아요 생성
+            createLike(token, supportId);
+        }
+    });
+
+    /*후원하기(결제) 클릭*/
+    document.getElementById('paymentBtn').addEventListener('click', function() {
+        promptAmount(token);
+    });
+
+    /*댓글 작성 클릭*/
+    document.getElementById('createCommentBtn').addEventListener('click', function() {
+        createComment(token);
+    });
+
+
     /*후원 삭제*/
     document.getElementById('deleteDonationBtn').addEventListener('click', function() {
         var supportId = document.getElementById('supportId').value;
         console.log('삭제할 후원: ' + supportId);
 
-        //토큰을 로컬 스토리지에서 가져오기
-        const token = localStorage.getItem('accessToken');
         if (!token) {
             alert("로그인 후 이용해주세요.");
             window.location.href = "/support/detail/" + supportId;
@@ -225,7 +237,7 @@
                     'Authorization': 'Bearer ' + token
                 }
             }).then(function(response) {
-                console.log(response.data);
+                console.log(response);
                 alert(response.data);
                 window.location.href = "/support/list";
             }).catch(function(error) {

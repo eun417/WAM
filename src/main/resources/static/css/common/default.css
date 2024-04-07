@@ -195,6 +195,17 @@ span.brand3 {
     transition: 0.2s ease-out;
 }
 
+/*후원 리스트*/
+.body-wrapper>.tag-box{
+    border: none;
+    margin: 0;
+    justify-content: left;
+    padding-bottom: 15px;
+}
+.donation-list-box>.donation-list{
+    margin-top: 35px;
+}
+
 /*태그 후원*/
 .tag-donation-box>.content-box,
 .qna-box>.content-box{

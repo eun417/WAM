@@ -38,8 +38,10 @@ public class SupportService {
 
     private final SupportRepository supportRepository;
     private final MemberRepository memberRepository;
+
     private final CommentService commentService;
     private final S3Service s3Service;
+
     private final SupportMapper supportMapper;
 
     /**
@@ -60,7 +62,6 @@ public class SupportService {
                 .startDate(supportReq.getStartDate())
                 .endDate(supportReq.getEndDate())
                 .firstImg(imgPath)
-                .subheading(supportReq.getSubheading())
                 .content(supportReq.getContent())
                 .commentCheck(supportReq.getCommentCheck())
                 .member(member)
@@ -91,7 +92,6 @@ public class SupportService {
                 .startDate(support.getStartDate())
                 .endDate(support.getEndDate())
                 .firstImg(support.getFirstImg())
-                .subheading(support.getSubheading())
                 .content(support.getContent())
                 .supportLike(support.getSupportLike())
                 .supportAmount(support.getSupportAmount())
@@ -124,7 +124,7 @@ public class SupportService {
         Support support = getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
+        checkSupportWriter(support.getMember().getMemberId(), memberId);
 
         //기존 대표 이미지를 삭제한 경우
         if (updateSupportReq.getFirstImgDeleted()) {
@@ -152,9 +152,7 @@ public class SupportService {
         Support support = getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) {
-            throw new CustomException(FORBIDDEN);
-        }
+        checkSupportWriter(support.getMember().getMemberId(), memberId);
 
         //S3에서 파일 삭제
         s3Service.deleteImage(support.getFirstImg());
@@ -163,11 +161,11 @@ public class SupportService {
     }
 
     /**
-     * 검색 - 제목+내용
+     * 검색 - 제목, 내용, 작성자
      */
     public PageResponse searchSupport(String keyword, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-        return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(keyword, pageable), pageNo);
+        return getSupportPageResponse(supportRepository.findByTitleOrContentOrNicknameContaining(keyword, pageable), pageNo);
     }
 
     /**
@@ -178,58 +176,23 @@ public class SupportService {
         return getSupportPageResponse(supportRepository.findByAnimalSubjectsContaining(keyword, pageable), pageNo);
     }
 
-    /**
-     * memberId로 Member 객체 조회
-     */
+    //memberId로 Member 객체 조회
     private Member getMember (Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
-    /**
-     * supportId로 Support 객체 조회
-     */
+    //supportId로 Support 객체 조회
     private Support getSupport (Long supportId) {
         return supportRepository.findById(supportId)
                 .orElseThrow(() -> new CustomException(SUPPORT_NOT_FOUND));
     }
 
-    /**
-     * Entity -> Dto
-     */
-    public SupportResponseDto convertToDto(Support support) {
-        return SupportResponseDto.builder()
-                .supportId(support.getSupportId())
-                .title(support.getTitle())
-                .nickname(support.getMember().getNickname())
-                .supportStatus(support.getSupportStatus())
-                .firstImg(support.getFirstImg())
-                .goalAmount(support.getGoalAmount())
-                .supportAmount(support.getSupportAmount())
-                .createDate(support.getCreateDate())
-                .commentCheck(support.getCommentCheck())
-                .build();
-    }
-
-    /**
-     * EntityList -> DtoList
-     * map()으로 각 Support를 SupportResponseDto로 변환
-     * collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
-     */
-    public List<SupportResponseDto> convertToDtoList(List<Support> supports) {
-        return supports.stream()
-                .map(support -> SupportResponseDto.builder()
-                        .supportId(support.getSupportId())
-                        .title(support.getTitle())
-                        .nickname(support.getMember().getNickname())
-                        .supportStatus(support.getSupportStatus())
-                        .firstImg(support.getFirstImg())
-                        .goalAmount(support.getGoalAmount())
-                        .supportAmount(support.getSupportAmount())
-                        .createDate(support.getCreateDate())
-                        .commentCheck(support.getCommentCheck())
-                        .build())
-                .collect(Collectors.toList());
+    //로그인한 사용자가 작성자인지 확인하는 함수
+    private void checkSupportWriter(Long writerId, Long loginMemberId) {
+        if (!loginMemberId.equals(writerId)) {
+            throw new CustomException(FORBIDDEN);
+        }
     }
 
     //Pagination 결과 함수
@@ -248,6 +211,48 @@ public class SupportService {
                 .totalPages(supportPage.getTotalPages()) //전체 페이지 수
                 .last(supportPage.isLast())  //마지막 페이지 여부
                 .build();
+    }
+
+    //Entity -> Dto
+    public SupportResponseDto convertToDto(Support support) {
+        return SupportResponseDto.builder()
+                .supportId(support.getSupportId())
+                .title(support.getTitle())
+                .nickname(getMemberNickname(support))
+                .supportStatus(support.getSupportStatus())
+                .firstImg(support.getFirstImg())
+                .goalAmount(support.getGoalAmount())
+                .supportAmount(support.getSupportAmount())
+                .createDate(support.getCreateDate())
+                .commentCheck(support.getCommentCheck())
+                .build();
+    }
+
+    /*
+     * EntityList -> DtoList
+     * map()으로 각 Support를 SupportResponseDto로 변환
+     * collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
+     */
+    public List<SupportResponseDto> convertToDtoList(List<Support> supports) {
+        return supports.stream()
+                .map(support -> SupportResponseDto.builder()
+                        .supportId(support.getSupportId())
+                        .title(support.getTitle())
+                        .nickname(getMemberNickname(support))
+                        .supportStatus(support.getSupportStatus())
+                        .firstImg(support.getFirstImg())
+                        .goalAmount(support.getGoalAmount())
+                        .supportAmount(support.getSupportAmount())
+                        .createDate(support.getCreateDate())
+                        .commentCheck(support.getCommentCheck())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    //닉네임 null 처리하는 함수
+    private String getMemberNickname(Support support) {
+        Member member = support.getMember();
+        return member != null ? member.getNickname() : "(알 수 없음)";
     }
 
 }

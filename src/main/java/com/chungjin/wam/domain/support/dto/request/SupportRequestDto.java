@@ -24,7 +24,6 @@ public class SupportRequestDto {
     private String startDate;
     @NotBlank(message = "종료일을 선택해주세요.")
     private String endDate;
-    private String subheading;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
     private Boolean commentCheck;

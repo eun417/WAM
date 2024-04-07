@@ -2,6 +2,8 @@
     margin-bottom: 20px;
 }
 
+
+/*input*/
 .body-wrapper .input-box{
     display: flex;
     justify-content: left;
@@ -22,6 +24,8 @@
     align-items: center;
 }
 
+
+/*input-box*/
 .input-box>p,
 .input-box>div>span,
 .input-box>span,
@@ -36,12 +40,12 @@
 .input-box>.input-form{
     width: 87%;
 }
-
+/*동물 분류*/
 .subject-box>.select{
     width: 18%;
     cursor: pointer;
 }
-
+/*후원 기간*/
 .date-box .input-form{
     margin-right: 20px;
 }
@@ -54,11 +58,11 @@
     width: 35%;
     color: #7a7a7a;
 }
-
+/*내용*/
 .text-editor{
     width: 87%;
 }
-
+/*댓글 옵션*/
 .comment-check{
     color: #cccccc;
     cursor: pointer;

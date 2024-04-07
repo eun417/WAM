@@ -105,10 +105,10 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
         const keyword = btn.id; //클릭된 버튼의 id 값을 keyword로 설정
 
-        axios.get('/support/search/tag', {
+        axios.get('/support/search-tag', {
             params: {
                 keyword: keyword,
-                page: 0
+                pageNo: 0
             }
         }).then(function(response) {
             const supportList = response.data.content;

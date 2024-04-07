@@ -1,5 +1,7 @@
 package com.chungjin.wam.domain.support.repository;
 
+import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
+import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
@@ -20,14 +22,16 @@ public interface SupportRepository extends JpaRepository<Support, Long> {
     Page<Support> findByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
     //제목+내용을 기준으로 후원을 페이지별로 조회
-    @Query("SELECT s FROM Support s WHERE s.title LIKE %:keyword% OR s.content LIKE %:keyword%")
-    Page<Support> findByTitleOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT s FROM Support s WHERE s.title LIKE %:keyword% OR s.content LIKE %:keyword% OR s.member.nickname LIKE %:keyword%")
+    Page<Support> findByTitleOrContentOrNicknameContaining(@Param("keyword") String keyword, Pageable pageable);
 
     //동물 분류(태그)를 기준으로 후원을 페이지별로 조회
     @Query("SELECT s FROM Support s WHERE CAST(s.animalSubjects AS string) LIKE %:keyword%")
     Page<Support> findByAnimalSubjectsContaining(@Param("keyword") String keyword, Pageable pageable);
 
     //현재 날짜 기준으로 마감일이 24시간 이내인 후원 조회
-    List<Support> findByDueDateBeforeAndStatusNot(String endDate, SupportStatus status);    //endDate 보다 이전, status 가 특정 값이 아닌 엔티티 검색
+    List<Support> findByEndDateBeforeAndSupportStatusNot(String endDate, SupportStatus status);    //endDate 보다 이전, status 가 특정 값이 아닌 엔티티 검색
 
+    //후원 상태를 기준으로 모든 후원 조회
+    List<Support> findBySupportStatus(SupportStatus supportStatus);
 }

@@ -29,7 +29,6 @@ public class SupportDetailDto {
     private String startDate;
     private String endDate;
     private String firstImg;
-    private String subheading;
     private String content;
     private Long supportLike;
     private Long supportAmount;

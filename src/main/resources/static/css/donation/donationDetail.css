@@ -28,9 +28,9 @@ body>.donationDetail-wrapper{
     gap: 8px;
 }
 .bold{
-    font-weight: 700;
+    font-weight: 600;
 }
-
+/*후원금*/
 .amount{
     display: flex;
     justify-content: space-between;
@@ -41,6 +41,7 @@ body>.donationDetail-wrapper{
     border: none;
     background-color: rgb(243, 243, 243);
     padding: 10px 20px 10px 20px;
+    cursor: default;
 }
 .donation-amount{
     text-align: right;
@@ -56,12 +57,12 @@ body>.donationDetail-wrapper{
     font-size: 18px;
     font-weight: 600;
 }
-
-.bottomline{
+/*좋아요, 공유, 결제*/
+.bottom-line{
     display: flex;
     justify-content: space-between;
 }
-.bottomline-left{
+.bottom-line-left{
     display: flex;
     gap: 15px;
     align-items: flex-end;
@@ -73,7 +74,7 @@ body>.donationDetail-wrapper{
 .donation-icon>#likeBtn{
     cursor: pointer;
 }
-.bottomline-right{
+.bottom-line-right{
     width: 60%;
 }
 .support-btn{
@@ -90,8 +91,9 @@ body>.donationDetail-wrapper{
 .body2-wrapper{
     text-align: justify;
     margin-top: 50px;
-    padding: 50px 10px 100px 10px;
+    padding: 50px 10px 80px 10px;
     border-top: 3px solid #EDEDED;
+    border-bottom: 3px solid #EDEDED;
     /*min-height: 200px;*/
 }
 .body2-wrapper img{
@@ -105,7 +107,6 @@ body>.donationDetail-wrapper{
 }
 .CommentWrite>p{
     font-size: 22px;
-    font-weight: 700;
 }
 .C-textarea{
     margin: 10px 0 10px 0;
@@ -113,7 +114,7 @@ body>.donationDetail-wrapper{
 .C-btn{
     width: 100%;
 }
-
+/*댓글 리스트*/
 .C-listHeader{
     display: flex;
     gap: 5px;
@@ -128,7 +129,7 @@ body>.donationDetail-wrapper{
 .comment-count{
     color: #996F5E;
 }
-
+/*댓글 박스*/
 .commentBox{
     display: flex;
     gap: 15px;
@@ -142,12 +143,7 @@ body>.donationDetail-wrapper{
     justify-content: space-between;
     position: relative;
 }
-.commentBox-LTR{
-    font-weight: 600;
-}
-.commentBox-LTL *{
-    cursor: pointer;
-}
+
 .edit-box{
     border: 1px solid #445D48;
     border-radius: 10px;
@@ -162,6 +158,13 @@ body>.donationDetail-wrapper{
 }
 .edit-box>div{
     padding: 10px;
+    cursor: pointer;
+}
+
+.commentBox-LTR{
+    font-weight: 600;
+}
+.commentBox-LTL *{
     cursor: pointer;
 }
 .commentBox-LM{

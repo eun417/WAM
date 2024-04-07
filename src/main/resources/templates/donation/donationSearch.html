@@ -3,18 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>donationSearch</title>
-    <style>
-        .body-wrapper>.tag-box{
-            border: none;
-            margin: 0;
-            justify-content: left;
-            padding-bottom: 15px;
-        }
-        .donation-list-box>.donation-list{
-            margin-top: 35px;
-        }
-    </style>
+    <title>후원 검색 결과</title>
 <body>
 <!-- header 영역 참조 -->
 <header th:insert="~{/common/header :: header}"></header>
@@ -24,21 +13,13 @@
         <div class="list-header"><span>후원하기</span></div>
         <div class="donationList-body">
             <div class="body-wrapper">
-                <div class="tag-box">
-                    <div id="mml" class="tag home-btn">#포유류</div>
-                    <div id="bird" class="tag home-btn">#조류</div>
-                    <div id="amnrp" class="tag home-btn">#양서파충류</div>
-                    <div id="fishes" class="tag home-btn">#어류</div>
-                    <div id="etc" class="tag home-btn">#etc</div>
-                </div>
                 <div class="inputBox">
                     <div class="searchBox">
-                        <!-- QnA 검색창 name : DL-search -->
-                        <input type="text" class="search input-form" name="DL-search" placeholder="검색어를 입력해주세요.">
-                        <button id="search-btn" class="btn bc3">Search</button>
+                        <input type="text" class="search input-form" placeholder="검색어를 입력해주세요.">
+                        <button id="searchBtn" class="btn bc4">검색</button>
                     </div>
                     <button class="writer-btn btn bc2">
-                        <div>
+                        <div onclick="goToSupportWrite(event)">
                             <span class="material-symbols-outlined">edit</span>
                             <span>글쓰기</span>
                         </div>
@@ -61,27 +42,19 @@
 
 <script th:src="@{/js/donation/donationList.js}"></script>
 <script>
-    /*URL에서 매개변수 추출 함수*/
-    function getQueryParams() {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const search = urlParams.get('search');
-        console.log(search);
-        return { search };
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        loadList(0);
+    });
 
     /*후원 검색 목록 조회*/
-    loadList(0);   //첫 번째 페이지 후원 목록 불러옴
-
-    //후원 검색 목록을 테이블에 표시하는 함수
-    function loadList(page) {
+    function loadList(pageNo) {
         const { search } = getQueryParams();
         document.querySelector('.search').value = search;   //검색창에 검색어 설정
 
-        axios.get('/support/search/tc', {
+        axios.get('/support/search-keyword', {
             params: {
                 keyword: search,
-                page: 0
+                pageNo: pageNo
             }
         })
         .then(function(response) {
@@ -92,8 +65,10 @@
                 return;
             }
 
-            //서버로부터 받은 데이터를 테이블에 추가
             var searchList = response.data.content;
+
+            //DocumentFragment 생성
+            var fragment = document.createDocumentFragment();
 
             searchList.forEach(function(support) {
                 //graph의 width 설정(목표금액의 몇 퍼센트 모였는지 보여줌)
@@ -121,16 +96,31 @@
                                     <p class="support-amount"><span>${support.supportAmount}</span>원</p>
                                 </div>
                             </div>`;
+                var div = document.createElement('div');
+                div.innerHTML = row;
 
-                document.querySelector('.donation-line').innerHTML += row;
+                fragment.appendChild(div.firstChild);
             });
 
+            //DOM에 fragment 추가
+            var donationLine = document.querySelector('.donation-line');
+            donationLine.appendChild(fragment);
+
             //페이지 내비게이션 업데이트
-            //renderPagination(response.data.totalPages, page);
+            //renderPagination(response.data.totalPages, pageNo);
         })
         .catch(function(error) {
             console.error(error);
         });
+    }
+
+    //URL에서 매개변수 추출 함수
+    function getQueryParams() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const search = urlParams.get('q');
+        console.log(search);
+        return { search };
     }
 </script>
 </body>

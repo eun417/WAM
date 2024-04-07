@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/support")
 public class SupportController {
@@ -34,9 +32,8 @@ public class SupportController {
      * 후원 작성폼
      */
     @GetMapping({"/write", "/update/{supportId}"})
-    public String goSupportWrite(@PathVariable("supportId") Optional<Long> supportId, Model model) {
-        //supportId 생략 위해 Optional 사용
-        if (supportId.isPresent()) {
+    public String goSupportWrite(@PathVariable(value = "supportId", required = false) Long supportId, Model model) {
+        if (supportId != null) {
             model.addAttribute("supportId", supportId);
         }
         return "donation/donationWrite";
@@ -46,7 +43,7 @@ public class SupportController {
      * 검색
      */
     @GetMapping("/search")
-    public String goSupportSearch(@RequestParam("search") String search) {
+    public String goSupportSearch(@RequestParam("q") String search) {
         return "donation/donationSearch";
     }
 

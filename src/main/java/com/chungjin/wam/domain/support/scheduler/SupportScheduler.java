@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static com.chungjin.wam.domain.support.entity.SupportStatus.END;
-import static com.chungjin.wam.domain.support.entity.SupportStatus.ENDING_SOON;
+import static com.chungjin.wam.domain.support.entity.SupportStatus.*;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class SupportScheduler {
         String twentyFourHoursAfter = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
         //24시간 이내의 후원을 찾아 상태를 변경
-        List<Support> expiringSupports = supportRepository.findByDueDateBeforeAndStatusNot(twentyFourHoursAfter, SupportStatus.END);
+        List<Support> expiringSupports = supportRepository.findByEndDateBeforeAndSupportStatusNot(twentyFourHoursAfter, END);
 
         for (Support support : expiringSupports) {
             support.updateSupportStatus(ENDING_SOON);   //"종료임박"으로 수정

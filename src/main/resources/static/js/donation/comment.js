@@ -1,17 +1,15 @@
 /*댓글 생성*/
-document.getElementById('createCommentBtn').addEventListener('click', function() {
+function createComment(token) {
+    if (!token) {
+        alert("로그인 후 이용해주세요.")
+    }
+
+    //CommentRequestDto 객체 생성
     const supportId = document.getElementById('supportId').value;
     const content = document.querySelector('.comment-content').value;
 
-    //CommentRequestDto 객체 생성
     const commentReq = {
         content: content
-    }
-
-    //토큰을 로컬 스토리지에서 가져오기
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        alert("로그인 후 이용해주세요.")
     }
 
     axios.post(`/support/${supportId}/comment`, commentReq, {
@@ -25,19 +23,17 @@ document.getElementById('createCommentBtn').addEventListener('click', function()
     })
     .catch(function(error) {
         console.error(error);
-        alert("댓글 작성에 실패했습니다.");
+        alert(error.response.data.message);
     });
-});
+}
 
 /*댓글 삭제 함수*/
-function deleteComment(supportId) {
+function deleteComment(token, supportId) {
     document.querySelectorAll('.delete-comment-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var commentId = this.parentNode.querySelector('.commentId').value;
             console.log('commentId:'+commentId);
 
-            //토큰을 로컬 스토리지에서 가져오기
-            const token = localStorage.getItem('accessToken');
             if (!token) {
                 alert("로그인 후 이용해주세요.")
             }

@@ -12,7 +12,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
     <!-- css -->
     <link rel="stylesheet" th:href="@{/css/donation/donationWrite.css}">
-    <title>donationWrite</title>
+    <title>후원글 작성하기</title>
 <body>
 <!-- header 영역 참조 -->
 <header th:insert="~{/common/header :: header}"></header>
@@ -25,7 +25,7 @@
         </div>
         <div class="detail-body">
             <div class="body-wrapper">
-                <input type="hidden" id="supportId">
+                <input type="hidden" id="supportId" th:value="${supportId}">
                 <div class="title-box input-box">
                     <p>제목</p>
                     <input type="text" id="title" class="input-form" placeholder="제목을 입력해주세요" required>
@@ -65,10 +65,6 @@
                         <div class="img-preview"></div>
                     </div>
                 </div>
-                <div class="subheading-box input-box">
-                    <p>소제목</p>
-                    <input type="text" id="subheading" class="input-form" placeholder="소제목을 입력해주세요" required>
-                </div>
                 <div class="content-box input-box">
                     <p>내용</p>
                     <div class="text-editor">
@@ -94,93 +90,158 @@
 <script th:src="@{/js/common/summernote.js}"></script>
 <script th:src="@{/js/donation/donationWrite.js}"></script>
 <script>
-    /*달력 설정*/
-    var today = new Date().toISOString().substring(0, 10);
-    document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
-    document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
-    document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+    document.addEventListener('DOMContentLoaded', function() {
+        /*달력 설정*/
+        var today = new Date().toISOString().substring(0, 10);
+        document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
+        document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
+        document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
 
+        /*파일 선택 -> 파일 이름 설정*/
+        var fileInput = document.getElementById('firstImg');
 
-    /*댓글 옵션 선택*/
-    document.getElementById('commentOption').addEventListener('click', function() {
-        const isCommentCheck = checkCommentOption();
-
-        if (isCommentCheck) {
-            this.classList.remove('active-comment-check');
-        } else {
-            this.classList.add('active-comment-check');
-        }
-    });
-
-    //댓글 허용 여부 반환 함수
-    function checkCommentOption() {
-        const commentOption = document.getElementById('commentOption');
-        return commentOption.classList.contains('active-comment-check');
-    }
-
-
-    getSupportDetail();
-    /*수정폼인 경우 후원 데이터를 가져오는 함수*/
-    function getSupportDetail() {
-        const supportId = [[${supportId}]];
-        console.log('수정할 후원: ' + supportId);
-        document.getElementById('supportId').value = supportId;
-        //supportId가 있는 경우에만 서버로부터 데이터 조회
-        if (supportId !== null) {
-            //작성폼, 수정폼에 따라 버튼 변경
-            showHideElement('#createDonationBtn');
-            showHideElement('#updateDonationBtn');
-
-            axios.get('/support/' + supportId)
-                .then(function (response) {
-                    var supportDetail = response.data;
-                    fillSupportDetail(supportDetail);   //supportDetail 값을 채우는 함수 실행
-                })
-                .catch(function (error) {
-                    console.error('후원 정보를 가져오는 중 오류 발생:', error);
-                });
-        }
-    }
-
-
-    //파일 선택 input
-    var fileInput = document.getElementById('firstImg');
-
-    //파일 변경되면 이름 변경 함수
-    fileInput.addEventListener('change', function() {
-        if (fileInput.files.length > 0) {
-            var fileName = fileInput.files[0].name;
-            //파일 이름을 file-name 요소에 업데이트
-            document.querySelector('.file-name').textContent = fileName;
-        } else {
-            document.querySelector('.file-name').textContent = "파일을 선택해주세요";
-        }
-    });
-
-
-    //이미지 업로드 요청 함수
-    function uploadImage(file) {
-        var formData = new FormData();
-        formData.append('file', file);
-
-        return axios.post('/support/image-upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+        //파일 변경되면 이름 변경
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files[0]) {
+                //파일 이름을 file-name 요소에 업데이트
+                document.querySelector('.file-name').textContent = fileInput.files[0].name;
+                console.log(fileInput.files[0].name);
+            } else {
+                document.querySelector('.file-name').textContent = "파일을 선택해주세요";
             }
         });
-    }
+    });
 
-    //이미지 삭제 요청 함수
-    function deleteImage(imgUrl) {
+    //수정폼인 경우 후원 데이터 조회
+    window.onload = function() {
+        getSupportDetail();
+    };
+
+
+    //토큰을 로컬 스토리지에서 가져오기
+    const token = localStorage.getItem('accessToken');
+
+    /*후원 생성*/
+    document.getElementById('createDonationBtn').addEventListener('click', function() {
+        if (!token) {
+            alert("로그인 후 이용해주세요.");
+            window.location.href = "/support/list";
+            return;
+        }
+
+        //SupportRequestDto 객체 생성
+        const title = document.getElementById('title').value.trim();
+        const animalSubjects = document.getElementById('subject').value;
+        const goalAmount = document.getElementById('goalAmount').value.trim();
+        const startDate = dotFormatDate(document.getElementById('startDate').value);
+        const endDate = dotFormatDate(document.getElementById('endDate').value);
+        const firstImg  = document.getElementById('firstImg').files[0];
+        console.log('firstImg name:' + firstImg.name);
+        const content = $('#summernote').summernote('code');
+        console.log('content:'+content);
+        const commentCheck = checkCommentOption();
+
+        const supportReq = {
+            title: title,
+            animalSubjects: animalSubjects,
+            goalAmount: goalAmount,
+            startDate: startDate,
+            endDate: endDate,
+            content: content,
+            commentCheck: commentCheck
+        };
+
         const formData = new FormData();
-        formData.append('fileUrl', imgUrl);
+        const json = JSON.stringify(supportReq);    //객체 -> JSON 문자열
+        const blob = new Blob([json], { type: "application/json" });    //JSON 문자열 -> Blob 객체
+        formData.append('supportReq', blob);
+        formData.append('firstImg', firstImg);
 
-        return axios.post('/support/image-delete', formData, {
+        //후원 생성 요청
+        axios.post('/support/', formData, {
             headers: {
+                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'multipart/form-data'
             }
+        }).then(function(response) {
+            console.log(response);
+            alert(response.data);
+        })
+        .catch(function(error) {
+            console.error(error);
+            alert(error.response.data.message);
         });
-    }
+    });
+
+
+    /*후원 수정*/
+    document.getElementById('updateDonationBtn').addEventListener('click', function() {
+        if (!token) {
+            alert("로그인 후 이용해주세요.");
+            window.location.href = "/support/list";
+            return;
+        }
+
+        //UpdateSupportRequestDto 객체 생성
+        const title = document.getElementById('title').value.trim();
+        const animalSubjects = document.getElementById('subject').value;
+        const goalAmount = document.getElementById('goalAmount').value.trim();
+        const startDate = dotFormatDate(document.getElementById('startDate').value);
+        const endDate = dotFormatDate(document.getElementById('endDate').value);
+        const newFirstImg  = document.getElementById('newFirstImg').files[0];
+        const content = $('#summernote').summernote('code');
+        const commentCheck = checkCommentOption();
+
+        const supportId = document.getElementById('supportId').value;
+        console.log('수정할 후원: ' + supportId);
+
+        //기존 대표 이미지 삭제 여부(기본값:false)
+        var firstImgDeleted = false;
+
+        //대표 이미지를 새로 설정한 경우
+        if (newFirstImg !== undefined && newFirstImg !== null) {
+            //기존 대표 이미지 삭제
+            firstImgDeleted = true;
+        }
+
+        console.log('기존 대표 이미지 삭제 여부: ' + firstImgDeleted);
+
+        const updateSupportReq = {
+            title: title,
+            animalSubjects: animalSubjects,
+            goalAmount: goalAmount,
+            startDate: startDate,
+            endDate: endDate,
+            firstImgDeleted: firstImgDeleted,
+            content: content,
+            commentCheck: commentCheck
+        };
+
+        const formData = new FormData();
+        const json = JSON.stringify(updateSupportReq);    //객체 -> JSON 문자열
+        const blob = new Blob([json], { type: "application/json" });    //JSON 문자열 -> Blob 객체
+        formData.append('updateSupportReq', blob);
+        //newFirstImg 값이 있을 경우에만 formData에 추가
+        if (newFirstImg !== undefined && newFirstImg !== null) {
+            formData.append('newFirstImg', newFirstImg);
+        }
+
+        //후원 수정 요청
+        axios.put('/support/' + supportId, formData, {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(function(response) {
+            console.log(response);
+            alert(response.data);
+            window.location.href = "/support/detail/" + supportId;
+        })
+        .catch(function(error) {
+            console.error(error);
+            alert(error.response.data.message);
+        });
+    });
 </script>
 </body>
 </html>

@@ -27,7 +27,6 @@ public class UpdateSupportRequestDto {
     private String endDate;
     @NotNull(message = "대표이미지를 선택해주세요.")
     private Boolean firstImgDeleted;    //기존 대표 이미지 삭제 여부(삭제하면 true / 기본값 false)
-    private String subheading;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
     private Boolean commentCheck;
