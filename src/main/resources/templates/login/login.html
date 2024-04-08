@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/login/login.css}">
     <title>로그인</title>
 </head>
 <body>
@@ -24,10 +23,10 @@
             </div>
         </div>
         <div class="find-box">
-            <a href="/auth/find-account">이메일 찾기</a> | <a href="/auth/change-pw">비밀번호 찾기</a>
+            <a href="/auth/find-account">이메일 찾기</a> | <a href="/auth/change-pw">비밀번호 재설정</a>
         </div>
         <div class="submit-box">
-            <button id="loginButton" class="submit btn btn-pill bc5">로그인</button>
+            <button id="loginBtn" class="submit btn btn-pill bc5">로그인</button>
         </div>
         <div class="login-bottom">
             <div class="joinUs">아직 회원이 아니신가요? | <a href="/auth/signup/main">회원가입하기</a></div>
@@ -46,34 +45,6 @@
 </div>
 
 <script th:src="@{/js/common/checkToken.js}"></script>
-<script>
-    document.getElementById('loginButton').addEventListener('click', function() {
-        var email = document.getElementsByName('email')[0].value;
-        var password = document.getElementsByName('password')[0].value;
-
-        //LoginRequest 객체 생성
-        const loginReq = {
-            email: email,
-            password: password
-        };
-
-        //로그인 요청을 보냄
-        axios.post('/auth/login', loginReq)
-            .then(function(response) {
-                //서버 응답 처리
-                console.log(response);
-                alert('로그인 성공!');
-
-                const accessToken = response.data.accessToken;
-                const refreshToken = response.data.refreshToken;
-                saveTokenToLocalStorage(accessToken, refreshToken); //서버에서 반환한 토큰을 로컬 스토리지에 저장
-            })
-            .catch(function(error) {
-                //오류 처리
-                console.error('로그인 실패:', error);
-                alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
-            });
-    });
-</script>
+<script th:src="@{/js/login/login.js}"></script>
 </body>
 </html>

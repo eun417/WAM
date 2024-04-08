@@ -6,14 +6,11 @@ import com.chungjin.wam.domain.auth.dto.response.FindEmailResponseDto;
 import com.chungjin.wam.domain.auth.dto.response.TokenResponseDto;
 import com.chungjin.wam.domain.auth.service.AuthService;
 import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +23,7 @@ public class AuthApiController {
      * 회원가입 - 인증코드 메일 발송
      */
     @PostMapping("/signup/email/send")
-    public ResponseEntity<String> sendMail(@RequestBody @Valid EmailRequestDto emailReq) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> sendMail(@RequestBody @Valid EmailRequestDto emailReq) {
         authService.sendCodeToEmail(emailReq);
         return ResponseEntity.ok("인증 메일이 발송되었습니다.");
     }
@@ -48,14 +45,6 @@ public class AuthApiController {
         authService.signUp(signUpReq);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
-
-    /**
-     * 이메일 중복 체크
-     */
-//    @PostMapping("/email-check")
-//    public ResponseEntity<Boolean> emailCheck(@RequestBody String email) {
-//        return ResponseEntity.ok(authService.checkEmailExists(email));
-//    }
 
     /**
      * 로그인
@@ -94,7 +83,7 @@ public class AuthApiController {
      * 비밀번호 재설정 - 링크 메일 전송
      */
     @PostMapping("/change-pw/email/send")
-    public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwLinkRequestDto changePwReq) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwLinkRequestDto changePwReq) {
         authService.sendLinkToEmail(changePwReq);
         return ResponseEntity.ok("비밀번호 재설정 링크 메일이 발송되었습니다.");
     }

@@ -28,7 +28,6 @@ public enum ErrorCodeType implements ErrorCode {
     INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다."),
     ALREADY_LOGGED_OUT(HttpStatus.BAD_REQUEST, "이미 로그아웃된 회원입니다."),
 
-
     //Token
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
     TOKEN_USER_MISMATCH(HttpStatus.BAD_REQUEST, "토큰의 유저 정보가 일치하지 않습니다."),
@@ -49,7 +48,10 @@ public enum ErrorCodeType implements ErrorCode {
     DELETE_FILE_FAILED(HttpStatus.BAD_REQUEST, "이미지 삭제에 실패했습니다."),
 
     //결제
-    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "입력한 금액과 실제 결제한 금액이 다릅니다.")
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "입력한 금액과 실제 결제한 금액이 다릅니다."),
+
+    //메일
+    SEND_MAIL_FAILED(HttpStatus.BAD_REQUEST, "메일 전송에 실패했습니다."),
 
     ;
 

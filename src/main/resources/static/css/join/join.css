@@ -6,6 +6,9 @@
     padding-top: 6%;
     padding-bottom: 10%;
 }
+
+
+/*제목*/
 .join-header{
     border-bottom: rgb(177, 177, 177) solid 1px;
     text-align: center;
@@ -17,6 +20,7 @@
     font-size: 26px;
     font-weight: 600;
 }
+
 .title>span{
     font-family: 'Righteous';
     font-size: 26px;
@@ -25,6 +29,9 @@
 .join-header>div:last-child{
     margin-top: 5px;
 }
+
+
+/*본문*/
 .join-content{
     padding-top: 50px;
 }
@@ -88,6 +95,7 @@
     padding: 5px;
 }
 
+
 /* agree */
 .join-wrapper>.content-box{
     width: 60%;
@@ -130,8 +138,9 @@ label>input{
 
 .join-content>.btn{
     width: 100%;
-    margin-top: 50px;
+    margin-top: 20px;
 }
+
 
 /* joinForm */
 .password-notice{

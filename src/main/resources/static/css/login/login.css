@@ -22,6 +22,8 @@
     border-bottom: 2px solid #a8adb4;
     padding: 10px;
 }
+
+
 .dass1{
     padding-bottom: 10px;
 }
@@ -37,6 +39,7 @@ div>.input-form{
 .dass1>.email{
     position: absolute;
 }
+
 
 /* 소셜 아이디로 로그인 */
 .find-box{
