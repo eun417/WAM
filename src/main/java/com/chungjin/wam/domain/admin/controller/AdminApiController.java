@@ -25,8 +25,8 @@ public class AdminApiController {
     /**
      * 모든 회원 조회
      */
-    @GetMapping("/member/page={page}")
-    public ResponseEntity<PageResponse> readAllMember(@PathVariable(value = "page") int pageNo) {
+    @GetMapping("/member")
+    public ResponseEntity<PageResponse> readAllMember(@RequestParam(value = "pageNo") int pageNo) {
         return ResponseEntity.ok().body(memberService.readAllMember(pageNo));
     }
 
@@ -42,8 +42,8 @@ public class AdminApiController {
     /**
      * 모든 QnA 조회
      */
-    @GetMapping("/qna/page={page}")
-    public ResponseEntity<PageResponse> readAllQna(@PathVariable(value = "page") int pageNo) {
+    @GetMapping("/qna")
+    public ResponseEntity<PageResponse> readAllQna(@RequestParam(value = "pageNo") int pageNo) {
         return ResponseEntity.ok().body(qnaService.readAllQna(pageNo));
     }
 
@@ -59,8 +59,8 @@ public class AdminApiController {
     /**
      * 모든 후원 조회
      */
-    @GetMapping("/support/page={page}")
-    public ResponseEntity<PageResponse> readAllSupport(@PathVariable(value = "page") int pageNo) {
+    @GetMapping("/support")
+    public ResponseEntity<PageResponse> readAllSupport(@RequestParam(value = "pageNo") int pageNo) {
         return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
     }
 

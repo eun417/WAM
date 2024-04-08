@@ -61,16 +61,9 @@ public class AdminService {
                 .orElseThrow(() -> new CustomException(SUPPORT_NOT_FOUND));
 
         //S3에서 파일 삭제
-        deleteFileAtS3(support.getFirstImg());
+        s3Service.deleteImage(support.getFirstImg());
         //DB에서 영구 삭제
         supportRepository.delete(support);
-    }
-
-    //파일 삭제 메소드
-    public void deleteFileAtS3(String fileName) {
-        if(fileName != null) {
-            s3Service.deleteImage(fileName);
-        }
     }
 
 }

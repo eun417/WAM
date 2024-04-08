@@ -1,16 +1,17 @@
-// 페이지 내비게이션을 생성하는 함수
+/*페이지 내비게이션을 생성하는 함수*/
 function generatePagination(object, totalPages, currentPage) {
     var pagination = '';
-    var maxVisiblePages = 5; // 표시할 최대 페이지 번호 수
-    var startPage = Math.max(0, currentPage - 2);
+    var maxVisiblePages = 10;    //표시할 최대 페이지 번호 수
+    var halfVisiblePages = Math.floor(maxVisiblePages / 2);
+    var startPage = Math.max(0, currentPage - halfVisiblePages);
     var endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
 
-    // 이전 버튼 추가
+    //이전 버튼 추가
     if (currentPage > 0) {
-        pagination += '<a class="page-navi" onclick="navigatePage(\'' + object + '\', ' + (currentPage - 1) + ')"><span class="material-symbols-outlined arrow">arrow_back_ios</span></a> ';
+        pagination += '<a class="page-navi" onclick="navigatePage(\'' + object + '\', ' + 0 + ')"><span class="material-symbols-outlined arrow">arrow_back_ios</span></a> '; // 맨 앞 페이지로 이동
     }
 
-    // 페이지 번호 추가
+    //페이지 번호 추가
     for (var i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
             pagination += '<span class="page-navi page-num active">' + (i + 1) + '</span> ';
@@ -19,15 +20,15 @@ function generatePagination(object, totalPages, currentPage) {
         }
     }
 
-    // 다음 버튼 추가
+    //다음 버튼 추가
     if (currentPage < totalPages - 1) {
-        pagination += '<a class="page-navi" onclick="navigatePage(\'' + object + '\', ' + (currentPage + 1) + ')"><span class="material-symbols-outlined arrow">arrow_forward_ios</span></a>';
+        pagination += '<a class="page-navi" onclick="navigatePage(\'' + object + '\', ' + (totalPages - 1) + ')"><span class="material-symbols-outlined arrow">arrow_forward_ios</span></a>'; // 맨 뒤 페이지로 이동
     }
 
     return pagination;
 }
 
-// 페이지 내비게이션을 HTML에 추가하는 함수
+/*페이지 내비게이션을 HTML에 추가하는 함수*/
 function renderPagination(object, totalPages, currentPage) {
     var paginationContainer = document.getElementById('pagination');
 
@@ -44,17 +45,17 @@ function renderPagination(object, totalPages, currentPage) {
     paginationContainer.innerHTML = paginationHTML;
 }
 
-// 페이지 이동 함수
-function navigatePage(object, page) {
+//페이지 이동 함수
+function navigatePage(object, pageNo) {
     switch (object) {
         case 'Member':
-            loadMemberList(page);
+            loadMemberList(pageNo);
             break;
         case 'Support':
-            loadSupportList(page);
+            loadSupportList(pageNo);
             break;
         case 'Qna':
-            loadQnaList(page);
+            loadQnaList(pageNo);
             break;
         default:
             console.error('잘못된 객체: ' + object);

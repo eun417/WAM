@@ -17,7 +17,7 @@ public class AdminController {
     /**
      * Member 목록 조회
      */
-    @GetMapping("/member")
+    @GetMapping("/member/list")
     public String goMemberList() {
         return "admin/memberList";
     }
@@ -25,7 +25,7 @@ public class AdminController {
     /**
      * QnA 목록 조회
      */
-    @GetMapping("/qna")
+    @GetMapping("/qna/list")
     public String goQnaList() {
         return "admin/qnaList";
     }
@@ -33,7 +33,7 @@ public class AdminController {
     /**
      * Support 목록 조회
      */
-    @GetMapping("/support")
+    @GetMapping("/support/list")
     public String goSupportList() {
         return "admin/supportList";
     }

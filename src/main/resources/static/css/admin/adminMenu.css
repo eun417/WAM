@@ -63,7 +63,7 @@
     display: flex;
 }
 .box-top>div>div>div:first-of-type {
-    font-weight: 900;
+    font-weight: 600;
 }
 .box-top>div>div>div:first-of-type>span{
     color: #e9d98c;
@@ -72,7 +72,6 @@
     font-size: 14px;
 }
 .box-bottom{
-    height: 150px;
     padding: 20px;
     position: relative;
 }
@@ -89,12 +88,6 @@
 }
 .link-icon {
     color: #303030;
-}
-.logout-btn{
-    width: 227px;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
 }
 
 /*왼쪽 메뉴*/
@@ -122,7 +115,7 @@
 .left-menu-list>li>div{
     display: flex;
     font-size: 18px;
-    font-weight: 900;
+    font-weight: 600;
 }
 .menu-detail-title{
     padding: 15px;
@@ -139,5 +132,14 @@
     color: rgb(173, 173, 173);
 }
 .menu-detail-title:hover>a{
+    color:rgba(255, 255, 255, 0.9);
+}
+.menu-detail-title:hover>span{
+    color:rgba(255, 255, 255, 0.9);
+}
+
+
+/*active*/
+.menu-detail-title>.admin-menu-active{
     color:rgba(255, 255, 255, 0.9);
 }

@@ -8,14 +8,32 @@
 
 /*테이블 내용 디테일*/
 .list-title{
-    font-weight: 900;
+    font-weight: 600;
     font-size: 20px;
     margin-bottom: 15px;
 }
-th:first-child, td:first-child{
-    width: 80px;
 
+
+/*th 크기*/
+.th-id{
+    width: 10%;
 }
+.th-writer{
+    width: 15%;
+}
+.th-create-date{
+    width: 10%;
+}
+.th-status{
+    width: 10%;
+}
+.th-delete-btn{
+    width: 10%;
+}
+.th-amount{
+    width: 15%;
+}
+
 
 .list-top>table{
     width: 100%;
