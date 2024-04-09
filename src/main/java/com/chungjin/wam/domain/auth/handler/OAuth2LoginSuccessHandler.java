@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -22,7 +24,7 @@ import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
@@ -33,6 +35,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         CustomOAuth2User oAuth2User = getCustomOAuth2User(authentication);
 
+
         if (oAuth2User == null) {
             throw new CustomException(RESOURCE_NOT_FOUND);
         }
@@ -40,11 +43,17 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         //인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
-        //TokenDto 객체를 JSON으로 변환하여 HTTP 응답의 본문으로 전송
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        objectMapper.writeValue(response.getWriter(), tokenDto);
+        String targetUrl = UriComponentsBuilder.fromUriString("/")
+                .queryParam("accessToken", tokenDto.getAccessToken())
+                .queryParam("refreshToken", tokenDto.getRefreshToken())
+                .build().toUriString();
 
-        response.sendRedirect("/"); //메인 페이지로 리다이렉트
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+//        //헤더에 등록해서 전송
+//        jwtTokenProvider.sendAccessAndRefreshToken(response, tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+//
+//        response.sendRedirect("/"); //메인 페이지로 리다이렉트
     }
 
     /**

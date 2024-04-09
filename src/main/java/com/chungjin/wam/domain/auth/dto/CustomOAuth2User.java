@@ -21,4 +21,9 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.oauthId = oauthId;
     }
 
+    @Override
+    public String getName() {
+        return String.valueOf(memberId);
+    }
+
 }
