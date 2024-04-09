@@ -6,12 +6,11 @@ import com.chungjin.wam.domain.support.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static com.chungjin.wam.domain.support.entity.SupportStatus.*;
 
 @Component
 @RequiredArgsConstructor
@@ -20,18 +19,37 @@ public class SupportScheduler {
     private final SupportRepository supportRepository;
 
     /**
-     * 매일 자정에 실행, 후원 마감일이 24시간 전인 게시물의 상태를 "종료임박"으로 변경
+     * 매일 자정에 실행
      */
+    @Transactional
     @Scheduled(cron = "0 0 0 * * ?")
     public void checkSupportExpirations() {
-        //현재 시간에서 24시간 이후 시간
-        String twentyFourHoursAfter = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        changeStatusEndingSoon();   //END 로 변경
+        changeStatusEnd();  //ENDING_SOON 으로 변경
+    }
 
-        //24시간 이내의 후원을 찾아 상태를 변경
-        List<Support> expiringSupports = supportRepository.findByEndDateBeforeAndSupportStatusNot(twentyFourHoursAfter, END);
+    //마감일 지난 후원의 상태를 END 로 변경
+    public void changeStatusEnd() {
+        String yesterday = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+        //마감일이 지난 후원 목록을 조회
+        List<Support> expiringSupports = supportRepository.findByEndDateAndSupportStatusNot(yesterday, SupportStatus.END);
 
         for (Support support : expiringSupports) {
-            support.updateSupportStatus(ENDING_SOON);   //"종료임박"으로 수정
+            support.setSupportStatus(SupportStatus.END); //후원 상태를 "END"로 변경
+        }
+    }
+
+    //마감일이 하루 남은 후원의 상태를 ENDING_SOON 으로 변경
+    public void changeStatusEndingSoon() {
+        //현재 시간
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+        //24시간 이내의 후원을 찾아 상태를 변경
+        List<Support> expiringSupports = supportRepository.findByEndDateAndSupportStatusNot(today, SupportStatus.END);
+
+        for (Support support : expiringSupports) {
+            support.updateSupportStatus(SupportStatus.ENDING_SOON);   //"종료임박"으로 수정
         }
     }
 

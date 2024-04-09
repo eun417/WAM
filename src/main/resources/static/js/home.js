@@ -54,8 +54,13 @@ function loadEndingSoonSupport() {
                            </div>`;
 
                 document.querySelector('.deadline-donation-box .content-box').innerHTML = box;
+
+                //종료 임박 후원이 없는 경우 보이게 함
+                document.querySelector('.deadline-donation-box').style.display = 'block';
             } else {
                 console.log('종료 임박 후원 없음');
+                //종료 임박 후원이 없는 경우 숨김
+                document.querySelector('.deadline-donation-box').style.display = 'none';
             }
         })
         .catch(function(error) {
