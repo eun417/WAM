@@ -23,7 +23,7 @@
             <div class="header-line"></div>
         </div>
         <div class="detail-body">
-            <input type="hidden" id="qnaId">
+            <input type="hidden" id="qnaId" th:value="${qnaId}">
             <div class="title-box input-box" style="margin-bottom:10px;">
                 <input type="text" id="title" class="input-form" placeholder="제목을 입력해주세요" required>
             </div>
@@ -53,13 +53,13 @@
 
     /*수정폼인 경우 QnA 데이터를 가져오는 함수*/
     function getQnaDetail() {
-        const qnaId = [[${qnaId}]];
+        const qnaId = document.getElementById('qnaId').value;
         console.log('수정할 QnA: ' + qnaId);
 
         document.getElementById('qnaId').value = qnaId;
 
         //qnaId가 있는 경우에만 서버로부터 데이터 조회
-        if (qnaId !== null) {
+        if (qnaId !== '') {
             //작성폼, 수정폼에 따라 버튼 변경
             showHideElement('#createQnaBtn');
             showHideElement('#updateQnaBtn');

@@ -17,8 +17,6 @@
     <link rel="stylesheet" th:href="@{/css/qna/qnaDetail.css}">
     <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- jquery -->
-<!--    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>-->
 
     <div class="header-wrapper">
         <div class="header">
@@ -100,7 +98,7 @@
             }).then(function(response) {
               console.log(response.data);
               removeTokenInLocalStorage();
-              //window.location.href = '/';
+              window.location.href = '/';
             })
             .catch(function(error) {
               console.error(error);

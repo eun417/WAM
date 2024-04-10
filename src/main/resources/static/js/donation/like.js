@@ -24,6 +24,7 @@ function checkLikeStatus(token, supportId) {
 function createLike(token, supportId) {
     if (!token) {
         alert("로그인 후 이용해주세요.")
+        return;
     }
 
     axios.post(`/support/${supportId}/like`, {}, {
@@ -47,7 +48,8 @@ function createLike(token, supportId) {
 /*좋아요 삭제 함수*/
 function deleteLike(token, supportId) {
     if (!token) {
-        alert("로그인 후 이용해주세요.")
+        alert("로그인 후 이용해주세요.");
+        return;
     }
 
     //사용자가 확인을 누르면 컨트롤러 호출

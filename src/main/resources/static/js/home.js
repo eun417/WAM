@@ -147,7 +147,7 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
                     var row = `<div class="donation-box">
                                     <div class="donation-img-box">
-                                        <div class="donation-status start">
+                                        <div class="donation-status ${support.supportStatus === 'START' ? 'start' : support.supportStatus === 'ENDING_SOON' ? 'ending-soon' : support.supportStatus === 'END' ? 'end' : ''}">
                                             ${support.supportStatus === 'START' ? '후원 시작' :
                                             support.supportStatus === 'SUPPORTING' ? '후원중' :
                                             support.supportStatus === 'ENDING_SOON' ? '종료 임박' :

@@ -67,7 +67,7 @@
                             <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
                             <td>${qna.viewCount}</td>
                             <td>${qna.createDate}</td>
-                            <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc2'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                            <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
                         </tr>`;
                 var tr = document.createElement('tr');
                 tr.innerHTML = row;
