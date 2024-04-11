@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Authority {
 
-    ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER"),
-    GUEST("ROLE_GUEST");
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_USER("ROLE_USER"),
+    ROLE_GUEST("ROLE_GUEST");
 
     private final String key;
 

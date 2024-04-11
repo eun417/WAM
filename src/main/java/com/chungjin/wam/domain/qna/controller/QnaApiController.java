@@ -11,6 +11,7 @@ import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +76,7 @@ public class QnaApiController {
     /**
      * QnA 답변 등록 (관리자만 가능)
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{qnaId}/answer")
     public ResponseEntity<String> updateQnaAnswer(@PathVariable("qnaId") Long qnaId,
                                                   @RequestBody @Valid QnaAnswerRequestDto qnaAnswerReq) {

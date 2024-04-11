@@ -74,7 +74,7 @@ public class OAuthAttributes {
                 .oauthId(oauth2UserInfo.getId())
                 .email(oauth2UserInfo.getEmail())
                 .nickname(oauth2UserInfo.getNickname())
-                .authority(Authority.GUEST)
+                .authority(Authority.ROLE_GUEST)
                 .build();
     }
 

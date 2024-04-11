@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import static com.chungjin.wam.domain.member.entity.Authority.USER;
+import static com.chungjin.wam.domain.member.entity.Authority.ROLE_USER;
 import static com.chungjin.wam.domain.member.entity.LoginType.LOCAL;
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
@@ -84,7 +84,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(signUpReq.getPassword()))
                 .name(signUpReq.getName())
                 .phoneNumber(signUpReq.getPhoneNumber())
-                .authority(USER)
+                .authority(ROLE_USER)
                 .nickname(signUpReq.getNickname())
                 .loginType(LOCAL)
                 .build());
