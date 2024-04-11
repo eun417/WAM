@@ -4,20 +4,31 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/*QnA 목록 조회*/
+/*QnA 검색 결과 조회*/
 function loadList(pageNo) {
-    axios.get('/qna', {
+    const { search } = getQueryParams();
+    document.querySelector('.search').value = search;   //검색창에 검색어 설정
+
+    axios.get('/qna/search-keyword', {
         params: {
+            search: search,
             pageNo: pageNo
         }
     }).then(function(response) {
-        var qnaList = response.data.content;
+        if (response.data.content.length === 0) {
+            //검색 결과가 없는 경우
+            alert('검색 결과가 없습니다.');
+            return;
+        }
+
+        var searchList = response.data.content;
         var tableBody = document.querySelector('#qnaTableBody');
 
         //DocumentFragment 생성
         var fragment = new DocumentFragment();
+        tableBody.innerHTML = ''; //테이블 내용 초기화
 
-        qnaList.forEach(function(qna) {
+        searchList.forEach(function(qna) {
             var row = `<tr>
                         <td>${qna.qnaId}</td>
                         <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
@@ -42,4 +53,13 @@ function loadList(pageNo) {
     .catch(function(error) {
         console.error(error);
     });
+}
+
+//URL에서 매개변수 추출 함수
+function getQueryParams() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const search = urlParams.get('q');
+    console.log(search);
+    return { search };
 }

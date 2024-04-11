@@ -41,11 +41,17 @@
 
     <script th:src="@{/js/common/checkToken.js}"></script>
     <script>
-
         document.addEventListener('DOMContentLoaded', function() {
             checkLoginStatus(); //로그인 여부 따라 헤더 버튼 수정
             moveMenuItem(); //현재 있는 탭 표시
         });
+
+        //로그아웃
+        document.querySelector('.button-logout').addEventListener('click', function() {
+            const token = localStorage.getItem('accessToken');
+            logout(token);
+        });
+
 
         //로그인 상태 확인, 헤더 버튼 표시 함수
         function checkLoginStatus() {
@@ -88,28 +94,6 @@
                 animalMapMenuItem.classList.add('menu-active');
             }
         }
-
-        /*로그아웃 요청 함수*/
-        function logout(token) {
-            axios.get('/auth/logout', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            }).then(function(response) {
-              console.log(response.data);
-              removeTokenInLocalStorage();
-              window.location.href = '/';
-            })
-            .catch(function(error) {
-              console.error(error);
-            });
-        }
-
-        //로그아웃
-        document.querySelector('.button-logout').addEventListener('click', function() {
-            const token = localStorage.getItem('accessToken');
-            logout(token);
-        });
     </script>
 </header>
 </html>

@@ -20,12 +20,6 @@
                     <li>
                         <div class="menu-detail-title detail-notice"></div>
                     </li>
-                    <li id="adminPage" style="display:none;">
-                        <div class="menu-detail-title admin-line">
-                            <span class="material-symbols-outlined title-icon">admin_panel_settings</span>
-                            <a href="/admin/member/list">관리자 페이지</a>
-                        </div>
-                    </li>
                     <li>
                         <div class="menu-detail-title">
                             <span class="material-symbols-outlined title-icon">group</span>
@@ -69,6 +63,7 @@
         moveMyMenuItem();   //현재 있는 메뉴 표시
         renderMenu(payload.auth);   //메뉴에 사용자의 권한 표시
 
+
         /*현재 있는 탭에 mypage-menu-active 클래스 추가하는 함수*/
         function moveMyMenuItem() {
             var currentPath = window.location.pathname;
@@ -89,15 +84,12 @@
         function renderMenu(authority) {
             var noticeElement = document.querySelector(".detail-notice");
 
-            if (authority === "GUEST") {
+            if (authority === "ROLE_GUEST") {
                 noticeElement.textContent = "현재 임시 회원입니다!";
-            } else if (authority === "USER") {
+            } else if (authority === "ROLE_USER") {
                 noticeElement.textContent = "현재 일반 회원입니다!";
-            } else if (authority === "ADMIN") {
+            } else if (authority === "ROLE_ADMIN") {
                 noticeElement.textContent = "관리자 권한입니다!";
-                //관리자 페이지 링크 보이기
-                const adminPageLink = document.querySelector('#adminPage');
-                adminPageLink.style.display = 'block';
             }
         }
     </script>
