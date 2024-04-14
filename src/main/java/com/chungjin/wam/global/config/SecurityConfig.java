@@ -44,17 +44,12 @@ public class SecurityConfig {
             "/auth/**",
             "/qna/**",
             "/support/**",
+            "/payment/**",
             "/animal-map/**",
             "/member/profile", "/member/like", "/member/support", "/member/qna", "/member/leave",
             "/admin/member/list", "/admin/support/list", "/admin/qna/list",
             "/h2-console/**",
             "/css/**", "/js/**"
-    };
-
-    private static final String[] USER_URLS = {
-            "/support/**",
-            "/payment/validate"
-//            "PUT:/qna/**/answer"
     };
 
     /**
@@ -89,8 +84,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .requestMatchers(HttpMethod.POST, "/support/").hasAuthority(Authority.ROLE_USER.getKey())
-                        .requestMatchers(HttpMethod.PUT, "/support/**").hasAuthority(Authority.ROLE_USER.getKey())
-                        .requestMatchers(HttpMethod.DELETE, "/support/**").hasAuthority(Authority.ROLE_USER.getKey())
+                        .requestMatchers(HttpMethod.PUT, "/support/{supportId}").hasAuthority(Authority.ROLE_USER.getKey())
+                        .requestMatchers(HttpMethod.DELETE, "/support/{supportId}").hasAuthority(Authority.ROLE_USER.getKey())
                         .requestMatchers(ALLOWED_URLS).permitAll()  //인증 없이 접근 허용
                         .requestMatchers("/admin/**").hasAuthority(Authority.ROLE_ADMIN.getKey())
                         .anyRequest().authenticated())   //나머지 요청들은 모두 인증 필요

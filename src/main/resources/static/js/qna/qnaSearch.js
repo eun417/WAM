@@ -18,7 +18,6 @@ function loadList(pageNo) {
         if (response.data.content.length === 0) {
             //검색 결과가 없는 경우
             alert('검색 결과가 없습니다.');
-            return;
         }
 
         var searchList = response.data.content;

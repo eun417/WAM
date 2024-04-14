@@ -161,36 +161,24 @@ public class MapService {
     //자연환경조사 데이터 가져오는 함수
     public String getAnimalData(String urlDetail, String typeName) throws IOException {
         StringBuilder urlBuilder = new StringBuilder(BASE_URL);
-        urlBuilder.append(urlDetail);
-        StringBuilder parameter = new StringBuilder();
-        parameter.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
-        parameter.append("&" + URLEncoder.encode("srs", "UTF-8") + "=" + URLEncoder.encode("EPSG:5186", "UTF-8"));
-        parameter.append("&" + URLEncoder.encode("bbox", "UTF-8") + "=" + URLEncoder.encode(BBOX, "UTF-8"));
-        parameter.append("&" + URLEncoder.encode("typeName", "UTF-8") + "=" + URLEncoder.encode(typeName, "UTF-8"));
-        parameter.append("&" + URLEncoder.encode("maxFeatures", "UTF-8") + "=" + URLEncoder.encode("500", "UTF-8"));
+        urlBuilder.append(urlDetail)
+                .append("?serviceKey=").append(serviceKey)
+                .append("&srs=").append(SRC)
+                .append("&bbox=").append(BBOX)
+                .append("&typeName=").append(typeName)
+                .append("&maxFeatures=50");
 
-        URL url = new URL(urlBuilder.toString() + parameter.toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        URL url = new URL(urlBuilder.toString());
+        log.info("URL: {}", url);
 
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
-
-        StringBuilder sb = new StringBuilder();
-        BufferedReader rd;
-        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        } else {
-            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            return sb.toString();
         }
-
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        rd.close();
-        conn.disconnect();
-
-        return sb.toString();
     }
 
 }

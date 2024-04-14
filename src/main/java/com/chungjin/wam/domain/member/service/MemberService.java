@@ -62,9 +62,9 @@ public class MemberService {
         //memberId로 Member 객체 가져오기
         Member member = getMember(memberId);
 
-        //이름, 휴대폰 번호 입력하면 GUEST인 사용자의 권한을 USER로 변경
-        if (member.getAuthority() == Authority.GUEST) {
-            member.updateAuthority(Authority.USER);
+        //이름, 휴대폰 번호 모두 입력하면 GUEST 인 사용자의 권한을 USER 로 변경
+        if (updateMemberReq.getName() != null && updateMemberReq.getPhoneNumber() != null && member.getAuthority() == Authority.ROLE_GUEST) {
+            member.updateAuthority(Authority.ROLE_USER);
         }
 
         //MapStruct로 수정

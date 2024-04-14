@@ -29,11 +29,10 @@ public class CommentApiController {
     /**
      * 댓글 삭제
      */
-    @DeleteMapping("/support/{supportId}/comment/{commentId}")
+    @DeleteMapping("/support/comment/{commentId}")
     public ResponseEntity<String> deleteComment(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                @PathVariable(value = "supportId") Long supportId,
                                                 @PathVariable(value = "commentId") Long commentId) {
-        commentService.deleteComment(userDetails.getMember().getMemberId(), supportId, commentId);
+        commentService.deleteComment(userDetails.getMember().getMemberId(), commentId);
         return ResponseEntity.ok("댓글이 삭제되었습니다.");
     }
 

@@ -22,6 +22,7 @@ public final class Constants {
      * 자연환경조사 데이터 조회에 필요한 상수
      */
     public static final String BASE_URL = "https://www.nie-ecobank.kr/ecoapi/EcpeInfoService/wfs";
+    public static final String SRC = "EPSG:5186";
     public static final String BBOX = "-410465.4539024363%2C23210.844119483023%2C811157.9208071957%2C634022.531474299";
 
     //양서파충류

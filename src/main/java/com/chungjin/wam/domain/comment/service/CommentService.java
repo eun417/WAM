@@ -75,14 +75,12 @@ public class CommentService {
     /**
      * 댓글 삭제
      */
-    public void deleteComment(Long memberId, Long supportId, Long commentId) {
-        //supportId로 Support 객체 가져오기
-        Support support = getSupport(supportId);
+    public void deleteComment(Long memberId, Long commentId) {
         //commentId로 Comment 객체 가져오기
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCodeType.COMMENT_NOT_FOUND));
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(support.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(comment.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
 
         //DB에서 영구 삭제
         commentRepository.delete(comment);
