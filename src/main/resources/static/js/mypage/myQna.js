@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*나의 QnA 목록 조회*/
 function loadList(pageNo) {
-    axios.get(`/member/qna-detail`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
+    api.get(`/member/qna-detail`, {
         params: {
             pageNo: pageNo
         }

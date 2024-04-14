@@ -12,10 +12,7 @@ document.querySelector('.leaveMember-btn').addEventListener('click', function() 
 
     if (confirm("정말로 탈퇴하시겠습니까?")) {
         //회원 탈퇴 요청
-        axios.delete('/member/leave', {
-            headers: {
-                'Authorization': 'Bearer ' + token //헤더에 토큰 추가
-            },
+        api.delete('/member/leave', {
             data: {
                 password: password
             }

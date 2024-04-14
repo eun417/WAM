@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//로컬 스토리지에서 액세스 토큰 가져오기
-const token = localStorage.getItem('accessToken');
+
 
 
 /*QnA 상세 조회*/
@@ -18,6 +17,9 @@ function loadQnaDetail() {
             var qnaDetail = response.data;
 
             document.title = qnaDetail.title;   //페이지 제목 설정
+
+            //로컬 스토리지에서 액세스 토큰 가져오기
+            const token = localStorage.getItem('accessToken');
 
             var titleElement = document.querySelector('.D-title');
             var nicknameElement = document.querySelector('.D-top');
@@ -81,19 +83,16 @@ document.querySelector('.btn-answer').addEventListener('click', function() {
         const qnaId = document.getElementById('qnaId').value;
 
         //답변 등록 요청
-        axios.put(`/qna/${qnaId}/answer`, qnaAnswerReq, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(function(response) {
-            console.log(response.data);
-            alert(response.data);
-            window.location.href = `/qna/detail/${qnaId}`;  //페이지 로드
-        })
-        .catch(function(error) {
-            console.error('답변 등록 실패', error);
-            alert(error.response.data.message);
-        });
+        api.put(`/qna/${qnaId}/answer`, qnaAnswerReq)
+            .then(function(response) {
+                console.log(response.data);
+                alert(response.data);
+                window.location.href = `/qna/detail/${qnaId}`;  //페이지 로드
+            })
+            .catch(function(error) {
+                console.error('답변 등록 실패', error);
+                alert(error.response.data.message);
+            });
     } else {
         //textarea 가 보이지 않는 경우 보이게 하기
         showHideElement('#answerTextarea');
@@ -127,19 +126,16 @@ document.getElementById('deleteQnaBtn').addEventListener('click', function() {
 
     if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
         //사용자가 확인을 누르면 QnA 삭제 요청
-        axios.delete('/qna/' + qnaId, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(function(response) {
-            console.log(response.data);
-            alert(response.data);
-            window.location.href = "/qna/list";  //목록 페이지로 이동
-        })
-        .catch(function(error) {
-            console.error('QnA 삭제 실패', error);
-            alert(error.response.data.message);
-        });
+        api.delete('/qna/' + qnaId)
+            .then(function(response) {
+                console.log(response.data);
+                alert(response.data);
+                window.location.href = "/qna/list";  //목록 페이지로 이동
+            })
+            .catch(function(error) {
+                console.error('QnA 삭제 실패', error);
+                alert(error.response.data.message);
+            });
     }
 });
 

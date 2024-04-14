@@ -1,7 +1,6 @@
 //토큰을 로컬 스토리지에서 가져오기
 const token = localStorage.getItem('accessToken');
 
-
 document.addEventListener('DOMContentLoaded', function() {
     /*달력 설정*/
     var today = new Date().toISOString().substring(0, 10);
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
 window.onload = function() {
     getSupportDetail();
 };
-
 
 /*수정폼인 경우 후원 데이터를 가져오는 함수*/
 function getSupportDetail() {
@@ -79,16 +77,13 @@ function fillSupportDetail(supportDetail) {
 
 /*후원 생성*/
 document.getElementById('createDonationBtn').addEventListener('click', function() {
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/support/list";
-        return;
-    }
-
     //SupportRequestDto 객체 생성
     const title = document.getElementById('title').value.trim();
     const animalSubjects = document.getElementById('subject').value;
     const goalAmount = document.getElementById('goalAmount').value.trim();
+    if (isNaN(goalAmount)) {
+        alert("0 이상의 숫자로 입력해주세요.");
+    }
     const startDate = dotFormatDate(document.getElementById('startDate').value);
     const endDate = dotFormatDate(document.getElementById('endDate').value);
     const firstImg  = document.getElementById('firstImg').files[0];
@@ -112,9 +107,8 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
     formData.append('firstImg', firstImg);
 
     //후원 생성 요청
-    axios.post('/support/', formData, {
+    api.post('/support/', formData, {
         headers: {
-            'Authorization': 'Bearer ' + token,
             'Content-Type': 'multipart/form-data'
         }
     }).then(function(response) {
@@ -135,16 +129,13 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
 
 /*후원 수정*/
 document.getElementById('updateDonationBtn').addEventListener('click', function() {
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/support/list";
-        return;
-    }
-
     //UpdateSupportRequestDto 객체 생성
     const title = document.getElementById('title').value.trim();
     const animalSubjects = document.getElementById('subject').value;
     const goalAmount = document.getElementById('goalAmount').value.trim();
+    if (isNaN(goalAmount)) {
+        alert("0 이상의 숫자로 입력해주세요.");
+    }
     const startDate = dotFormatDate(document.getElementById('startDate').value);
     const endDate = dotFormatDate(document.getElementById('endDate').value);
     const newFirstImg  = document.getElementById('newFirstImg').files[0];
@@ -186,9 +177,8 @@ document.getElementById('updateDonationBtn').addEventListener('click', function(
     }
 
     //후원 수정 요청
-    axios.put('/support/' + supportId, formData, {
+    api.put('/support/' + supportId, formData, {
         headers: {
-            'Authorization': 'Bearer ' + token,
             'Content-Type': 'multipart/form-data'
         }
     }).then(function(response) {

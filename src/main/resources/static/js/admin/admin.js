@@ -1,11 +1,6 @@
 /*회원 목록 조회*/
-const token = localStorage.getItem('accessToken');
-
 function loadMemberList(pageNo) {
-    axios.get('/admin/member', {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
+    api.get('/admin/member', {
         params: {
             pageNo: pageNo
         }
@@ -47,11 +42,11 @@ function loadMemberList(pageNo) {
 
                 if (confirm("정말로 회원을 탈퇴시키겠습니까?")) {
                     //사용자가 확인을 누르면 회원 탈퇴 요청
-                    axios.delete('/admin/member/' + memberId)
+                    api.delete('/admin/member/' + memberId)
                         .then(function(response) {
                             console.log(response);
                             alert(response.data);
-                            window.location.href = "/admin/member/list";
+                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);
@@ -68,10 +63,7 @@ function loadMemberList(pageNo) {
 
 /*후원 목록 조회*/
 function loadSupportList(pageNo) {
-    axios.get('/admin/support', {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
+    api.get('/admin/support', {
         params: {
             pageNo: pageNo
         }
@@ -113,11 +105,11 @@ function loadSupportList(pageNo) {
 
                 if (confirm("정말로 후원을 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 후원 삭제 요청
-                    axios.delete('/admin/support/' + supportId)
+                    api.delete('/admin/support/' + supportId)
                         .then(function(response) {
                             console.log(response);
                             alert(response.data);
-                            window.location.href = "/admin/support/list";
+                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);
@@ -134,10 +126,7 @@ function loadSupportList(pageNo) {
 
 /*QnA 목록 조회*/
 function loadQnaList(pageNo) {
-    axios.get('/admin/qna', {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
+    api.get('/admin/qna', {
         params: {
             pageNo: pageNo
         }
@@ -179,11 +168,11 @@ function loadQnaList(pageNo) {
 
                 if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 QnA 삭제 요청
-                    axios.delete('/admin/qna/' + qnaId)
+                    api.delete('/admin/qna/' + qnaId)
                         .then(function(response) {
                             console.log(response);
                             alert(response.data);
-                            window.location.href = "/admin/qna/list";
+                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);

@@ -16,68 +16,64 @@ function promptAmount(token) {
 
 /*후원하기(결제) 함수*/
 function requestPay(token, amount) {
-    axios.get('/member/profile-detail', {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    .then(function (response) {
-        const memberData = response.data;   //회원 정보
+    api.get('/member/profile-detail')
+        .then(function (response) {
+            const memberData = response.data;   //회원 정보
 
-        var impKey = document.getElementById('impKey').getAttribute('href');
-        IMP.init(impKey);
+            var impKey = document.getElementById('impKey').getAttribute('href');
+            IMP.init(impKey);
 
-        var today = new Date();
-        var makeMerchantUid = today.getFullYear()+""+(today.getMonth()+1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes()+""+today.getSeconds();
+            var today = new Date();
+            var makeMerchantUid = today.getFullYear()+""+(today.getMonth()+1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes()+""+today.getSeconds();
 
-        IMP.request_pay({
-            pg: 'html5_inicis.INIpayTest',
-            pay_method: "card",
-            merchant_uid: "IMP" + makeMerchantUid,    //주문번호
-            name: "WAM 후원", //결제 이름
-            amount: amount, //결제금액
-            buyer_email: memberData.email,    //나중에 로그인한 사용자 정보로 수정
-            buyer_name: memberData.name,
-            buyer_tel: memberData.phoneNumber
-        }, function (rsp) {
-            if (rsp.success) {
-                if (!token) {
-                    alert("로그인 후 이용해주세요.")
-                }
-
-                var supportId = document.getElementById("supportId").value;
-                var impUid = rsp.imp_uid;
-                var inputAmount = amount;
-
-                //PaymentRequestDto 객체 생성
-                const paymentReq = {
-                    supportId: supportId,
-                    inputAmount: inputAmount,
-                    impUid: impUid
-                };
-
-                //결제 검증
-                axios.post('/payment/validate', paymentReq, {
-                    headers: {
-                        'Authorization': 'Bearer ' + token
+            IMP.request_pay({
+                pg: 'html5_inicis.INIpayTest',
+                pay_method: "card",
+                merchant_uid: "IMP" + makeMerchantUid,    //주문번호
+                name: "WAM 후원", //결제 이름
+                amount: amount, //결제금액
+                buyer_email: memberData.email,    //나중에 로그인한 사용자 정보로 수정
+                buyer_name: memberData.name,
+                buyer_tel: memberData.phoneNumber
+            }, function (rsp) {
+                if (rsp.success) {
+                    if (!token) {
+                        alert("로그인 후 이용해주세요.")
                     }
-                })
-                .then(function(response) {
-                    console.log(response);
-                    alert(response.data);
-                    window.location.href = `/support/detail/${supportId}`   //새로고침
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    alert(error.response.data.message);
-                });
-            } else {
-                alert("결제 실패");
-                console.log(rsp);
-            }
+
+                    var supportId = document.getElementById("supportId").value;
+                    var impUid = rsp.imp_uid;
+                    var inputAmount = amount;
+
+                    //PaymentRequestDto 객체 생성
+                    const paymentReq = {
+                        supportId: supportId,
+                        inputAmount: inputAmount,
+                        impUid: impUid
+                    };
+
+                    //결제 검증
+                    axios.post('/payment/validate', paymentReq, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        alert(response.data);
+                        window.location.href = `/support/detail/${supportId}`   //새로고침
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        alert(error.response.data.message);
+                    });
+                } else {
+                    alert("결제 실패");
+                    console.log(rsp);
+                }
+            });
+        })
+        .catch(function (error) {
+            console.error(error);
         });
-    })
-    .catch(function (error) {
-        console.error(error);
-    });
 }

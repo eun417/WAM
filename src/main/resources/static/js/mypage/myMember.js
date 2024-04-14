@@ -6,22 +6,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*회원 정보 조회*/
 function loadProfileInformation() {
-    axios.get('/member/profile-detail', {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    .then(function (response) {
-        const memberData = response.data;
-        document.getElementById('memberId').value = memberData.memberId;
-        document.getElementById('email').value = memberData.email;
-        document.getElementById('nickname').value = memberData.nickname;
-        document.getElementById('name').value = memberData.name;
-        document.getElementById('phoneNumber').value = memberData.phoneNumber;
-    })
-    .catch(function (error) {
-        console.error(error);
-    });
+    api.get('/member/profile-detail')
+        .then(function (response) {
+            const memberData = response.data;
+            document.getElementById('memberId').value = memberData.memberId;
+            document.getElementById('email').value = memberData.email;
+            document.getElementById('nickname').value = memberData.nickname;
+            document.getElementById('name').value = memberData.name;
+            document.getElementById('phoneNumber').value = memberData.phoneNumber;
+        })
+        .catch(function (error) {
+            console.error(error);
+        });
 }
 
 
@@ -51,24 +47,20 @@ document.querySelector('#updateMemberBtn').addEventListener('click', function() 
         phoneNumber: newPhoneNumber
     };
 
-    axios.put('/member/profile-detail', updateMemberReq, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    .then(function (response) {
-        alert(response.data);
-        window.location.href = '/member/profile';
-    })
-    .catch(function (error) {
-        console.error(error);
-        //서버가 반환한 에러 메시지 표시
-        if (error.response && error.response.data && error.response.data.errors) {
-            alert(error.response.data.errors[0].message);
-        } else {
-            alert(error.response.data.message);
-        }
-    });
+    api.put('/member/profile-detail', updateMemberReq)
+        .then(function (response) {
+            alert(response.data);
+            window.location.href = '/member/profile';
+        })
+        .catch(function (error) {
+            console.error(error);
+            //서버가 반환한 에러 메시지 표시
+            if (error.response && error.response.data && error.response.data.errors) {
+                alert(error.response.data.errors[0].message);
+            } else {
+                alert(error.response.data.message);
+            }
+        });
 });
 
 
@@ -91,22 +83,19 @@ document.getElementById('updatePwBtn').addEventListener('click', function() {
         checkPassword: checkPw
     };
 
-    axios.put(`/member/profile-detail/pw`, updatePwReq, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    }).then(response => {
-      console.log(response);
-      alert(response.data)
-      window.location.href = '/member/profile';
-    })
-    .catch(error => {
-        console.error('비밀번호 변경 실패', error);
-        //서버가 반환한 에러 메시지 표시
-        if (error.response && error.response.data && error.response.data.errors) {
-            alert(error.response.data.errors[0].message);
-        } else {
-            alert(error.response.data.message);
-        }
-    });
+    api.put(`/member/profile-detail/pw`, updatePwReq)
+        .then(function (response) {
+          console.log(response);
+          alert(response.data)
+          window.location.reload(); //새로고침
+        })
+        .catch(function (error) {
+            console.error('비밀번호 변경 실패', error);
+            //서버가 반환한 에러 메시지 표시
+            if (error.response && error.response.data && error.response.data.errors) {
+                alert(error.response.data.errors[0].message);
+            } else {
+                alert(error.response.data.message);
+            }
+        });
 });

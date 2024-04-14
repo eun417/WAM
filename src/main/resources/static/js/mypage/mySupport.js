@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*나의 후원 목록 조회*/
 function loadList(pageNo) {
-   axios.get(`/member/support-detail`, {
-       headers: {
-           'Authorization': 'Bearer ' + token
-       },
+   api.get(`/member/support-detail`, {
         params: {
             pageNo: pageNo
         }

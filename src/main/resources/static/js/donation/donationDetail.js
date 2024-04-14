@@ -3,17 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//로컬 스토리지에서 액세스 토큰 가져오기
-const token = localStorage.getItem('accessToken');
-
-
 /*후원 상세 조회*/
 function loadSupportDetail() {
     const supportId = document.getElementById('supportId').value;
     console.log('조회된 후원:' + supportId);
 
+    const token = localStorage.getItem("accessToken");
+
     //좋아요 상태 확인
-    checkLikeStatus(token, supportId);
+    if (token) {
+        checkLikeStatus(token, supportId);
+    }
 
     axios.get(`/support/${supportId}`)
         .then(function(response) {
@@ -85,7 +85,7 @@ function loadSupportDetail() {
             });
 
             //댓글 삭제 함수 실행
-            deleteComment(token);
+            deleteComment();
         })
         .catch(function(error) {
             console.error(error);
@@ -97,6 +97,8 @@ function loadSupportDetail() {
 document.getElementById('updateDonationBtn').addEventListener('click', function() {
     var supportId = document.getElementById('supportId').value;
     console.log('수정할 후원: ' + supportId);
+
+    const token = localStorage.getItem("accessToken");
 
     if (!token) {
         alert('로그인 후 이용해주세요.');
@@ -115,22 +117,22 @@ document.getElementById('likeBtn').addEventListener('click', function() {
 
     if (likeBtn.classList.contains('liked')) {
         //이미 좋아요를 누름 -> 좋아요 취소
-        deleteLike(token, supportId);
+        deleteLike(supportId);
 
     } else {
         //좋아요를 누르지 않음 -> 좋아요 생성
-        createLike(token, supportId);
+        createLike(supportId);
     }
 });
 
 /*후원하기(결제) 클릭*/
 document.getElementById('paymentBtn').addEventListener('click', function() {
-    promptAmount(token);
+    promptAmount();
 });
 
 /*댓글 작성 클릭*/
 document.getElementById('createCommentBtn').addEventListener('click', function() {
-    createComment(token);
+    createComment();
 });
 
 
@@ -139,26 +141,17 @@ document.getElementById('deleteDonationBtn').addEventListener('click', function(
     var supportId = document.getElementById('supportId').value;
     console.log('삭제할 후원: ' + supportId);
 
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/support/detail/" + supportId;
-        return;
-    }
-
     if (confirm("정말로 후원을 삭제하시겠습니까?")) {
         //사용자가 확인을 누르면 컨트롤러 호출
-        axios.delete(`/support/${supportId}`, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(function(response) {
-            console.log(response);
-            alert(response.data);
-            window.location.href = "/support/list";
-        }).catch(function(error) {
-            console.error(error);
-            alert(error.response.data.message);
-        });
+        api.delete(`/support/${supportId}`)
+            .then(function(response) {
+                console.log(response);
+                alert(response.data);
+                window.location.href = "/support/list";
+            }).catch(function(error) {
+                console.error(error);
+                alert(error.response.data.message);
+            });
     }
 });
 

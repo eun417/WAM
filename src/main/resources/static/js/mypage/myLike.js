@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*나의 좋아요 목록 조회*/
 function loadList(pageNo) {
-    axios.get(`/member/like-detail`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
+    api.get(`/member/like-detail`, {
         params: {
             pageNo: pageNo
         }
@@ -58,19 +55,16 @@ function loadList(pageNo) {
 
                 if (confirm("정말로 좋아요를 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 좋아요 삭제 요청
-                    axios.delete('/support/' + supportId + '/like', {
-                        headers: {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    }).then(function(response) {
-                        console.log(response.data);
-                        alert(response.data);
-                        loadLikeList(pageNo); //페이지 로드
-                    })
-                    .catch(function(error) {
-                        console.error('좋아요 삭제 실패', error);
-                        alert(error.response.data.message);
-                    });
+                    api.delete('/support/' + supportId + '/like')
+                        .then(function(response) {
+                            console.log(response.data);
+                            alert(response.data);
+                            window.location.reload(); //새로고침
+                        })
+                        .catch(function(error) {
+                            console.error('좋아요 삭제 실패', error);
+                            alert(error.response.data.message);
+                        });
                 }
             });
         });
