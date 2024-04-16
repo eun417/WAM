@@ -4,6 +4,8 @@ import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.support.entity.Support;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -19,6 +21,7 @@ public class SupportLike {
 
     @ManyToOne
     @JoinColumn(name = "support_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Support support;
 
     @ManyToOne

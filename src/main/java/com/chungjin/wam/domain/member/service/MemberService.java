@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.member.service;
 
+import com.chungjin.wam.domain.auth.service.RedisService;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.request.UpdatePwRequestDto;
@@ -39,6 +40,8 @@ public class MemberService {
     private final QnaRepository qnaRepository;
     private final SupportRepository supportRepository;
     private final SupportLikeRepository supportLikeRepository;
+
+    private final RedisService redisService;
 
     private final MemberMapper memberMapper;
 
@@ -103,7 +106,10 @@ public class MemberService {
             throw new CustomException(INVALID_PASSWORD);
         }
 
-        //DB에서 영구 삭제
+        //Redis 에서 RefreshToken 삭제
+        redisService.deleteData(memberId.toString());
+
+        //DB 에서 영구 삭제
         memberRepository.delete(member);
     }
 

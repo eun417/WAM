@@ -5,6 +5,8 @@ import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Builder
@@ -21,6 +23,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "support_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Support support;
 
     @ManyToOne

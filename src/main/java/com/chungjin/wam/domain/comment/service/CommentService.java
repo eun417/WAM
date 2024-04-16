@@ -65,6 +65,7 @@ public class CommentService {
         return comments.stream()
                 .map(comment -> CommentDto.builder()
                         .commentId(comment.getCommentId())
+                        .memberId(comment.getMember().getMemberId())
                         .nickname(comment.getMember().getNickname())
                         .content(comment.getContent())
                         .createDate(comment.getCreateDate())
@@ -86,9 +87,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    /**
-     * supportId로 Support 객체 조회
-     */
+    //supportId로 Support 객체 조회
     private Support getSupport (long supportId) {
         return supportRepository.findById(supportId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
