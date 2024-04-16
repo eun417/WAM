@@ -6,6 +6,9 @@ import lombok.Getter;
 @Getter
 public class TokenRequestDto {
 
-    @NotBlank(message = "Refresh Token이 존재하지 않습니다.")
+    @NotBlank
+    private String accessToken;
+    @NotBlank
     private String refreshToken;
+
 }
