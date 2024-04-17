@@ -129,9 +129,7 @@ public class AuthService {
     @Transactional
     public TokenResponseDto refresh(TokenRequestDto tokenReq) {
         //Refresh 토큰 검증
-        if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
-            throw new CustomException(REFRESH_TOKEN_EXPIRED);
-        }
+        jwtTokenProvider.validateRefreshToken(tokenReq.getRefreshToken());
 
         //Refresh Token 으로 memberId 가져오기
         String memberIdString = jwtTokenProvider.getMemberId(tokenReq.getRefreshToken());

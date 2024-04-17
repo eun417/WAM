@@ -3,11 +3,12 @@ package com.chungjin.wam.global.jwt;
 import com.chungjin.wam.domain.auth.dto.TokenDto;
 import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
 import com.chungjin.wam.domain.auth.service.RedisService;
+import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -115,7 +116,7 @@ public class JwtTokenProvider {
      * 주어진 액세스 토큰을 사용하여 사용자의 인증 정보를 가져와서 Authentication 객체로 변환
      */
     public Authentication getAuthentication(String accessToken) {
-        //accessToken을 파싱하여 클레임 가져오기
+        //accessToken 을 파싱하여 클레임 가져오기
         Claims claims = parseClaims(accessToken);
 
         //권한 정보가 없는 경우 에러 발생
@@ -134,7 +135,7 @@ public class JwtTokenProvider {
 
         /*
         사용자의 인증 정보
-        비밀번호는 비어있는 문자열로, 권한 정보는 앞서 변환한 authorities로 설정
+        비밀번호는 비어있는 문자열로, 권한 정보는 앞서 변환한 authorities 로 설정
         ""(비밀번호): JWT 토큰을 사용하여 사용자를 인증하고 권한을 부여하는 경우에는 이미 인증이 완료되었으며, 사용자의 비밀번호는 필요하지 않음
         */
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
@@ -169,16 +170,32 @@ public class JwtTokenProvider {
             //유효한 토큰인 경우에만 클레임 반환
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
+            throw new CustomException(ErrorCodeType.WRONG_TYPE_SIGNATURE);
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
+            throw new CustomException(ErrorCodeType.ACCESS_TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new CustomException(ErrorCodeType.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
+    }
+
+    public void validateRefreshToken(String refreshToken) {
+        try {
+            //유효한 토큰인 경우에만 클레임 반환
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
+        } catch (SecurityException | MalformedJwtException e) {
+            throw new CustomException(ErrorCodeType.WRONG_TYPE_SIGNATURE);
+        } catch (ExpiredJwtException e) {
+            throw new CustomException(ErrorCodeType.REFRESH_TOKEN_EXPIRED);
+        } catch (UnsupportedJwtException e) {
+            throw new CustomException(ErrorCodeType.INVALID_TOKEN);
+        }
     }
 
     /**

@@ -21,7 +21,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
 @Configuration
@@ -94,7 +93,7 @@ public class SecurityConfig {
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
-                //JwtFilter 를 addFilterBefore()로 등록했던 JwtSecurityConfig 클래스도 적용
+                //JwtAuthenticationFilter 를 addFilterBefore()로 등록했던 JwtSecurityConfig 클래스도 적용
                 .with(new JwtSecurityConfig(jwtTokenProvider), customizer -> {})
 
                 //소셜 로그인 설정
