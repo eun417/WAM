@@ -1,9 +1,7 @@
 package com.chungjin.wam.global.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.validation.FieldError;
 
 import java.util.List;

@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
      * 비즈니스 로직에서 발생한 오류를 클라이언트에게 전달하기 위해 사용
      */
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<Object> handleCustomException(CustomException e) {
+    protected ResponseEntity<Object> handleCustomException(CustomException e) {
         //CustomException 발생 시 예외 코드에 따른 응답을 반환
         log.warn("handleRuntimeException", e);
         return handleExceptionInternal(e.getErrorCode());
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      * 메서드에 전달된 인자의 값이 유효하지 않을 때 발생
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
+    protected ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
         //IllegalArgumentException 발생 시 로그를 기록하고 예외 코드와 메시지를 반환
         log.warn("handleIllegalArgument", e);
         return handleExceptionInternal(ErrorCodeType.INVALID_PARAMETER, e.getMessage());
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
      * 클라이언트의 잘못된 요청이나 입력 데이터에 대한 오류
      */
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<Object> handleBindException(BindException e) {
+    protected ResponseEntity<Object> handleBindException(BindException e) {
         //@Valid 어노테이션으로 넘어오는 에러를 처리하고, 해당 에러에 대한 응답을 반환
         log.warn("handleBindException", e);
         return handleExceptionInternal(e, ErrorCodeType.INVALID_PARAMETER);
@@ -56,12 +56,12 @@ public class GlobalExceptionHandler {
      * 주로 프로그래밍 오류나 시스템 장애와 관련하여 발생
      * 클라이언트에게는 상세한 오류 메시지를 반환 X
      */
-    @ExceptionHandler({Exception.class})    //{} : 배열(여러 예외 타입 처리)
-    public ResponseEntity<Object> handleAllException(Exception ex) {
-        //모든 예외를 처리하고, 내부 서버 오류에 대한 응답을 반환
-        log.warn("handleAllException", ex);
-        return handleExceptionInternal(ErrorCodeType.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler({Exception.class})    //{} : 배열(여러 예외 타입 처리)
+//    protected ResponseEntity<Object> handleAllException(Exception ex) {
+//        //모든 예외를 처리하고, 내부 서버 오류에 대한 응답을 반환
+//        log.warn("handleAllException", ex);
+//        return handleExceptionInternal(ErrorCodeType.INTERNAL_SERVER_ERROR);
+//    }
 
 
     /**
