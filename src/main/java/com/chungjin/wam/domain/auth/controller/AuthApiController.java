@@ -80,7 +80,7 @@ public class AuthApiController {
     }
 
     /**
-     * 비밀번호 재설정 - 링크 메일 전송
+     * 비밀번호 재설정 - 1. 링크 메일 전송
      */
     @PostMapping("/change-pw/email/send")
     public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwLinkRequestDto changePwReq) {
@@ -89,7 +89,7 @@ public class AuthApiController {
     }
 
     /**
-     * 비밀번호 재설정
+     * 비밀번호 재설정 - 2. 정보 입력
      */
     @PutMapping("change-pw/{authCode}")
     public ResponseEntity<String> changePw(@RequestBody @Valid ChangePwRequestDto changePwReq,

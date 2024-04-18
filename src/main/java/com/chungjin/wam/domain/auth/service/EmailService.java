@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.auth.service;
 
+import com.chungjin.wam.global.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -14,6 +15,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.SEND_MAIL_FAILED;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,31 +30,64 @@ public class EmailService {
     private String smtpEmail;
 
     /**
-     * 인증번호 메일 전송
+     * 이메일 인증을 위한 인증번호 메일 전송
      */
-    public void sendCodeMail(String email) throws MessagingException, UnsupportedEncodingException {
-        String authCode = createCode(); //인증코드 생성
+    public void sendCodeMail(String email) {
+        try {
+            String authCode = createCode(); //인증코드 생성
 
-        MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessage message = javaMailSender.createMimeMessage();
 
-        message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
-        message.setSubject("[인증 코드] " + authCode); //이메일 제목
-        message.setText(setCodeContext(authCode), "utf-8", "html"); //내용 설정(Template Process)
-        message.setFrom(new InternetAddress(smtpEmail, "WAM"));   //보낼 때 이름 설정하고 싶은 경우
+            message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
+            message.setSubject("[인증 코드] " + authCode); //이메일 제목
+            message.setText(setCodeContext(authCode), "utf-8", "html"); //내용 설정(Template Process)
+            message.setFrom(new InternetAddress(smtpEmail, "WAM"));   //보낸이 이름 설정
 
-        //인증시간 만료를 위해 Redis에 5분 동안 저장
-        redisService.setDataExpire(email, authCode, 60 * 5L);
+            //인증시간 만료를 위해 Redis 에 5분 동안 저장
+            redisService.setDataExpire(email, authCode, 60 * 5L);
 
-        javaMailSender.send(message);   //이메일 전송
+            javaMailSender.send(message);   //메일 전송
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new CustomException(SEND_MAIL_FAILED);
+        }
+    }
+
+    //타임리프 설정
+    private String setCodeContext(String authCode) {
+        Context context = new Context();
+        context.setVariable("authCode", authCode); //Template 에 전달할 데이터 설정
+        return templateEngine.process("join/mailAuthCode", context); //mailAuthCode.html
     }
 
     /**
-     * 타임리프 설정
+     * 비밀번호 재설정 링크 메일 전송
      */
-    private String setCodeContext(String authCode) {
+    public void sendLinkMail(String email) {
+        try {
+            String authCode = createCode(); //인증코드 생성
+            String changePwLink = "http://localhost:8081/auth/change-pw/form?authCode=" + authCode;   //인증코드로 링크 생성
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
+            message.setSubject("[WAM] 비밀번호 재설정 링크입니다."); //이메일 제목
+            message.setText(setLinkContext(changePwLink), "utf-8", "html"); //내용 설정(Template Process)
+            message.setFrom(new InternetAddress(smtpEmail, "WAM"));   //보낸이 이름 설정
+
+            //링크 제공시간 제한을 위해 Redis 에 10분 동안 저장
+            redisService.setDataExpire(authCode, email, 60 * 10L);
+
+            javaMailSender.send(message);   //메일 전송
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new CustomException(SEND_MAIL_FAILED);
+        }
+    }
+
+    //타임리프 설정
+    private String setLinkContext(String changePwLink) {
         Context context = new Context();
-        context.setVariable("authCode", authCode); //Template에 전달할 데이터 설정
-        return templateEngine.process("join/mailAuthCode", context); //mailAuthCode.html
+        context.setVariable("changePwLink", changePwLink); //Template 에 전달할 데이터 설정
+        return templateEngine.process("login/mailChangePwLink", context); //mailChangePwLink.html
     }
 
     /**
@@ -61,7 +97,7 @@ public class EmailService {
         StringBuilder code = new StringBuilder();
         Random rnd = new Random();
         for (int i = 0; i < 8; i++) { //인증코드 8자리
-            int index = rnd.nextInt(3); //0~2 까지 랜덤, rnd 값에 따라서 아래 switch 문이 실행됨
+            int index = rnd.nextInt(3); //0~2까지 랜덤, rnd 값에 따라서 아래 switch 문이 실행됨
             switch (index) {
                 case 0:
                     code.append((char) ((int) (rnd.nextInt(26)) + 97));
@@ -79,35 +115,6 @@ public class EmailService {
         }
 
         return code.toString();
-    }
-
-    /**
-     * 링크 메일 전송
-     */
-    public void sendLinkMail(String email) throws MessagingException, UnsupportedEncodingException {
-        String authCode = createCode(); //인증코드 생성
-        String changePwLink = "http://localhost:8081/auth/change-pw/form?authCode=" + authCode;   //인증코드로 링크 생성
-
-        MimeMessage message = javaMailSender.createMimeMessage();
-
-        message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
-        message.setSubject("[WAM] 비밀번호 재설정 링크입니다."); //이메일 제목
-        message.setText(setLinkContext(changePwLink), "utf-8", "html"); //내용 설정(Template Process)
-        message.setFrom(new InternetAddress(smtpEmail, "WAM"));   //보낼 때 이름 설정하고 싶은 경우
-
-        //링크 제공시간 제한을 위해 Redis에 10분 동안 저장
-        redisService.setDataExpire(authCode, email, 60 * 10L);
-
-        javaMailSender.send(message);   //이메일 전송
-    }
-
-    /**
-     * 타임리프 설정
-     */
-    private String setLinkContext(String changePwLink) {
-        Context context = new Context();
-        context.setVariable("changePwLink", changePwLink); //Template에 전달할 데이터 설정
-        return templateEngine.process("login/mailChangePwLink", context); //mailChangePwLink.html
     }
 
 }

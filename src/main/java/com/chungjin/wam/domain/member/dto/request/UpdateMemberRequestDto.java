@@ -4,14 +4,10 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import static com.chungjin.wam.global.util.Constants.PHONE_NUMBER_REGEXP;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class UpdateMemberRequestDto {
 
     @NotBlank(message = "닉네임을 입력해주세요.")

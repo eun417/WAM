@@ -1,26 +1,21 @@
 package com.chungjin.wam.domain.comment.service;
 
 import com.chungjin.wam.domain.member.entity.Member;
-import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.comment.dto.request.CommentRequestDto;
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.comment.entity.Comment;
-import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.comment.repository.CommentRepository;
-import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
-import com.chungjin.wam.global.exception.error.ErrorCodeType;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,19 +23,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
-    private final SupportRepository supportRepository;
 
-    private final MemberService memberService;
+    private final EntityUtils entityUtils;
 
     /**
      * 댓글 생성
      */
     public void createComment(Long memberId, Long supportId, CommentRequestDto commentReq) {
-        //email로 Member 객체 가져오기
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+        //memberId로 Member 객체 가져오기
+        Member member = entityUtils.getMember(memberId);
         //supportId로 Support 객체 가져오기
-        Support support = getSupport(supportId);
+        Support support = entityUtils.getSupport(supportId);
 
         //Dto -> Entity
         Comment comment = Comment.builder()
@@ -61,15 +54,15 @@ public class CommentService {
         List<Comment> comments = commentRepository.findAllBySupportId(supportId);
 
         /*
-        comments -> stream
-        Dto -> Entity
-        map 메소드로 각 댓글을 CommentDto로 변환
+         comments -> stream
+         Dto -> Entity
+         map 메소드로 각 댓글을 CommentDto 로 변환
         */
         return comments.stream()
                 .map(comment -> CommentDto.builder()
                         .commentId(comment.getCommentId())
-                        .memberId(memberService.getMemberIdForMember(comment.getMember()))
-                        .nickname(memberService.getNicknameForMember(comment.getMember()))
+                        .memberId(entityUtils.getMemberId(comment.getMember()))
+                        .nickname(entityUtils.getNickname(comment.getMember()))
                         .content(comment.getContent())
                         .createDate(comment.getCreateDate())
                         .build())
@@ -81,19 +74,13 @@ public class CommentService {
      */
     public void deleteComment(Long memberId, Long commentId) {
         //commentId로 Comment 객체 가져오기
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCodeType.COMMENT_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(COMMENT_NOT_FOUND));
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        if(!memberId.equals(comment.getMember().getMemberId())) throw new CustomException(ErrorCodeType.FORBIDDEN);
+        if(!memberId.equals(comment.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
 
-        //DB에서 영구 삭제
+        //DB 에서 영구 삭제
         commentRepository.delete(comment);
-    }
-
-    //supportId로 Support 객체 조회
-    private Support getSupport (long supportId) {
-        return supportRepository.findById(supportId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
     }
 
 }

@@ -7,12 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SupportLike {
 
     @Id
@@ -27,5 +24,11 @@ public class SupportLike {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public SupportLike(Support support, Member member) {
+        this.support = support;
+        this.member = member;
+    }
 
 }

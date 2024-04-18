@@ -8,11 +8,9 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
     @Id
@@ -29,5 +27,12 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Comment(String content, Support support, Member member) {
+        this.content = content;
+        this.support = support;
+        this.member = member;
+    }
 
 }

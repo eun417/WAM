@@ -1,19 +1,11 @@
 package com.chungjin.wam.domain.support.dto.request;
 
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
-import com.chungjin.wam.domain.comment.entity.CommentCheck;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class UpdateSupportRequestDto {
 
     @NotBlank(message = "제목을 입력해주세요.")

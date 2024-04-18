@@ -33,7 +33,9 @@ public class RedisService {
     }
 
     /**
-     * 해당 key에 해당하는 value가 존재하는지 확인
+     * 주어진 key가 있는지 확인
+     * @param key
+     * @return Redis에 key가 있다면 True
      */
     public boolean existData(String key) {
         return Boolean.TRUE.equals(template.hasKey(key));
@@ -68,9 +70,10 @@ public class RedisService {
 
     /**
      * 입력받은 값과 저장된 데이터 비교
+     * @param value
+     * @return null이 아니고, 비어 있지 않으면 True
      */
     public boolean checkExistsValue(String value) {
-//        return !value.equals("false");
         return value != null && !value.isEmpty();
     }
 

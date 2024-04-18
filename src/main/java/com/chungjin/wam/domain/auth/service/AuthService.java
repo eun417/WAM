@@ -9,7 +9,6 @@ import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static com.chungjin.wam.domain.member.entity.Authority.ROLE_USER;
@@ -29,6 +27,7 @@ import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthService {
 
     private final MemberRepository memberRepository;
@@ -43,23 +42,17 @@ public class AuthService {
     /**
      * 회원가입 - 1. 인증코드 메일 발송
      */
-    @Transactional
     public void sendCodeToEmail(EmailRequestDto emailReq) {
-        try {
-            //이미 가입되어 있는 사용자 확인
-            checkEmailExists(emailReq.getEmail());
+        //이미 가입되어 있는 사용자 확인
+        checkEmailExists(emailReq.getEmail());
 
-            //인증코드 전송
-            emailService.sendCodeMail(emailReq.getEmail());
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new CustomException(SEND_MAIL_FAILED);
-        }
+        //인증코드 전송
+        emailService.sendCodeMail(emailReq.getEmail());
     }
 
     /**
      * 회원가입 - 2. 인증코드 검증
      */
-    @Transactional
     public void verifyCode(VerifyEmailRequestDto verifyEmailReq) {
         //Redis 에 저장된 인증코드 가져오기
         String redisAuthCode = redisService.getData(verifyEmailReq.getEmail());
@@ -90,10 +83,7 @@ public class AuthService {
                 .build());
     }
 
-    /**
-     * 중복 이메일 확인
-     */
-    @Transactional
+    //중복 이메일 확인하는 함수
     public void checkEmailExists(String email) {
         if (memberRepository.existsByEmail(email)) {
             throw new CustomException(DUPLICATE_EMAIL);
@@ -102,8 +92,9 @@ public class AuthService {
 
     /**
      * 로그인
+     * @param loginReq
+     * @return Access Token, 만료 시간, Refresh Token
      */
-    @Transactional
     public TokenDto login(LoginRequest loginReq) {
         //사용자가 입력한 이메일로 사용자가 있는지 확인
         Member member = memberRepository.findByEmail(loginReq.getEmail())
@@ -125,13 +116,14 @@ public class AuthService {
 
     /**
      * Refresh
+     * @param tokenReq
+     * @return 재발급된 Access Token
      */
-    @Transactional
     public TokenResponseDto refresh(TokenRequestDto tokenReq) {
-        //Refresh 토큰 검증
+        //refresh token 검증
         jwtTokenProvider.validateRefreshToken(tokenReq.getRefreshToken());
 
-        //Refresh Token 으로 memberId 가져오기
+        //refresh token 으로 memberId 가져오기
         String memberIdString = jwtTokenProvider.getMemberId(tokenReq.getRefreshToken());
 
         //Redis 에서 memberId를 기반으로 values 가져옴
@@ -139,7 +131,7 @@ public class AuthService {
         String refreshToken = values.get(0);
         log.info("Refresh Token in Redis: {}", refreshToken);
 
-        //Refresh Token 일치하는지 검사
+        //전달받은 refresh token 과 Redis 에 저장된 refresh token 일치하는지 확인
         if (!refreshToken.equals(tokenReq.getRefreshToken())) {
             throw new CustomException(TOKEN_USER_MISMATCH);
         }
@@ -153,14 +145,13 @@ public class AuthService {
     /**
      * 로그아웃
      */
-    @Transactional
     public void logout(String memberIdString) {
-        //Redis 에 Refresh Token 이 없는 경우 에러 발생
+        //Redis 에 refresh token 이 없는 경우 에러 발생
         if (!redisService.existData(memberIdString)) {
             throw new CustomException(ALREADY_LOGGED_OUT);
         }
 
-        //Redis 에서 해당 RefreshToken 삭제
+        //Redis 에서 해당 refresh token 삭제
         redisService.deleteData(memberIdString);
     }
 
@@ -168,8 +159,8 @@ public class AuthService {
      * 이메일 찾기
      */
     public FindEmailResponseDto findEmail(FindEmailRequestDto findEmailReq) {
-        String phoneNumber = findEmailReq.getPhoneNumber();
         String name = findEmailReq.getName();
+        String phoneNumber = findEmailReq.getPhoneNumber();
 
         //이름, 휴대폰 번호로 Member 객체 조회
         Member member = memberRepository.findByNameAndPhoneNumber(name, phoneNumber)
@@ -182,28 +173,23 @@ public class AuthService {
     }
 
     /**
-     * 비밀번호 재설정 - 링크 메일 전송
+     * 비밀번호 재설정 - 1. 링크 메일 전송
      */
-    @Transactional
     public void sendLinkToEmail(ChangePwLinkRequestDto changePwReq) {
-        try {
-            //이름, 이메일로 사용자 확인
-            if(!memberRepository.existsByNameAndEmail(changePwReq.getName(), changePwReq.getEmail()))
-                throw new CustomException(MEMBER_NOT_FOUND);
+        //이름, 이메일로 사용자 확인
+        if(!memberRepository.existsByNameAndEmail(changePwReq.getName(), changePwReq.getEmail()))
+            throw new CustomException(MEMBER_NOT_FOUND);
 
-            //링크 메일 전송
-            emailService.sendLinkMail(changePwReq.getEmail());
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new CustomException(SEND_MAIL_FAILED);
-        }
+        //링크 메일 전송
+        emailService.sendLinkMail(changePwReq.getEmail());
     }
 
     /**
-     * 비밀번호 재설정
+     * 비밀번호 재설정 - 2. 정보 입력
      */
     @Transactional
     public void changePw(ChangePwRequestDto changePwReq, String authCode) {
-        //Redis 에 저장된 email 가져오기
+        //Redis 에 저장된 이메일 가져오기
         String email = redisService.getData(authCode);
 
         //인증코드에 해당하는 이메일이 없는 경우

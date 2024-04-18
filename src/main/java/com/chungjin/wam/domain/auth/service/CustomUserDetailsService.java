@@ -18,16 +18,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * 사용자 상세 정보 조회
+     * @param username
+     * @return UserDetails 를 구현한 CustomUserDetails 객체
+     * @throws UsernameNotFoundException
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member;
 
-        if (username.contains("@")) { // 이메일인 경우
+        if (username.contains("@")) { //이메일인 경우
             member = memberRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-        } else { // memberId인 경우
+        } else { //memberId인 경우
             member = memberRepository.findById(Long.parseLong(username))
                     .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
         }

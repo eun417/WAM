@@ -1,17 +1,14 @@
 package com.chungjin.wam.domain.support.entity;
 
-import com.chungjin.wam.domain.comment.entity.CommentCheck;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Support extends BaseTimeEntity {
 
     @Id
@@ -53,6 +50,20 @@ public class Support extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Support(String title, AnimalSubjects animalSubjects, Long goalAmount, String startDate, String endDate, String firstImg, String content, Boolean commentCheck, Member member, SupportStatus supportStatus) {
+        this.title = title;
+        this.animalSubjects = animalSubjects;
+        this.goalAmount = goalAmount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.firstImg = firstImg;
+        this.content = content;
+        this.commentCheck = commentCheck;
+        this.member = member;
+        this.supportStatus = supportStatus;
+    }
 
     //좋아요 증가
     public void upLike(Long supportLike) {

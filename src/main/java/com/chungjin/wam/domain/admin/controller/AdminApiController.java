@@ -1,20 +1,17 @@
 package com.chungjin.wam.domain.admin.controller;
 
 import com.chungjin.wam.domain.admin.service.AdminService;
-import com.chungjin.wam.domain.auth.dto.CustomUserDetails;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.qna.service.QnaService;
 import com.chungjin.wam.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-//@PreAuthorize("hasRole('ROLE_ADMIN')")  //관리자만 가능
 public class AdminApiController {
 
     private final AdminService adminService;

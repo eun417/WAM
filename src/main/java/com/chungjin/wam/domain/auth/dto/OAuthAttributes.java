@@ -9,10 +9,8 @@ import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.entity.LoginType;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 각 소셜에서 받아오는 데이터가 다르므로
@@ -26,10 +24,11 @@ public class OAuthAttributes {
     private OAuth2UserInfo oauth2UserInfo;  //소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등)
 
     /**
-     * loginType에 맞는 메소드 호출하여 OAuthAttributes 객체 반환
-     * 파라미터 -> userNameAttributeName : OAuth2 로그인 시 키(PK)가 되는 값 / attributes : OAuth 서비스의 유저 정보들
-     * 소셜별 of 메소드(ofGoogle, ofKaKao, ofNaver)들은 각각 소셜 로그인 API에서 제공하는
-     * 회원의 식별값(id), attributes, nameAttributeKey를 저장 후 build
+     * LoginType 에 맞는 메소드를 호출하여 OAuthAttributes 객체 반환
+     * @param loginType
+     * @param userNameAttributeName : OAuth2 로그인 시 키(PK)가 되는 값
+     * @param attributes : OAuth 서비스의 유저 정보들
+     * @return 식별값(id), attributes, nameAttributeKey 로 build 한 OAuthAttributes 객체
      */
     public static OAuthAttributes of(LoginType loginType, String userNameAttributeName, Map<String, Object> attributes) {
 
@@ -64,9 +63,10 @@ public class OAuthAttributes {
     }
 
     /**
-     * of 메소드로 OAuthAttributes 객체가 생성되어, 유저 정보들이 담긴 OAuth2UserInfo가 소셜 타입별로 주입된 상태
-     * OAuth2UserInfo에서 oauthId(식별값), nickname, email을 가져와서 build
-     * authority는 GUEST로 설정
+     * of 메소드로 OAuthAttributes 객체가 생성되어, 유저 정보들이 담긴 OAuth2UserInfo 가 소셜 타입별로 주입된 상태
+     * @param loginType
+     * @param oauth2UserInfo : oauthId(식별값), nickname, email 담고 있음
+     * @return OAuth2UserInfo 의 데이터로 생성한 Member(authority -> GUEST)
      */
     public Member toEntity(LoginType loginType, OAuth2UserInfo oauth2UserInfo) {
         return Member.builder()

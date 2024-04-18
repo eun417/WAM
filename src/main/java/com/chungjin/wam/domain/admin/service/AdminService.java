@@ -27,7 +27,6 @@ public class AdminService {
 
     /**
      * 회원 탈퇴
-     * @param memberId
      */
     public void deleteMember(Long memberId) {
         //memberId로 Member 객체 조회
@@ -40,7 +39,6 @@ public class AdminService {
 
     /**
      * QnA 삭제
-     * @param qnaId
      */
     public void deleteQna(Long qnaId) {
         //qnaId로 QnA 객체 조회
@@ -53,7 +51,6 @@ public class AdminService {
 
     /**
      * 후원 삭제
-     * @param supportId
      */
     public void deleteSupport(Long supportId) {
         //supportId로 support 객체 가져오기

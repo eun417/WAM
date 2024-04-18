@@ -6,10 +6,7 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class SupportResponseDto {
 
     private Long supportId;

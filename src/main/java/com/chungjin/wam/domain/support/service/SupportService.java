@@ -2,8 +2,6 @@ package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.comment.service.CommentService;
 import com.chungjin.wam.domain.member.entity.Member;
-import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
@@ -14,8 +12,8 @@ import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.s3.S3Service;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,29 +27,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chungjin.wam.domain.support.entity.SupportStatus.ENDING_SOON;
-import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class SupportService {
 
     private final SupportRepository supportRepository;
-    private final MemberRepository memberRepository;
 
     private final CommentService commentService;
     private final S3Service s3Service;
-    private final MemberService memberService;
 
     private final SupportMapper supportMapper;
+    private final EntityUtils entityUtils;
 
     /**
      * 후원 생성
      */
+    @Transactional
     public void createSupport(Long memberId, SupportRequestDto supportReq, MultipartFile firstImg) {
         //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
 
         //파일 업로드(대표 이미지)
         String imgPath = s3Service.uploadFile(firstImg, S3_SUPPORT_FIRST);
@@ -79,14 +76,14 @@ public class SupportService {
      */
     public SupportDetailDto readSupport(Long supportId) {
         //supportId로 support 객체 가져오기
-        Support support = getSupport(supportId);
+        Support support = entityUtils.getSupport(supportId);
         //supportId로 comment List 가져오기
         List<CommentDto> comments = commentService.findAllComment(supportId);
 
         //Entity -> Dto
         return SupportDetailDto.builder()
                 .supportId(support.getSupportId())
-                .memberId(memberService.getMemberIdForMember(support.getMember()))
+                .memberId(entityUtils.getMemberId(support.getMember()))
                 .animalSubjects(support.getAnimalSubjects())
                 .title(support.getTitle())
                 .goalAmount(support.getGoalAmount())
@@ -121,12 +118,13 @@ public class SupportService {
     /**
      * 후원 수정
      */
+    @Transactional
     public void updateSupport(Long memberId, Long supportId, UpdateSupportRequestDto updateSupportReq, MultipartFile newFirstImg) {
         //supportId로 support 객체 가져오기
-        Support support = getSupport(supportId);
+        Support support = entityUtils.getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        checkSupportWriter(support.getMember().getMemberId(), memberId);
+        entityUtils.checkWriter(support.getMember().getMemberId(), memberId);
 
         //기존 대표 이미지를 삭제한 경우
         if (updateSupportReq.getFirstImgDeleted()) {
@@ -149,12 +147,13 @@ public class SupportService {
     /**
      * 후원 삭제
      */
+    @Transactional
     public void deleteSupport(Long memberId, Long supportId) {
         //supportId로 support 객체 가져오기
-        Support support = getSupport(supportId);
+        Support support = entityUtils.getSupport(supportId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        checkSupportWriter(support.getMember().getMemberId(), memberId);
+        entityUtils.checkWriter(support.getMember().getMemberId(), memberId);
 
         //S3에서 파일 삭제
         s3Service.deleteImage(support.getFirstImg());
@@ -178,41 +177,26 @@ public class SupportService {
         return getSupportPageResponse(supportRepository.findByAnimalSubjectsContaining(keyword, pageable), pageNo);
     }
 
-    //memberId로 Member 객체 조회
-    private Member getMember (Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-    }
-
-    //supportId로 Support 객체 조회
-    private Support getSupport (Long supportId) {
-        return supportRepository.findById(supportId)
-                .orElseThrow(() -> new CustomException(SUPPORT_NOT_FOUND));
-    }
-
-    //로그인한 사용자가 작성자인지 확인하는 함수
-    private void checkSupportWriter(Long writerId, Long loginMemberId) {
-        if (!loginMemberId.equals(writerId)) {
-            throw new CustomException(FORBIDDEN);
-        }
-    }
-
     //Pagination 결과 함수
-    private PageResponse getSupportPageResponse(Page<Support> supportPage, int pageNo) {
+    public PageResponse getSupportPageResponse(Page<Support> supportPage, int pageNo) {
         //현재 페이지의 Support 목록
         List<Support> supports = supportPage.getContent();
         //EntityList -> DtoList
         List<Object> supportDtos = supports.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
-        return PageResponse.builder()
-                .content(supportDtos)	//Support 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(supportPage.getSize()) //페이지당 항목 수
-                .totalElements(supportPage.getTotalElements())   //전체 Support 수
-                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
-                .last(supportPage.isLast())  //마지막 페이지 여부
-                .build();
+        return PageResponse.createPageResponse(supportDtos, supportPage, pageNo);
+    }
+
+    /*
+      EntityList -> DtoList
+      map()으로 각 Support를 SupportResponseDto로 변환
+      collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
+     */
+    public List<SupportResponseDto> convertToDtoList(List<Support> supports) {
+        return supports.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     //Entity -> Dto
@@ -220,7 +204,7 @@ public class SupportService {
         return SupportResponseDto.builder()
                 .supportId(support.getSupportId())
                 .title(support.getTitle())
-                .nickname(memberService.getNicknameForMember(support.getMember()))
+                .nickname(entityUtils.getNickname(support.getMember()))
                 .supportStatus(support.getSupportStatus())
                 .firstImg(support.getFirstImg())
                 .goalAmount(support.getGoalAmount())
@@ -228,27 +212,6 @@ public class SupportService {
                 .createDate(support.getCreateDate())
                 .commentCheck(support.getCommentCheck())
                 .build();
-    }
-
-    /*
-     * EntityList -> DtoList
-     * map()으로 각 Support를 SupportResponseDto로 변환
-     * collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
-     */
-    public List<SupportResponseDto> convertToDtoList(List<Support> supports) {
-        return supports.stream()
-                .map(support -> SupportResponseDto.builder()
-                        .supportId(support.getSupportId())
-                        .title(support.getTitle())
-                        .nickname(memberService.getNicknameForMember(support.getMember()))
-                        .supportStatus(support.getSupportStatus())
-                        .firstImg(support.getFirstImg())
-                        .goalAmount(support.getGoalAmount())
-                        .supportAmount(support.getSupportAmount())
-                        .createDate(support.getCreateDate())
-                        .commentCheck(support.getCommentCheck())
-                        .build())
-                .collect(Collectors.toList());
     }
 
 }

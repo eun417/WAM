@@ -7,8 +7,6 @@ import lombok.*;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class QnaResponseDto {
 
     private Long qnaId;

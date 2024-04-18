@@ -1,7 +1,6 @@
 package com.chungjin.wam.domain.member.service;
 
 import com.chungjin.wam.domain.auth.service.AuthService;
-import com.chungjin.wam.domain.auth.service.RedisService;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
 import com.chungjin.wam.domain.member.dto.request.UpdatePwRequestDto;
@@ -17,6 +16,7 @@ import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,11 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chungjin.wam.domain.member.entity.Authority.ROLE_USER;
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -42,19 +44,18 @@ public class MemberService {
     private final SupportRepository supportRepository;
     private final SupportLikeRepository supportLikeRepository;
 
-    private final RedisService redisService;
     private final AuthService authService;
 
     private final MemberMapper memberMapper;
-
     private final PasswordEncoder passwordEncoder;
+    private final EntityUtils entityUtils;
 
     /**
      * 로그인 회원의 email로 회원 정보 조회
      */
     public MemberResponseDto getMemberProfile(Long memberId) {
         //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
         //Entity -> Dto
         return memberMapper.toDto(member);
     }
@@ -65,11 +66,11 @@ public class MemberService {
     @Transactional
     public void updateMember(Long memberId, UpdateMemberRequestDto updateMemberReq) {
         //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
 
-        //이름, 휴대폰 번호 모두 입력하면 GUEST 인 사용자의 권한을 USER 로 변경
+        //이름, 휴대폰 번호 모두 입력하면 GUEST인 사용자의 권한을 USER로 변경
         if (updateMemberReq.getName() != null && updateMemberReq.getPhoneNumber() != null && member.getAuthority() == Authority.ROLE_GUEST) {
-            member.updateAuthority(Authority.ROLE_USER);
+            member.updateAuthority(ROLE_USER);
         }
 
         //MapStruct로 수정
@@ -82,13 +83,10 @@ public class MemberService {
     @Transactional
     public void updatePw(Long memberId, UpdatePwRequestDto updatePwReq) {
         //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
 
         //입력한 비밀번호가 암호화된 비밀번호와 맞는지 확인
-        if (!passwordEncoder.matches(updatePwReq.getNowPassword(), member.getPassword())) {
-            log.info("비밀번호 일치 여부: {}", passwordEncoder.matches(updatePwReq.getNowPassword(), member.getPassword()));
-            throw new CustomException(INVALID_PASSWORD);
-        }
+        validatePassword(updatePwReq.getNowPassword(), member.getPassword());
 
         //비밀번호 암호화 후 변경
         member.updatePw(passwordEncoder.encode(updatePwReq.getNewPassword()));
@@ -100,25 +98,16 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long memberId, String password) {
         //memberId로 로그인 한 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
 
         //입력한 비밀번호가 암호화된 비밀번호와 맞는지 확인
-        if (!passwordEncoder.matches(password, member.getPassword())) {
-            log.info("비밀번호 일치 여부: {}", passwordEncoder.matches(password, member.getPassword()));
-            throw new CustomException(INVALID_PASSWORD);
-        }
+        validatePassword(password, member.getPassword());
 
         //회원 탈퇴
         memberRepository.delete(member);
 
         //로그아웃 처리
         authService.logout(memberId.toString());
-    }
-
-    //memberId로 Member 객체 조회하는 함수
-    private Member getMember (Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     /**
@@ -136,14 +125,7 @@ public class MemberService {
         for (Qna qna : qnas) {
             qnaDtos.add(memberMapper.toDto(qna)); //Qna를 MyQnaDto로 변환하여 리스트에 추가
         }
-        return PageResponse.builder()
-                .content(qnaDtos)	//Qna 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(qnaPage.getSize()) //페이지당 항목 수
-                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
-                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
-                .last(qnaPage.isLast())  //마지막 페이지 여부
-                .build();
+        return PageResponse.createPageResponse(qnaDtos, qnaPage, pageNo);
     }
 
     /**
@@ -161,14 +143,7 @@ public class MemberService {
         for (Support support : supports) {
             supportDtos.add(memberMapper.toDto(support)); //Support를 MySupportDto로 변환하여 리스트에 추가
         }
-        return PageResponse.builder()
-                .content(supportDtos)	//Support 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(supportPage.getSize()) //페이지당 항목 수
-                .totalElements(supportPage.getTotalElements())   //전체 Support 수
-                .totalPages(supportPage.getTotalPages()) //전체 페이지 수
-                .last(supportPage.isLast())  //마지막 페이지 여부
-                .build();
+        return PageResponse.createPageResponse(supportDtos, supportPage, pageNo);
     }
 
     /**
@@ -184,27 +159,9 @@ public class MemberService {
         //EntityList -> DtoList
         List<Object> likeDtos = new ArrayList<>();
         for (Support support : supports) {
-            likeDtos.add(convertToLikeDto(support)); //Support를 MyLikeDto로 변환하여 리스트에 추가
+            likeDtos.add(MyLikeResponseDto.toDto(support)); //Support를 MyLikeDto로 변환하여 리스트에 추가
         }
-        return PageResponse.builder()
-                .content(likeDtos)	//Support 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(likePage.getSize()) //페이지당 항목 수
-                .totalElements(likePage.getTotalElements())   //전체 Support 수
-                .totalPages(likePage.getTotalPages()) //전체 페이지 수
-                .last(likePage.isLast())  //마지막 페이지 여부
-                .build();
-    }
-
-    //Entity -> Dto (Like)
-    public MyLikeResponseDto convertToLikeDto(Support support) {
-        return MyLikeResponseDto.builder()
-                .supportId(support.getSupportId())
-                .title(support.getTitle())
-                .nickname(support.getMember().getNickname())
-                .createDate(support.getCreateDate())
-                .supportStatus(support.getSupportStatus())
-                .build();
+        return PageResponse.createPageResponse(likeDtos, likePage, pageNo);
     }
 
     /**
@@ -222,24 +179,15 @@ public class MemberService {
         for (Member member : members) {
             memberDtos.add(memberMapper.toDto(member)); //Member를 MemberDto로 변환하여 리스트에 추가
         }
-        return PageResponse.builder()
-                .content(memberDtos)	//Member 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(memberPage.getSize()) //페이지당 항목 수
-                .totalElements(memberPage.getTotalElements())   //전체 Member 수
-                .totalPages(memberPage.getTotalPages()) //전체 페이지 수
-                .last(memberPage.isLast())  //마지막 페이지 여부
-                .build();
+        return PageResponse.createPageResponse(memberDtos, memberPage, pageNo);
     }
 
-    //회원이 탈퇴했을 경우 대비하여 반환할 닉네임
-    public String getNicknameForMember(Member member) {
-        return (member != null) ? member.getNickname() : "(알 수 없음)";
-    }
-
-    //회원이 탈퇴했을 경우 대비하여 반환할 memberId
-    public Long getMemberIdForMember(Member member) {
-        return (member != null) ? member.getMemberId() : 0L;
+    //입력한 비밀번호가 암호화된 비밀번호와 맞는지 확인하는 함수
+    private void validatePassword(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            log.info("비밀번호 일치 여부: {}", passwordEncoder.matches(rawPassword, encodedPassword));
+            throw new CustomException(INVALID_PASSWORD);
+        }
     }
 
 }

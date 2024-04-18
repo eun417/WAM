@@ -52,6 +52,7 @@ public class Member extends BaseTimeEntity {
         this.loginType = loginType;
     }
 
+
     //비밀번호 변경
     public void updatePw(String newPassword) {
         this.password = newPassword;

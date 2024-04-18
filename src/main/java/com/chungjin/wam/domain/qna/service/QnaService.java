@@ -1,8 +1,6 @@
 package com.chungjin.wam.domain.qna.service;
 
 import com.chungjin.wam.domain.member.entity.Member;
-import com.chungjin.wam.domain.member.repository.MemberRepository;
-import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
@@ -12,7 +10,7 @@ import com.chungjin.wam.domain.qna.dto.response.QnaResponseDto;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
 import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.global.exception.CustomException;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,26 +23,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chungjin.wam.domain.qna.entity.QnaCheck.CHECKING;
-import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class QnaService {
 
     private final QnaRepository qnaRepository;
-    private final MemberRepository memberRepository;
-
-    private final MemberService memberService;
 
     private final QnaMapper qnaMapper;
+    private final EntityUtils entityUtils;
 
     /**
      * QnA 생성
      */
+    @Transactional
     public void createQna(Long memberId, QnaRequestDto qnaReq) {
         //memberId로 Member 객체 가져오기
-        Member member = getMember(memberId);
+        Member member = entityUtils.getMember(memberId);
 
         //Dto -> Entity
         Qna qna = Qna.builder()
@@ -58,18 +54,12 @@ public class QnaService {
         qnaRepository.save(qna);
     }
 
-    //memberId로 Member 객체 조회하는 함수
-    private Member getMember (Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-    }
-
     /**
      * QnA 상세 조회
      */
     public QnaDetailDto readQna(Long qnaId) {
         //qnaId로 QnA 객체 가져오기
-        Qna qna = getQna(qnaId);
+        Qna qna = entityUtils.getQna(qnaId);
 
         //조회수 증가
         qna.upViewCount(qna.getViewCount());
@@ -77,8 +67,8 @@ public class QnaService {
         //Entity -> Dto
         return QnaDetailDto.builder()
                 .qnaId(qna.getQnaId())
-                .memberId(memberService.getMemberIdForMember(qna.getMember()))
-                .nickname(memberService.getNicknameForMember(qna.getMember()))
+                .memberId(entityUtils.getMemberId(qna.getMember()))
+                .nickname(entityUtils.getNickname(qna.getMember()))
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .createDate(qna.getCreateDate())
@@ -101,12 +91,13 @@ public class QnaService {
     /**
      * QnA 수정
      */
+    @Transactional
     public void updateQna(Long memberId, Long qnaId, UpdateQnaRequestDto updateQnaReq) {
         //qnaId로 QnA 객체 가져오기
-        Qna qna = getQna(qnaId);
+        Qna qna = entityUtils.getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        checkQnaWriter(qna.getMember().getMemberId(), memberId);
+        entityUtils.checkWriter(qna.getMember().getMemberId(), memberId);
 
         //MapStruct 로 수정
         qnaMapper.updateFromUpdateDto(updateQnaReq, qna);
@@ -115,30 +106,25 @@ public class QnaService {
     /**
      * QnA 삭제
      */
+    @Transactional
     public void deleteQna(Long memberId, Long qnaId) {
         //qnaId로 QnA 객체 가져오기
-        Qna qna = getQna(qnaId);
+        Qna qna = entityUtils.getQna(qnaId);
 
         //로그인한 사용자가 작성자가 아닌 경우 에러 발생
-        checkQnaWriter(qna.getMember().getMemberId(), memberId);
+        entityUtils.checkWriter(qna.getMember().getMemberId(), memberId);
 
         //DB 에서 영구 삭제
         qnaRepository.delete(qna);
     }
 
-    ////로그인한 사용자가 작성자인지 확인하는 함수
-    private void checkQnaWriter(Long writerId, Long loginMemberId) {
-        if (!loginMemberId.equals(writerId)) {
-            throw new CustomException(FORBIDDEN);
-        }
-    }
-
     /**
      * QnA 답변 등록
      */
+    @Transactional
     public void updateQnaAnswer(Long qnaId, QnaAnswerRequestDto qnaAnswerReq) {
         //qnaId로 QnA 객체 가져오기
-        Qna qna = getQna(qnaId);
+        Qna qna = entityUtils.getQna(qnaId);
 
         //MapStruct 로 수정
         qnaMapper.updateFromAnswerDto(qnaAnswerReq, qna);
@@ -153,12 +139,6 @@ public class QnaService {
         return getQnaPageResponse(qnaRepository.findByTitleOrContentOrNicknameContaining(keyword, pageable), pageNo);
     }
 
-    //qnaId로 Qna 객체 조회하는 함수
-    private Qna getQna (long qnaId) {
-        return qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new CustomException(QNA_NOT_FOUND));
-    }
-
     //Pagination 결과 함수
     private PageResponse getQnaPageResponse(Page<Qna> qnaPage, int pageNo) {
         //현재 페이지의 Qna 목록
@@ -167,14 +147,7 @@ public class QnaService {
         List<Object> qnaDtos = qnas.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
-        return PageResponse.builder()
-                .content(qnaDtos)   //Qna 목록
-                .pageNo(pageNo) //현재 페이지 번호
-                .pageSize(qnaPage.getSize()) //페이지당 항목 수
-                .totalElements(qnaPage.getTotalElements())   //전체 Qna 수
-                .totalPages(qnaPage.getTotalPages()) //전체 페이지 수
-                .last(qnaPage.isLast())  //마지막 페이지 여부
-                .build();
+        return PageResponse.createPageResponse(qnaDtos, qnaPage, pageNo);
     }
 
     //Entity -> Dto
@@ -186,7 +159,7 @@ public class QnaService {
                 .createDate(qna.getCreateDate())
                 .viewCount(qna.getViewCount())
                 .qnaCheck(qna.getQnaCheck())
-                .nickname(memberService.getNicknameForMember(qna.getMember()))
+                .nickname(entityUtils.getNickname(qna.getMember()))
                 .build();
     }
 

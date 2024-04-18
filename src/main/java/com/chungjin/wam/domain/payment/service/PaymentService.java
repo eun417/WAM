@@ -1,15 +1,13 @@
 package com.chungjin.wam.domain.payment.service;
 
 import com.chungjin.wam.domain.member.entity.Member;
-import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.payment.dto.PaymentRequestDto;
 import com.chungjin.wam.domain.payment.entity.PaymentInfo;
 import com.chungjin.wam.domain.payment.repository.PaymentRepository;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
-import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
-import com.chungjin.wam.global.exception.error.ErrorCodeType;
+import com.chungjin.wam.global.util.EntityUtils;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -24,12 +22,12 @@ import static com.chungjin.wam.global.exception.error.ErrorCodeType.PAYMENT_AMOU
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final MemberRepository memberRepository;
-    private final SupportRepository supportRepository;
+
+    private final EntityUtils entityUtils;
 
     /**
      * 후원금액 결제
@@ -56,20 +54,19 @@ public class PaymentService {
         return iamportResponse.getResponse();
     }
 
-    /*결제 취소*/
+    //결제 취소하는 함수
     public CancelData cancelPayment(IamportResponse<Payment> response) {
         return new CancelData(response.getResponse().getImpUid(), true);
     }
 
-    /*기존 금액에서 후원 받은 금액 추가, 결제 정보 저장*/
+    //기존 금액에서 후원 받은 금액 추가, 결제 정보 저장하는 함수
+    @Transactional
     public void createPaymentInfo(Long memberId, PaymentRequestDto paymentReq, Long paidAmount) {
         //memberId로 Member 객체 가져오기
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.MEMBER_NOT_FOUND));
+        Member member = entityUtils.getMember(memberId);
 
         //supportId로 support 객체 가져오기
-        Support support = supportRepository.findById(paymentReq.getSupportId())
-                .orElseThrow(() -> new CustomException(ErrorCodeType.SUPPORT_NOT_FOUND));
+        Support support = entityUtils.getSupport(paymentReq.getSupportId());
 
         //해당 후원글의 후원 받은 금액 수정
         support.updateSupportAmount(paidAmount);
@@ -100,4 +97,5 @@ public class PaymentService {
     public Long readTotalPaymentAmount() {
         return paymentRepository.findTotalPaymentAmount();
     }
+
 }
