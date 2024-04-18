@@ -12,7 +12,7 @@ function loadSupportDetail() {
 
     //좋아요 상태 확인
     if (token) {
-        checkLikeStatus(token, supportId);
+        checkLikeStatus(supportId);
     }
 
     axios.get(`/support/${supportId}`)
@@ -75,13 +75,30 @@ function loadSupportDetail() {
                             </div>
                             <div class="commentBox-LTR comment-nickname">${comment.nickname}</div>
                             <div class="commentBox-LTL">
-                                <span class="material-symbols-outlined">more_horiz</span>
+                                <span class="material-symbols-outlined comment-edit">more_horiz</span>
                             </div>
                         </div>
                         <div class="commentBox-LM"><p class="comment-content">${comment.content}</p></div>
                         <div class="commentBox-LB"><span class="comment-date gray-text">${comment.createDate}</span></div>
                     </div>`;
                 commentList.appendChild(commentBox);
+
+                //각 댓글에 대한 이벤트 처리
+                commentBox.querySelector('.comment-edit').addEventListener('click', function() {
+                    const editBox = this.closest('.commentBox-LT').querySelector('.edit-box');
+                    //.edit-box 가 보이지 않는 경우 보이도록 함
+                    //showHideElement(editBox);
+                    if (editBox.style.display === 'none') {
+                        editBox.style.display = 'block';
+                    } else {
+                        editBox.style.display = 'none';
+                    }
+                });
+
+                if (isLoggedInMember(token, comment.memberId)) {
+                    // Show the comment edit button
+                    commentBox.querySelector('.comment-edit').style.display = 'block';
+                }
             });
 
             //댓글 삭제 함수 실행
@@ -169,14 +186,21 @@ function showHideElement(element) {
 
 //로그인 사용자가 작성자인지 확인, 수정&삭제 버튼 보이는 함수
 function showUpDelBtnForWriter(token, memberId) {
-    if (token) {
-        //payload에서 데이터 가져오기
-        const payload = getPayloadData(token);
-        console.log('login memberId:'+payload.sub);
+    if (isLoggedInMember(token, memberId)) {
+        showHideElement('.writer');
+    }
+}
 
-        //memberId가 같으면 버튼 보이기
+function isLoggedInMember(token, memberId) {
+    if (token) {
+        //payload 에서 데이터 가져오기
+        const payload = getPayloadData(token);
+        console.log('login memberId:' + payload.sub);
+        console.log('memberId:' + memberId);
+
         if (payload.sub == memberId) {
-            showHideElement('.writer');
+            return true;
         }
+        return false;
     }
 }

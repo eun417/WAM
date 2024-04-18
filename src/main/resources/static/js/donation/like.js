@@ -1,19 +1,17 @@
 /*좋아요 상태 확인 함수*/
-function checkLikeStatus(token, supportId) {
-    if (token) {
-        api.get(`/support/${supportId}/likeStatus`)
-            .then(function(response) {
-                const isLiked = response.data;
-                if (isLiked) {
-                    //좋아요 상태일 때 클래스 추가
-                    var likeBtn = document.getElementById('likeBtn');
-                    likeBtn.classList.add('liked');
-                }
-            })
-        .catch(function(error) {
-            console.error(error);
-        });
-    }
+function checkLikeStatus(supportId) {
+    api.get(`/support/${supportId}/like-status`)
+        .then(function(response) {
+            const isLiked = response.data;
+            if (isLiked) {
+                //좋아요 상태일 때 클래스 추가
+                var likeBtn = document.getElementById('likeBtn');
+                likeBtn.classList.add('liked');
+            }
+        })
+    .catch(function(error) {
+        console.error(error);
+    });
 }
 
 /*좋아요 생성 함수*/

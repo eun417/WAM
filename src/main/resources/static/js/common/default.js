@@ -38,7 +38,7 @@ api.interceptors.response.use(
     console.log('status', status);
 
     if (status === 401) {
-        if (msg === "Unauthorized") {
+        if (msg === "토큰이 만료되었습니다.") {
             const refreshToken = localStorage.getItem('refreshToken');
             if (!refreshToken) {
                 return Promise.reject('Refresh token을 찾을 수 없습니다.');
@@ -69,7 +69,7 @@ api.interceptors.response.use(
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");
         }
     } else if (status == 400) {
-        alert(msg);
+        //alert(msg);
     }
     return Promise.reject(error);
   }

@@ -37,10 +37,6 @@ function requestPay(token, amount) {
                 buyer_tel: memberData.phoneNumber
             }, function (rsp) {
                 if (rsp.success) {
-                    if (!token) {
-                        alert("로그인 후 이용해주세요.")
-                    }
-
                     var supportId = document.getElementById("supportId").value;
                     var impUid = rsp.imp_uid;
                     var inputAmount = amount;
@@ -53,20 +49,15 @@ function requestPay(token, amount) {
                     };
 
                     //결제 검증
-                    axios.post('/payment/validate', paymentReq, {
-                        headers: {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    })
-                    .then(function(response) {
-                        console.log(response);
-                        alert(response.data);
-                        window.location.href = `/support/detail/${supportId}`   //새로고침
-                    })
-                    .catch(function (error) {
-                        console.error(error);
-                        alert(error.response.data.message);
-                    });
+                    api.post('/payment/validate', paymentReq)
+                        .then(function(response) {
+                            console.log(response);
+                            alert("후원해주셔서 감사합니다!");
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            alert(error.response.data.message);
+                        });
                 } else {
                     alert("결제 실패");
                     console.log(rsp);

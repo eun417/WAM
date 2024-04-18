@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 
     function validateInput(input, index) {
+        if (!input) return; //input 이 null 이면 함수 종료
+
         input.addEventListener('input', function() {
             let errorMessage = '';
 

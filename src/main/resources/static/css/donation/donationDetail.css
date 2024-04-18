@@ -144,6 +144,10 @@ body>.donationDetail-wrapper{
     position: relative;
 }
 
+.commentBox-LTL>.comment-edit{
+    display: none;
+}
+
 .edit-box{
     border: 1px solid #445D48;
     border-radius: 10px;
@@ -152,6 +156,7 @@ body>.donationDetail-wrapper{
     right: 0px;
     background-color: rgb(255, 255, 255);
     transition-duration: 0.3s;
+    display: none;
 }
 .edit-box:hover{
     background-color: #f7f7f7;

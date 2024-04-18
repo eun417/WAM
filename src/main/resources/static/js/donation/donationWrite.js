@@ -112,8 +112,8 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
             'Content-Type': 'multipart/form-data'
         }
     }).then(function(response) {
-        console.log(response);
         alert(response.data);
+        window.location.href = "/support/list";
     })
     .catch(function(error) {
         console.error(error);
@@ -182,7 +182,6 @@ document.getElementById('updateDonationBtn').addEventListener('click', function(
             'Content-Type': 'multipart/form-data'
         }
     }).then(function(response) {
-        console.log(response);
         alert(response.data);
         window.location.href = "/support/detail/" + supportId;
     })

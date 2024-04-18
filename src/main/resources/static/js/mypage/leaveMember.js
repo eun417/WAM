@@ -18,6 +18,8 @@ document.querySelector('.leaveMember-btn').addEventListener('click', function() 
             }
         }).then(function(response) {
             alert(response.data);
+            localStorage.clear();
+            window.location.href = '/';
         })
         .catch(function(error) {
             console.error(error);

@@ -33,8 +33,11 @@ function loadEndingSoonSupport() {
     axios.get('/support/ending-soon')
         .then(function(response) {
             const endingSoonSupportList = response.data;
+            var hasData = false; // 데이터 조회 여부를 나타내는 변수
 
             if (endingSoonSupportList && endingSoonSupportList.length > 0) {
+                hasData = true; // 데이터가 있을 경우 true 로 설정
+
                 //랜덤한 인덱스 선택
                 const randomIndex = Math.floor(Math.random() * endingSoonSupportList.length);
                 const randomEndingSoonSupport = endingSoonSupportList[randomIndex];
@@ -74,6 +77,11 @@ function loadEndingSoonSupport() {
 
                 //종료 임박 후원이 없는 경우 보이게 함
                 document.querySelector('.deadline-donation-box').style.display = 'block';
+
+                //종료 임박 후원이 있을 경우 카운트
+                if (hasData) {
+                    setInterval(updateTime, 1000);  //남은 후원 시간
+                }
             } else {
                 console.log('종료 임박 후원 없음');
                 //종료 임박 후원이 없는 경우 숨김
@@ -194,7 +202,7 @@ function loadQna(pageNo) {
             const qna = qnaList[i];
             if (qna) {
                 var row = `<div class="qna-detail-box">
-                                <p class="qna-detail-title">${qna.title}</p>
+                                <a href="/qna/detail/${qna.qnaId}" class="qna-detail-title title-hover">${qna.title}</a>
                                 <p class="gray-text">${qna.createDate}</p>
                                 <p class="qna-content">${qna.content}</p>
                             </div>`;
@@ -213,7 +221,6 @@ function loadQna(pageNo) {
 document.addEventListener('DOMContentLoaded', function() {
     socialLoginSuccess();
     loadEndingSoonSupport();
-    setInterval(updateTime, 1000);  //남은 후원 시간
     loadTotalAmount();
     document.getElementById('mml').click(); //첫 번째 버튼 자동 클릭
     loadQna(0);

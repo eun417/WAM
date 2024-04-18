@@ -23,8 +23,9 @@ function loadProfileInformation() {
 
 /*회원 정보 수정*/
 document.querySelector('#updateMemberBtn').addEventListener('click', function() {
-    const isValidated = window.getValidationStatus();
-    if (!isValidated) {
+    const isRegexValidated = window.getValidationStatus();
+    console.log("isRegexValidated", isRegexValidated);
+    if (!isRegexValidated) {
         alert('정보를 다시 입력해주세요.');
         return;
     }
@@ -66,9 +67,9 @@ document.querySelector('#updateMemberBtn').addEventListener('click', function() 
 
 /*비밀번호 변경*/
 document.getElementById('updatePwBtn').addEventListener('click', function() {
-    const isValidated = window.getValidationStatus();
-    if (!isValidated) {
-        alert('정보를 다시 입력해주세요.');
+    const isPwValidated = window.getPwValidationStatus();
+    if (!isPwValidated) {
+        alert('비밀번호를 다시 입력해주세요.');
         return;
     }
 
@@ -85,7 +86,6 @@ document.getElementById('updatePwBtn').addEventListener('click', function() {
 
     api.put(`/member/profile-detail/pw`, updatePwReq)
         .then(function (response) {
-          console.log(response);
           alert(response.data)
           window.location.reload(); //새로고침
         })
