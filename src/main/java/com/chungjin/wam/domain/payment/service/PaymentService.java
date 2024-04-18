@@ -6,6 +6,7 @@ import com.chungjin.wam.domain.payment.dto.PaymentRequestDto;
 import com.chungjin.wam.domain.payment.entity.PaymentInfo;
 import com.chungjin.wam.domain.payment.repository.PaymentRepository;
 import com.chungjin.wam.domain.support.entity.Support;
+import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
@@ -83,6 +84,14 @@ public class PaymentService {
 
         //DB에 저장
         paymentRepository.save(paymentInfo);
+
+        //후원 글의 첫 결제 여부 확인
+        boolean isFirstPayment = support.getSupportStatus() == SupportStatus.START;
+
+        //첫 결제인 경우에만 후원 상태를 "후원중"으로 업데이트
+        if (isFirstPayment) {
+            support.updateSupportStatus(SupportStatus.SUPPORTING);
+        }
     }
 
     /**

@@ -19,7 +19,7 @@ public class SupportLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long supportLikeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "support_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Support support;

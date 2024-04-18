@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.member.service;
 
+import com.chungjin.wam.domain.auth.service.AuthService;
 import com.chungjin.wam.domain.auth.service.RedisService;
 import com.chungjin.wam.domain.member.dto.MemberMapper;
 import com.chungjin.wam.domain.member.dto.request.UpdateMemberRequestDto;
@@ -42,6 +43,7 @@ public class MemberService {
     private final SupportLikeRepository supportLikeRepository;
 
     private final RedisService redisService;
+    private final AuthService authService;
 
     private final MemberMapper memberMapper;
 
@@ -106,11 +108,11 @@ public class MemberService {
             throw new CustomException(INVALID_PASSWORD);
         }
 
-        //Redis 에서 RefreshToken 삭제
-        redisService.deleteData(memberId.toString());
-
-        //DB 에서 영구 삭제
+        //회원 탈퇴
         memberRepository.delete(member);
+
+        //로그아웃 처리
+        authService.logout(memberId.toString());
     }
 
     //memberId로 Member 객체 조회하는 함수
@@ -228,6 +230,16 @@ public class MemberService {
                 .totalPages(memberPage.getTotalPages()) //전체 페이지 수
                 .last(memberPage.isLast())  //마지막 페이지 여부
                 .build();
+    }
+
+    //회원이 탈퇴했을 경우 대비하여 반환할 닉네임
+    public String getNicknameForMember(Member member) {
+        return (member != null) ? member.getNickname() : "(알 수 없음)";
+    }
+
+    //회원이 탈퇴했을 경우 대비하여 반환할 memberId
+    public Long getMemberIdForMember(Member member) {
+        return (member != null) ? member.getMemberId() : 0L;
     }
 
 }

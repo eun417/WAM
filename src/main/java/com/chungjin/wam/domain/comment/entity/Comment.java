@@ -21,7 +21,7 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "support_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Support support;

@@ -3,6 +3,7 @@ package com.chungjin.wam.domain.support.service;
 import com.chungjin.wam.domain.comment.service.CommentService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
+import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
@@ -41,6 +42,7 @@ public class SupportService {
 
     private final CommentService commentService;
     private final S3Service s3Service;
+    private final MemberService memberService;
 
     private final SupportMapper supportMapper;
 
@@ -84,7 +86,7 @@ public class SupportService {
         //Entity -> Dto
         return SupportDetailDto.builder()
                 .supportId(support.getSupportId())
-                .memberId(support.getMember().getMemberId())
+                .memberId(memberService.getMemberIdForMember(support.getMember()))
                 .animalSubjects(support.getAnimalSubjects())
                 .title(support.getTitle())
                 .goalAmount(support.getGoalAmount())
@@ -218,7 +220,7 @@ public class SupportService {
         return SupportResponseDto.builder()
                 .supportId(support.getSupportId())
                 .title(support.getTitle())
-                .nickname(getMemberNickname(support))
+                .nickname(memberService.getNicknameForMember(support.getMember()))
                 .supportStatus(support.getSupportStatus())
                 .firstImg(support.getFirstImg())
                 .goalAmount(support.getGoalAmount())
@@ -238,7 +240,7 @@ public class SupportService {
                 .map(support -> SupportResponseDto.builder()
                         .supportId(support.getSupportId())
                         .title(support.getTitle())
-                        .nickname(getMemberNickname(support))
+                        .nickname(memberService.getNicknameForMember(support.getMember()))
                         .supportStatus(support.getSupportStatus())
                         .firstImg(support.getFirstImg())
                         .goalAmount(support.getGoalAmount())
@@ -247,12 +249,6 @@ public class SupportService {
                         .commentCheck(support.getCommentCheck())
                         .build())
                 .collect(Collectors.toList());
-    }
-
-    //닉네임 null 처리하는 함수
-    private String getMemberNickname(Support support) {
-        Member member = support.getMember();
-        return member != null ? member.getNickname() : "(알 수 없음)";
     }
 
 }

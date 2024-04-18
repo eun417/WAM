@@ -2,6 +2,7 @@ package com.chungjin.wam.domain.qna.service;
 
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
+import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
 import com.chungjin.wam.domain.qna.dto.request.QnaRequestDto;
@@ -33,6 +34,8 @@ public class QnaService {
 
     private final QnaRepository qnaRepository;
     private final MemberRepository memberRepository;
+
+    private final MemberService memberService;
 
     private final QnaMapper qnaMapper;
 
@@ -74,8 +77,8 @@ public class QnaService {
         //Entity -> Dto
         return QnaDetailDto.builder()
                 .qnaId(qna.getQnaId())
-                .memberId(qna.getMember().getMemberId())
-                .nickname(getMemberNickname(qna))
+                .memberId(memberService.getMemberIdForMember(qna.getMember()))
+                .nickname(memberService.getNicknameForMember(qna.getMember()))
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .createDate(qna.getCreateDate())
@@ -84,12 +87,6 @@ public class QnaService {
                 .answerDate(qna.getAnswerDate())
                 .qnaCheck(qna.getQnaCheck())
                 .build();
-    }
-
-    //닉네임 null 처리하는 함수
-    private String getMemberNickname(Qna qna) {
-        Member member = qna.getMember();
-        return member != null ? member.getNickname() : "(알 수 없음)";
     }
 
     /**
@@ -189,7 +186,7 @@ public class QnaService {
                 .createDate(qna.getCreateDate())
                 .viewCount(qna.getViewCount())
                 .qnaCheck(qna.getQnaCheck())
-                .nickname(qna.getMember().getNickname())
+                .nickname(memberService.getNicknameForMember(qna.getMember()))
                 .build();
     }
 

@@ -3,15 +3,14 @@ package com.chungjin.wam.domain.member.entity;
 import com.chungjin.wam.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  //의미 없는 객체 생성 막음
-@SQLDelete(sql = "UPDATE member SET activated = false WHERE member_id = ?")
-@SQLRestriction("activated = true")
+@SoftDelete(strategy = SoftDeleteType.ACTIVE, columnName = "activated")
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -37,6 +36,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
 
+    @Column(insertable = false, updatable = false)
     private Boolean activated = true;
 
     //생성자에 @Builder 선언

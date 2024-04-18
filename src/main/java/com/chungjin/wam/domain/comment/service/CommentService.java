@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.comment.dto.request.CommentRequestDto;
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.comment.entity.Comment;
+import com.chungjin.wam.domain.member.service.MemberService;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.comment.repository.CommentRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
@@ -29,6 +30,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final SupportRepository supportRepository;
+
+    private final MemberService memberService;
 
     /**
      * 댓글 생성
@@ -65,8 +68,8 @@ public class CommentService {
         return comments.stream()
                 .map(comment -> CommentDto.builder()
                         .commentId(comment.getCommentId())
-                        .memberId(comment.getMember().getMemberId())
-                        .nickname(comment.getMember().getNickname())
+                        .memberId(memberService.getMemberIdForMember(comment.getMember()))
+                        .nickname(memberService.getNicknameForMember(comment.getMember()))
                         .content(comment.getContent())
                         .createDate(comment.getCreateDate())
                         .build())

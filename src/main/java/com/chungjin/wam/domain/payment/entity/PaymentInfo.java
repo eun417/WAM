@@ -22,7 +22,7 @@ public class PaymentInfo extends BaseTimeEntity {
     @Column(name = "payment_uid")
     private String paymentUid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "support_id")
     private Support support;
 
