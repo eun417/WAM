@@ -4,7 +4,6 @@ import com.chungjin.wam.global.exception.error.ErrorCodeType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,18 +13,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /**
-     * 유효한 자격 증명을 제공하지 않고 접근하려 할 때 401 에러 리턴
+     * 사용자의 요청에 대한 인증이 실패했을 때 401 에러 반환
      */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        log.info("JwtAuthenticationEntryPoint 실행");
         String exception = (String)request.getAttribute("exception");
-        log.info("JwtAuthenticationEntryPoint - exception: {}", exception);
 
         if (exception == null) {
             setErrorResponse(request, response, ErrorCodeType.UNAUTHORIZED);
@@ -44,6 +40,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         }
     }
 
+    //인증 에러가 발생했을 때 JSON 형식의 에러 응답 반환하는 함수
     private void setErrorResponse(HttpServletRequest request, HttpServletResponse response, ErrorCodeType errorCode) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -53,7 +50,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         body.put("message", errorCode.getMessage());
         body.put("path", request.getServletPath());
         body.put("timestamp", LocalDateTime.now().toString());
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper(); //JSON으로 직렬화
         mapper.writeValue(response.getOutputStream(), body);
     }
 

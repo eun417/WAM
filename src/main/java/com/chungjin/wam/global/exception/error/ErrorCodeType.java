@@ -51,10 +51,10 @@ public enum ErrorCodeType implements ErrorCode {
     INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "IMAGE-001", "잘못된 형식의 파일입니다."),
     DELETE_FILE_FAILED(HttpStatus.BAD_REQUEST, "IMAGE-002", "이미지 삭제에 실패했습니다."),
 
-    //결제
+    //Payment
     PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "PAYMENT-000", "입력한 금액과 실제 결제한 금액이 다릅니다."),
 
-    //메일
+    //Mail
     SEND_MAIL_FAILED(HttpStatus.BAD_REQUEST, "MAIL-000", "메일 전송에 실패했습니다."),
 
     ;

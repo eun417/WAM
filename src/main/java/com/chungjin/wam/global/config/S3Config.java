@@ -23,6 +23,7 @@ public class S3Config {
     /**
      * Amazon S3 클라이언트를 생성, 빈으로 등록
      * -> 애플리케이션에서 Amazon S3를 사용 가능
+     * @return AmazonS3Client: 이미지를 S3에 저장하기 위해 사용되는 객체
      */
     @Bean
     public AmazonS3Client amazonS3Client() {

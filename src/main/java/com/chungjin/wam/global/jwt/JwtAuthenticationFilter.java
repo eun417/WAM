@@ -24,15 +24,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //Request Header 에서 토큰을 꺼냄
+        //Request Header에서 토큰을 꺼냄
         String accessToken = jwtTokenProvider.resolveToken(request);
-//        String requestURI = request.getRequestURI();
 
-        //validateToken으로 토큰 유효성 검사
+        //토큰 유효성 검사
         if (StringUtils.hasText(accessToken) && jwtTokenProvider.validateToken(accessToken)) {
-            //토큰 유효성 검증 통과(정상 토큰)
-            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken); // 토큰에서 Authentication 객체 받아옴
-            SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 저장(set)
+            //토큰에서 Authentication 객체 받아옴
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            //SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("SecurityContextHolder에 Authentication 객체를 저장했습니다. 인증 완료 {}", authentication.getName());
             log.info("저장된 객체 권한은 {} 입니다", authentication.getAuthorities());
         }

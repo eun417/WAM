@@ -18,11 +18,19 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
+    /**
+     * Redis와의 연결 설정
+     * @return LettuceConnectionFactory: Redis 연결, 관리하는 Spring 구현체
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
+    /**
+     * Redis 상호작용 담당
+     * @return RedisTemplate: Redis와 상호작용하기 위한 설정들을 담고 있음
+     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();

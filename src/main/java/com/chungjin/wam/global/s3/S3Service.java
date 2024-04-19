@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
@@ -36,15 +34,19 @@ public class S3Service {
 
     /**
      * S3에 이미지 업로드
+     * @param file
+     * @param directory
+     * @return 저장된 이미지의 주소
      */
     public String uploadFile(MultipartFile file, String directory) {
-        String fileName = directory + "/" + createFileName(file.getOriginalFilename());
-        log.info("upload fileName: " + fileName);
-
         if (file.isEmpty()) {
             throw new CustomException(RESOURCE_NOT_FOUND);
         }
 
+        String fileName = directory + "/" + createFileName(file.getOriginalFilename());
+        log.info("upload fileName: " + fileName);
+
+        //S3에 업로드되는 파일 또는 객체와 관련된 정보(파일의 유형, 크기, 버전 등과 같은 정보)
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(file.getContentType());
 
@@ -66,6 +68,7 @@ public class S3Service {
 
     /**
      * S3에서 이미지 삭제
+     * @param fileUrl
      */
     public void deleteImage(String fileUrl) {
         log.info("delete fileUrl: " + fileUrl);
@@ -87,12 +90,12 @@ public class S3Service {
         }
     }
 
-    //파일 이름 생성 메소드
+    //파일 이름 생성 함수
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    //파일 확장자 구하는 메소드
+    //파일 확장자 구하는 함수
     private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));

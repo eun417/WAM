@@ -41,6 +41,9 @@ public class EmailConfig {
     @Value("${spring.mail.properties.mail.smtp.writetimeout}")
     private int writeTimeout;
 
+    /**
+     * JavaMailSender 설정
+     */
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -54,6 +57,7 @@ public class EmailConfig {
         return mailSender;
     }
 
+    //JavaMail 속성을 구성하는 함수
     private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", auth);

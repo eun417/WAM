@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
 import com.chungjin.wam.domain.auth.service.RedisService;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
+import com.nimbusds.jwt.JWT;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -30,11 +31,11 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;    // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5; //30;    // 30분
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; //* 7;  // 7일
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String REFRESH_HEADER = "Refresh";
+//    public static final String REFRESH_HEADER = "Refresh";
     public static final String BEARER_PREFIX = "Bearer ";
 
     private final CustomUserDetailsService userDetailsService;
@@ -45,12 +46,15 @@ public class JwtTokenProvider {
     /**
      * 주어진 시크릿 키를 사용하여 JwtTokenProvider 인스턴스를 생성하고 초기화
      * 시크릿 키는 JWT 토큰의 생성 및 검증에 사용
+     * @param secretKey
+     * @param userDetailsService
+     * @param redisService
      */
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService, RedisService redisService) {
         //Base64로 인코딩된 시크릿 키를 디코딩
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
-        //주어진 바이트 배열로부터 HmacSha 키를 생성. 이 키는 JWT 토큰의 서명에 사용
+        //주어진 바이트 배열로부터 HMAC SHA 키를 생성. 이 키는 JWT 토큰의 서명에 사용
         this.key = Keys.hmacShaKeyFor(keyBytes);
 
         this.userDetailsService = userDetailsService;
@@ -58,7 +62,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 사용자의 로그인에 의해 생성된 인증 정보를 기반으로 액세스 토큰과 리프레시 토큰을 생성하여 반환
+     * 사용자의 로그인에 의해 생성된 인증 정보를 기반으로 access token, refresh token 을 생성하여 반환
      */
     public TokenDto generateTokenDto(Authentication authentication) {
         //권한들 가져오기
@@ -89,10 +93,10 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         return Jwts.builder()
-                .setSubject(memberIdString)   // payload "sub": "name" ... 사용자 이름
-                .claim(AUTHORITIES_KEY, authorities)    // payload "auth": "ROLE_USER" ... 사용자 권한 정보
-                .setExpiration(accessTokenExpiresIn)    // payload "exp": 1516239022(예시) ... 액세스 토큰 만료 시간
-                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512" ... JWT에 서명 추가
+                .setSubject(memberIdString)   //payload "sub": "name" ... 사용자 이름
+                .claim(AUTHORITIES_KEY, authorities)    //payload "auth": "ROLE_USER" ... 사용자 권한 정보
+                .setExpiration(accessTokenExpiresIn)    //payload "exp": 1516239022(예시) ... 액세스 토큰 만료 시간
+                .signWith(key, SignatureAlgorithm.HS512)    //header "alg": "HS512" ... JWT에 서명 추가
                 .compact(); //JWT를 문자로 직렬화하여 반환
     }
 
@@ -113,7 +117,9 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 주어진 액세스 토큰을 사용하여 사용자의 인증 정보를 가져와서 Authentication 객체로 변환
+     * access token 을 사용하여 사용자의 인증 정보를 가져와서 Authentication 객체로 변환
+     * @param accessToken
+     * @return 사용자의 인증 정보
      */
     public Authentication getAuthentication(String accessToken) {
         //accessToken 을 파싱하여 클레임 가져오기
@@ -134,23 +140,19 @@ public class JwtTokenProvider {
         UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
 
         /*
-        사용자의 인증 정보
-        비밀번호는 비어있는 문자열로, 권한 정보는 앞서 변환한 authorities 로 설정
-        ""(비밀번호): JWT 토큰을 사용하여 사용자를 인증하고 권한을 부여하는 경우에는 이미 인증이 완료되었으며, 사용자의 비밀번호는 필요하지 않음
+         사용자의 인증 정보
+         비밀번호는 비어있는 문자열로, 권한 정보는 앞서 변환한 authorities 로 설정
+         ""(비밀번호): JWT 토큰을 사용하여 사용자를 인증하고 권한을 부여하는 경우에는 이미 인증이 완료되었으며,
+         사용자의 비밀번호는 필요하지 않음
         */
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     /**
-     * memberId 조회
-     */
-    public String getMemberId(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
-    }
-
-    /**
      * 필터링하기 위해선 토큰 정보 필요
      * -> Request Header에서 토큰 정보를 꺼내옴
+     * @param request
+     * @return access token OR null
      */
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
@@ -163,7 +165,14 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 토큰의 서명 검증, 토큰의 유효기간을 확인하여 토큰의 유효성 판단
+     * JWT 토큰에서 memberId 조회
+     */
+    public String getMemberId(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    /**
+     * access token 의 서명 검증, 유효기간을 확인하여 유효성 검사
      */
     public boolean validateToken(String token) {
         try {
@@ -185,6 +194,9 @@ public class JwtTokenProvider {
         return false;
     }
 
+    /**
+     * refresh token 유효성 검사
+     */
     public void validateRefreshToken(String refreshToken) {
         try {
             //유효한 토큰인 경우에만 클레임 반환
@@ -199,15 +211,20 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 주어진 액세스 토큰을 파싱하여 그 안에 포함된 클레임을 추출하고, 만료된 토큰인 경우에는 만료된 토큰의 클레임을 반환
+     * access token 을 파싱하여 그 안에 포함된 클레임을 추출하고, 만료된 토큰인 경우에는 만료된 토큰의 클레임을 반환
+     * @param token
+     * @return Claims: name-value 형태인 정보의 조각들
      */
-    public Claims parseClaims(String accessToken){
+    public Claims parseClaims(String token){
         try{
-            //setSigningKey(key): JwtParser에 대한 서명 키를 설정(JWT 토큰을 생성할 때 사용된 서명 키와 일치) ->  JWT 토큰의 유효성 검증
-            //parseClaimsJws(accessToken): 주어진 액세스 토큰을 파싱하여 클레임을 추출 ... JWT 토큰의 서명을 검증하고, 서명이 유효한 경우에만 클레임을 추출
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        }catch (ExpiredJwtException ex){
-            //ExpiredJwtException: JWT 토큰이 만료된 경우에 발생하는 예외
+            /*
+             setSigningKey(key): JwtParser 에 대한 서명 키를 설정(JWT 토큰을 생성할 때 사용된 서명 키와 일치)
+             ->  JWT 토큰의 유효성 검증
+             parseClaimsJws(accessToken): 주어진 액세스 토큰을 파싱하여 클레임을 추출
+             ... JWT 토큰의 서명을 검증하고, 서명이 유효한 경우에만 클레임을 추출
+             */
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException ex){    //JWT 토큰이 만료된 경우에 발생하는 예외
             return ex.getClaims();
         }
     }

@@ -20,7 +20,7 @@ public class ErrorResponse {
 
     /**
      * @Valid로 에러가 들어왔을 때(유효성 검사 오류),
-     * 어느 필드에서 에러가 발생했는 지에 대한 응답 처리
+     * 어느 필드에서 에러가 발생했는지에 대한 응답 처리
      */
     @Getter
     @Builder
