@@ -66,12 +66,12 @@ public class Support extends BaseTimeEntity {
     }
 
     //좋아요 증가
-    public void upLike(Long supportLike) {
+    public void upLike() {
         this.supportLike++;
     }
 
     //좋아요 감소
-    public void downLike(Long supportLike) {
+    public void downLike() {
         this.supportLike--;
     }
 

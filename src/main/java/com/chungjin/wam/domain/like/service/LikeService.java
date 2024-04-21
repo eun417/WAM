@@ -32,7 +32,7 @@ public class LikeService {
         Support support = entityUtils.getSupport(supportId);
 
         //좋아요 증가
-        support.upLike(support.getSupportLike());
+        support.upLike();
 
         //Entity 생성
         SupportLike like = SupportLike.builder()
@@ -67,7 +67,7 @@ public class LikeService {
         if(!memberId.equals(supportLike.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
 
         //좋아요 감소
-        support.downLike(support.getSupportLike());
+        support.downLike();
 
         //DB에서 영구 삭제
         supportLikeRepository.delete(supportLike);

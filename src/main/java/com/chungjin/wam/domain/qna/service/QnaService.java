@@ -57,12 +57,13 @@ public class QnaService {
     /**
      * QnA 상세 조회
      */
+    @Transactional
     public QnaDetailDto readQna(Long qnaId) {
         //qnaId로 QnA 객체 가져오기
         Qna qna = entityUtils.getQna(qnaId);
 
         //조회수 증가
-        qna.upViewCount(qna.getViewCount());
+        qna.upViewCount();
 
         //Entity -> Dto
         return QnaDetailDto.builder()

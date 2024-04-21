@@ -146,13 +146,10 @@ public class AuthService {
      * 로그아웃
      */
     public void logout(String memberIdString) {
-        //Redis 에 refresh token 이 없는 경우 에러 발생
-        if (!redisService.existData(memberIdString)) {
-            throw new CustomException(ALREADY_LOGGED_OUT);
+        if (redisService.existData(memberIdString)) {
+            //Redis 에서 해당 refresh token 삭제
+            redisService.deleteData(memberIdString);
         }
-
-        //Redis 에서 해당 refresh token 삭제
-        redisService.deleteData(memberIdString);
     }
 
     /**

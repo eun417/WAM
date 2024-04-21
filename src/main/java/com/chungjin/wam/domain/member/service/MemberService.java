@@ -69,7 +69,7 @@ public class MemberService {
         Member member = entityUtils.getMember(memberId);
 
         //이름, 휴대폰 번호 모두 입력하면 GUEST인 사용자의 권한을 USER로 변경
-        if (updateMemberReq.getName() != null && updateMemberReq.getPhoneNumber() != null && member.getAuthority() == Authority.ROLE_GUEST) {
+        if (member.getName() != null && member.getPhoneNumber() != null && member.getAuthority() == Authority.ROLE_GUEST) {
             member.updateAuthority(ROLE_USER);
         }
 

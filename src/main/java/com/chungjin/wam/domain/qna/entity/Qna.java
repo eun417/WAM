@@ -57,7 +57,7 @@ public class Qna extends BaseTimeEntity {
     }
 
     //조회수 증가
-    public void upViewCount(Long viewCount) {
+    public void upViewCount() {
         this.viewCount++;
     }
 
