@@ -14,9 +14,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -114,7 +112,7 @@ public class MapService {
                         Element ecoBankElement = (Element) ecoBankList.item(0);
 
                         String speciesName = getElementTextContent(ecoBankElement, "EcoBank:spcs_korean_nm");
-                        if (speciesName.equals("알수없음")) {
+                        if (speciesName.equals("(알 수 없음)")) {
                             continue;
                         }
                         String coordinates = getElementTextContent(ecoBankElement, "EcoBank:geom");
@@ -155,7 +153,7 @@ public class MapService {
     //null 처리하는 함수
     private String getElementTextContent(Element element, String tagName) {
         NodeList nodeList = element.getElementsByTagName(tagName);
-        return nodeList.getLength() > 0 ? nodeList.item(0).getTextContent() : "알수없음";
+        return nodeList.getLength() > 0 ? nodeList.item(0).getTextContent() : "(알 수 없음)";
     }
 
     //자연환경조사 데이터 가져오는 함수
@@ -166,10 +164,9 @@ public class MapService {
                 .append("&srs=").append(SRC)
                 .append("&bbox=").append(BBOX)
                 .append("&typeName=").append(typeName)
-                .append("&maxFeatures=50");
+                .append("&maxFeatures=500");
 
         URL url = new URL(urlBuilder.toString());
-        log.info("URL: {}", url);
 
         try (BufferedReader rd = new BufferedReader(new InputStreamReader(url.openStream()))) {
             StringBuilder sb = new StringBuilder();
