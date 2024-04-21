@@ -63,6 +63,8 @@ public class Support extends BaseTimeEntity {
         this.commentCheck = commentCheck;
         this.member = member;
         this.supportStatus = supportStatus;
+        this.supportLike = 0L;
+        this.supportAmount = 0L;
     }
 
     //좋아요 증가

@@ -6,7 +6,6 @@ import com.chungjin.wam.domain.auth.service.CustomOAuth2UserService;
 import com.chungjin.wam.domain.member.entity.Authority;
 import com.chungjin.wam.global.jwt.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -45,7 +44,6 @@ public class SecurityConfig {
             "/animal-map/**",
             "/member/profile", "/member/like", "/member/support", "/member/qna", "/member/leave",
             "/admin/member/list", "/admin/support/list", "/admin/qna/list",
-            "/h2-console/**",
             "/css/**", "/js/**"
     };
 
@@ -79,17 +77,12 @@ public class SecurityConfig {
 
                 //HttpServletRequest 를 사용하는 요청들에 대한 접근 제한 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .requestMatchers(HttpMethod.POST, "/support/").hasAuthority(Authority.ROLE_USER.getKey())
                         .requestMatchers(HttpMethod.PUT, "/support/{supportId}").hasAuthority(Authority.ROLE_USER.getKey())
                         .requestMatchers(HttpMethod.DELETE, "/support/{supportId}").hasAuthority(Authority.ROLE_USER.getKey())
                         .requestMatchers(ALLOWED_URLS).permitAll()  //인증 없이 접근 허용
                         .requestMatchers("/admin/**").hasAuthority(Authority.ROLE_ADMIN.getKey())
                         .anyRequest().authenticated())   //나머지 요청들은 모두 인증 필요
-
-                //h2-console 설정
-                .headers(headers ->
-                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
                 //JwtAuthenticationFilter 를 addFilterBefore()로 등록했던 JwtSecurityConfig 클래스도 적용
                 .with(new JwtSecurityConfig(jwtTokenProvider), customizer -> {})

@@ -39,10 +39,10 @@ public class Qna extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public Qna(String title, String content, Long viewCount, QnaCheck qnaCheck, Member member) {
+    public Qna(String title, String content, QnaCheck qnaCheck, Member member) {
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
+        this.viewCount = 0L;
         this.qnaCheck = qnaCheck;
         this.member = member;
     }

@@ -68,13 +68,13 @@ public class MemberService {
         //memberId로 Member 객체 가져오기
         Member member = entityUtils.getMember(memberId);
 
+        //MapStruct로 수정
+        memberMapper.updateFromDto(updateMemberReq, member);
+
         //이름, 휴대폰 번호 모두 입력하면 GUEST인 사용자의 권한을 USER로 변경
         if (member.getName() != null && member.getPhoneNumber() != null && member.getAuthority() == Authority.ROLE_GUEST) {
             member.updateAuthority(ROLE_USER);
         }
-
-        //MapStruct로 수정
-        memberMapper.updateFromDto(updateMemberReq, member);
     }
 
     /**
