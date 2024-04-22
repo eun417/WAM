@@ -14,13 +14,6 @@ function loadList(pageNo) {
         }
     })
     .then(function(response) {
-        if (response.data.content.length === 0) {
-            //검색 결과가 없는 경우
-            alert('검색 결과가 없습니다.');
-            window.location.href = "/support/list";
-            return;
-        }
-
         var searchList = response.data.content;
 
         //DocumentFragment 생성

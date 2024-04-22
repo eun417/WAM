@@ -29,19 +29,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="link-icon-box">
-                        <div>
-                            <a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();"></a>
+                        <a id="btnTwitter" href="javascript:shareTwitter();">
+                            <div class="link-icon twitter"></div>
                             <p>트위터</p>
-                        </div>
-                        <div>
-                            <a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();"></a>
+                        </a>
+                        <a id="btnFacebook" href="javascript:shareFacebook();">
+                            <div class="link-icon facebook"></div>
                             <p>페이스북</p>
-                        </div>
-                        <div>
-                            <a id="jsKey" th:href="${@environment.getProperty('kakao.js.key')}"></a>
-                            <a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();"></a>
+                        </a>
+                        <a id="btnKakao" href="javascript:shareKakao();">
+                            <div class="link-icon kakao"></div>
                             <p>카카오톡</p>
-                        </div>
+                            <a id="jsKey" th:href="${@environment.getProperty('kakao.js.key')}"></a>
+                        </a>
                     </div>
                     <div class="url-box">
                         <input type="text" id="urlLink" class="url-link input-form">

@@ -18,7 +18,7 @@ document.getElementById('sendMailBtn').addEventListener('click', function() {
     axios.post('/auth/change-pw/email/send', changePwLinkReq)
         .then(function (response) {
             console.log(response);
-            alert(response.data)
+            alert(response.data);
         })
         .catch(function (error) {
             console.error('메일 전송 실패:', error);

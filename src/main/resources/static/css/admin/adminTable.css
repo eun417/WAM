@@ -25,10 +25,10 @@
     width: 10%;
 }
 .th-status{
-    width: 10%;
+    width: 11%;
 }
 .th-delete-btn{
-    width: 10%;
+    width: 11%;
 }
 .th-amount{
     width: 15%;
@@ -85,7 +85,7 @@ table tr:hover{
 }
 .list-bottom{
     background-color: rgb(241, 241, 241);
-    height: 150px;
+    height: 100px;
     box-sizing: border-box;
     text-align: right;
     position: relative;

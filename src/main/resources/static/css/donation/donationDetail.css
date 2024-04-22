@@ -191,11 +191,12 @@ body>.donationDetail-wrapper{
 .link-icon-box{
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     margin-bottom: 20px;
 }
-.link-icon-box>div{
+.link-icon-box>a{
     text-align: center;
+    text-decoration-line: none;
 }
 .link-icon {
     position: relative;

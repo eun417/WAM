@@ -13,12 +13,14 @@
     border-bottom: rgb(177, 177, 177) solid 1px;
     text-align: center;
     font-size: large;
-    font-weight: bold;
     padding: 15px;
 }
 .join-header>.title{
     font-size: 26px;
     font-weight: 600;
+}
+.join-header>.explanation{
+    font-weight: 500;
 }
 
 .title>span{

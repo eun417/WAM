@@ -1,3 +1,24 @@
+let pageNo = 0;
+
+//무한 스크롤
+window.addEventListener('scroll', function() {
+    const scrollHeight = document.documentElement.scrollHeight; //문서의 총 높이
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop; //현재 스크롤 위치
+    const clientHeight = document.documentElement.clientHeight; //현재 보이는 화면의 높이
+
+    //스크롤이 페이지 하단에 도달했는지 확인
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+        //현재 스크롤 위치 + 화면 높이 = 현재 화면의 맨 아래 위치
+
+        //페이지 번호 증가
+        pageNo++;
+
+        //추가 콘텐츠 로드
+        loadList(pageNo);
+    }
+});
+
+
 /*supportWrite 페이지 이동(create)*/
 function goToSupportWrite(event) {
     event.preventDefault(); //기본 이벤트 실행 방지
@@ -20,3 +41,11 @@ document.getElementById('searchBtn').addEventListener('click', function() {
     var searchValue = document.querySelector('.search').value;
     window.location.href = "/support/search?q=" + searchValue;
 });
+
+//Enter 하면 검색 버튼 클릭
+function enterSearchBtn(event) {
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        document.getElementById('searchBtn').click();
+    }
+}

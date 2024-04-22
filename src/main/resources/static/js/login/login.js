@@ -1,8 +1,20 @@
 /*로그인 버튼 클릭*/
 document.getElementById('loginBtn').addEventListener('click', function() {
+    login();
+});
+
+//Enter 하면 로그인 버튼 클릭
+function enterLoginBtn(event) {
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        document.getElementById('loginBtn').click();
+    }
+}
+
+function login() {
     //LoginRequest 객체 생성
-    var email = document.getElementsByName('email')[0].value;
-    var password = document.getElementsByName('password')[0].value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
 
     const loginReq = {
         email: email,
@@ -16,7 +28,9 @@ document.getElementById('loginBtn').addEventListener('click', function() {
 
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
-            saveTokenToLocalStorage(accessToken, refreshToken); //서버에서 반환한 토큰을 로컬 스토리지에 저장
+            //서버에서 반환한 토큰을 로컬 스토리지에 저장
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
 
             //payload에서 데이터 가져오기
             const payload = getPayloadData(accessToken);
@@ -31,4 +45,4 @@ document.getElementById('loginBtn').addEventListener('click', function() {
             console.error('로그인 실패', error);
             alert(error.response.data.message);
         });
-});
+}

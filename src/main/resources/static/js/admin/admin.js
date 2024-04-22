@@ -14,12 +14,12 @@ function loadMemberList(pageNo) {
         memberList.forEach(function(member) {
             var row = `<tr>
                         <td>${member.memberId}</td>
-                        <td>${member.name}</td>
+                        <td>${member.name == null ? '(알 수 없음)' : member.name}</td>
                         <td>${member.email}</td>
                         <td>${member.nickname}</td>
                         <td>${member.createDate}</td>
-                        <td>${member.authority == 'ADMIN' ? '관리자' : (member.authority == 'USER' ? '사용자' : '임시회원')}</td>
-                        <td><button class="deleteMember-btn btn-s bc4">회원 탈퇴</button></td>
+                        <td><button class="answer-btn btn btn-s bc3" style="cursor: default;">${member.authority == 'ROLE_ADMIN' ? '관리자' : (member.authority == 'ROLE_USER' ? '사용자' : '임시회원')}</button></td>
+                        <td><button class="deleteMember-btn btn-s bc6">회원 탈퇴</button></td>
                     </tr>`;
             var tr = document.createElement('tr');
             tr.innerHTML = row;
@@ -82,7 +82,7 @@ function loadSupportList(pageNo) {
                         <td>${support.goalAmount}</td>
                         <td>${support.supportAmount}</td>
                         <td>${support.createDate}</td>
-                        <td><button class="deleteSupport-btn btn-s bc4">삭제</button></td>
+                        <td><button class="deleteSupport-btn btn-s bc6">삭제</button></td>
                     </tr>`;
             var tr = document.createElement('tr');
             tr.innerHTML = row;
@@ -144,8 +144,8 @@ function loadQnaList(pageNo) {
                         <td>${qna.nickname}</td>
                         <td>${qna.createDate}</td>
                         <td>${qna.viewCount}</td>
-                        <td><button class="answer-btn btn-s bc1" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
-                        <td><button class="deleteQna-btn btn-s bc4">삭제</button></td>
+                        <td><button class="answer-btn btn btn-s ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                        <td><button class="deleteQna-btn btn-s bc6">삭제</button></td>
                     </tr>`;
             var tr = document.createElement('tr');
             tr.innerHTML = row;

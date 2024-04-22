@@ -58,14 +58,23 @@
         </div>
         <div class="top-menu">
             <div class="top-menu-background">
-                <div class="top-menu-title"></div>
+                <button class="logout-btn bc3" style="cursor:pointer">로그아웃</button>
             </div>
         </div>
     </div>
 
+    <script th:src="@{/js/common/checkToken.js}"></script>
     <script th:src="@{/js/common/default.js}"></script>
+    <script th:src="@{/js/login/logout.js}"></script>
     <script>
-        moveAdminMenuItem();   //현재 있는 메뉴 표시
+        document.addEventListener('DOMContentLoaded', function() {
+            moveAdminMenuItem();   //현재 있는 메뉴 표시
+        });
+
+        //로그아웃
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            logout();
+        });
 
         /*현재 있는 탭에 admin-menu-active 클래스 추가하는 함수*/
         function moveAdminMenuItem() {

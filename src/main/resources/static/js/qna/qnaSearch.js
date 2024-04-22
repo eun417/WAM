@@ -15,11 +15,6 @@ function loadList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        if (response.data.content.length === 0) {
-            //검색 결과가 없는 경우
-            alert('검색 결과가 없습니다.');
-        }
-
         var searchList = response.data.content;
         var tableBody = document.querySelector('#qnaTableBody');
 

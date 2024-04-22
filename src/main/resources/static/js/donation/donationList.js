@@ -1,29 +1,7 @@
-let pageNo = 0;
-
 /*페이지 로드 시 함수 실행*/
 document.addEventListener('DOMContentLoaded', function() {
     loadList(0);
 });
-
-
-//무한 스크롤
-window.addEventListener('scroll', function() {
-    const scrollHeight = document.documentElement.scrollHeight; //문서의 총 높이
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop; //현재 스크롤 위치
-    const clientHeight = document.documentElement.clientHeight; //현재 보이는 화면의 높이
-
-    //스크롤이 페이지 하단에 도달했는지 확인
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
-        //현재 스크롤 위치 + 화면 높이 = 현재 화면의 맨 아래 위치
-
-        //페이지 번호 증가
-        pageNo++;
-
-        //추가 콘텐츠 로드
-        loadList(pageNo);
-    }
-});
-
 
 /*후원 목록 조회*/
 function loadList(pageNo) {

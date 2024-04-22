@@ -20,3 +20,11 @@ document.getElementById('searchBtn').addEventListener('click', function() {
     console.log(searchValue);
     window.location.href = "/qna/search?q=" + searchValue;
 });
+
+//Enter 하면 검색 버튼 클릭
+function enterSearchBtn(event) {
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        document.getElementById('searchBtn').click();
+    }
+}

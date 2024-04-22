@@ -64,12 +64,6 @@ document.getElementById('createQnaBtn').addEventListener('click', function() {
 
 /*QnA 수정*/
 document.getElementById('updateQnaBtn').addEventListener('click', function() {
-    if (!token) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "/qna/list";
-        return;
-    }
-
     //UpdateQnaRequestDto 객체 생성
     const title = document.getElementById('title').value.trim();
     const content = $('#summernote').summernote('code');

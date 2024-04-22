@@ -1,15 +1,3 @@
-//토큰을 토컬 스토리지에 저장
-function saveTokenToLocalStorage(accessToken, refreshToken) {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-}
-
-//토큰을 토컬 스토리지에서 삭제
-function removeTokenInLocalStorage() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-}
-
 //payload에서 데이터 가져오기
 function getPayloadData(accessToken) {
     //토큰이 없는 경우 null 반환

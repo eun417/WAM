@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-
-
 /*QnA 상세 조회*/
 function loadQnaDetail() {
     const qnaId = document.getElementById('qnaId').value;
@@ -109,6 +106,9 @@ document.querySelector('.btn-answer').addEventListener('click', function() {
 document.getElementById('updateQnaBtn').addEventListener('click', function() {
     var qnaId = document.getElementById('qnaId').value;
     console.log('수정할 후원: ' + qnaId);
+
+    //로컬 스토리지에서 액세스 토큰 가져오기
+    const token = localStorage.getItem('accessToken') || null;
 
     if (!token) {
         alert('로그인 후 이용해주세요.');

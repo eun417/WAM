@@ -67,6 +67,7 @@ div>.input-form{
     font-size: 15px;
 }
 .joinUs a:hover{
+    font-weight: 600;
     text-decoration: underline;
 }
 .login-bottom{

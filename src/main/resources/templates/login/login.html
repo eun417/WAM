@@ -15,11 +15,11 @@
         <div class="typing-box">
             <div class="empx"><span>이메일</span></div>
             <div class="typing-email dass1">
-                <input type="text" name="email" class="input-form" placeholder="이메일 입력" required>
+                <input type="text" id="email" class="input-form" placeholder="이메일 입력" required>
             </div>
             <div class="typing-password dass1">
                 <div class="empx"><span>비밀번호</span></div>
-                <div><input type="password" name="password" class="input-form" placeholder="비밀번호 입력" required></div>
+                <div><input type="password" id="password" class="input-form" onkeyup="enterLoginBtn(event)" placeholder="비밀번호 입력" required></div>
             </div>
         </div>
         <div class="find-box">

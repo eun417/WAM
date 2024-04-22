@@ -31,6 +31,7 @@ function loadSupportDetail() {
                 donationStatusElement.classList.add('ending-soon');
                 donationStatusElement.textContent = '종료 임박';
             } else if (supportDetail.supportStatus === 'END') {
+                disablePaymentBtn();    //후원하기(결제) 버튼 막기
                 donationStatusElement.classList.add('end');
                 donationStatusElement.textContent = '후원 종료';
             }
@@ -107,6 +108,15 @@ function loadSupportDetail() {
         .catch(function(error) {
             console.error(error);
         });
+}
+
+//"후원 종료" 상태인 후원의 결제 막는 함수
+function disablePaymentBtn() {
+    const paymentBtn = document.getElementById('paymentBtn');
+    paymentBtn.disabled = true;
+    paymentBtn.addEventListener('click', function() {
+        alert('종료된 후원입니다');
+    });
 }
 
 
