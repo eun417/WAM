@@ -22,6 +22,11 @@ repositories {
 	maven { url 'https://jitpack.io' }	//iamport 라이브러리 추가하기 위함
 }
 
+//plain jar 생성 X 설정
+jar {
+	enabled = false
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -75,9 +80,6 @@ dependencies {
 
 	//Thymeleaf 실시간 반영
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-	//Web Client
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
