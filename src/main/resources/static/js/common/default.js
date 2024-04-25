@@ -64,7 +64,7 @@ api.interceptors.response.use(
                     return Promise.reject(refreshError);
                 });
         //} else if (msg === "리프레시 토큰이 만료되었습니다.") {
-        else {
+        } else {
             localStorage.clear();
             window.location.href = "/auth/login";
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");
