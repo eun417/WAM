@@ -5,7 +5,6 @@ import com.chungjin.wam.domain.auth.service.CustomUserDetailsService;
 import com.chungjin.wam.domain.auth.service.RedisService;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.exception.error.ErrorCodeType;
-import com.nimbusds.jwt.JWT;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -31,8 +30,8 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5; //30;    // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; //* 7;  // 7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;    // 30분
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3;  // 3일
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 //    public static final String REFRESH_HEADER = "Refresh";
@@ -111,7 +110,7 @@ public class JwtTokenProvider {
         List<String> values = new ArrayList<>();
         values.add(refreshToken);
         values.add(authorities);
-        //Refresh Token 만료를 위해 Redis에 7일 동안 저장
+        //Refresh Token 만료를 위해 Redis에 저장
         redisService.setListDataExpire(memberIdString, values, REFRESH_TOKEN_EXPIRE_TIME);
         return refreshToken;
     }

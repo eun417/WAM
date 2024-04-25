@@ -63,7 +63,8 @@ api.interceptors.response.use(
                     console.error("토큰 재발급 오류:", refreshError);
                     return Promise.reject(refreshError);
                 });
-        } else if (msg === "리프레시 토큰이 만료되었습니다.") {
+        //} else if (msg === "리프레시 토큰이 만료되었습니다.") {
+        else {
             localStorage.clear();
             window.location.href = "/auth/login";
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");
