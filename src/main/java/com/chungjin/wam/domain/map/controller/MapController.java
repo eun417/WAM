@@ -37,7 +37,7 @@ public class MapController {
     @GetMapping("/amnrp")
     public String goAmnrpMap(Model model) {
         model.addAttribute("clientId", clientId);
-        return "map/AmnrpMap";
+        return "map/amnrpMap";
     }
 
     /**
