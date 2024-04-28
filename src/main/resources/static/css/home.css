@@ -6,7 +6,7 @@
     margin: auto;
 }
 
-.default{
+.home-content .count-box>.default{
     cursor: default;
 }
 .content-box .more-btn{
@@ -173,4 +173,5 @@
 .qna-detail-box img{
     width: 100%;
     object-fit:cover;
+    display: none;
 }

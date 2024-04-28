@@ -1,5 +1,5 @@
 const api = axios.create({
-  baseURL: "http://15.165.6.171:8081",
+  baseURL: "http://15.165.6.171:8080",
   headers: { "Content-type": "application/json" },
   withCredentials: true,
 });
@@ -63,8 +63,7 @@ api.interceptors.response.use(
                     console.error("토큰 재발급 오류:", refreshError);
                     return Promise.reject(refreshError);
                 });
-        //} else if (msg === "리프레시 토큰이 만료되었습니다.") {
-        } else {
+        } else if (msg === "리프레시 토큰이 만료되었습니다.") {
             localStorage.clear();
             window.location.href = "/auth/login";
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");

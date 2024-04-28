@@ -2,12 +2,12 @@ const supportId = document.getElementById('supportId').value;
 
 function shareTwitter() {
     var sendText = "WAM - 야생동물후원사이트"; // 전달할 텍스트
-    var sendUrl = "http://localhost:8081/support/detail/"+supportId; // 전달할 URL
+    var sendUrl = "http://ec2-15-165-6-171.ap-northeast-2.compute.amazonaws.com:8081/support/detail/"+supportId; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
 }
 
 function shareFacebook() {
-    var sendUrl = "http://localhost:8081/support/detail/"+supportId; // 전달할 URL
+    var sendUrl = "http://ec2-15-165-6-171.ap-northeast-2.compute.amazonaws.com:8081/support/detail/"+supportId; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
 }
 
@@ -25,8 +25,8 @@ function shareKakao() {
       description: "야생동물후원사이트", // 보여질 설명
       imageUrl: "https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png", // 콘텐츠 URL
       link: {
-         mobileWebUrl: "http://localhost:8081/support/detail/"+supportId,
-         webUrl: "http://localhost:8081/support/detail/"+supportId
+         mobileWebUrl: "http://ec2-15-165-6-171.ap-northeast-2.compute.amazonaws.com:8081/support/detail/"+supportId,
+         webUrl: "http://ec2-15-165-6-171.ap-northeast-2.compute.amazonaws.com:8081/support/detail/"+supportId
       }
     }
   });

@@ -102,11 +102,12 @@ function loadSupportByTag(keyword, pageNo) {
 
                 var row = `<div class="donation-box">
                                 <div class="donation-img-box">
-                                    <div class="donation-status start">
-                                        ${supportTag.supportStatus === 'START' ? '후원 시작' :
-                                        supportTag.supportStatus === 'SUPPORTING' ? '후원중' :
-                                        supportTag.supportStatus === 'ENDING_SOON' ? '종료 임박' :
-                                        supportTag.supportStatus === 'END' ? '후원 종료' : ''}
+                                    <div class="donation-status ${support.supportStatus === 'START' ? 'start' :
+                                                                   support.supportStatus === 'ENDING_SOON' ? 'ending-soon' :
+                                                                   support.supportStatus === 'END' ? 'end' : ''}">
+                                        ${support.supportStatus === 'START' ? '후원 시작' :
+                                          support.supportStatus === 'ENDING_SOON' ? '종료 임박' :
+                                          support.supportStatus === 'END' ? '후원 종료' : ''}
                                     </div>
                                     <div class="donation-img"><img src="${supportTag.firstImg}" class="first-pic" alt="animal"></div>
                                 </div>
