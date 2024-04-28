@@ -22,7 +22,7 @@ import static com.chungjin.wam.global.exception.error.ErrorCodeType.PAYMENT_AMOU
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -60,7 +60,6 @@ public class PaymentService {
     }
 
     //기존 금액에서 후원 받은 금액 추가, 결제 정보 저장하는 함수
-    @Transactional
     public void createPaymentInfo(Long memberId, PaymentRequestDto paymentReq, Long paidAmount) {
         //memberId로 Member 객체 가져오기
         Member member = entityUtils.getMember(memberId);
@@ -94,6 +93,7 @@ public class PaymentService {
     /**
      * 총 후원금 조회
      */
+    @Transactional(readOnly = true)
     public Long readTotalPaymentAmount() {
         return paymentRepository.findTotalPaymentAmount();
     }
