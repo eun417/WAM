@@ -48,9 +48,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # 4. Spring Boot 애플리케이션 Gradle 빌드
+    # 4. Spring Boot 애플리케이션 Gradle 빌드    
     - name: Build with Gradle
-      run: ./gradlew clean build --exclude-task test
+      run: |
+        chmod +x ./gradlew
+        ./gradlew clean build --exclude-task test
 
     # 5. Docker 이미지 빌드
     - name: docker image build
