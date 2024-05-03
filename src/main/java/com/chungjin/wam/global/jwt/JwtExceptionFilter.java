@@ -1,6 +1,5 @@
 package com.chungjin.wam.global.jwt;
 
-import com.chungjin.wam.global.exception.CustomException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (CustomException e) {
+        } catch (JwtException e) {
             //JwtAuthenticationFilter 에서 발생한 예외 처리
             request.setAttribute("exception", e.getErrorCode().getCode());
             filterChain.doFilter(request, response);

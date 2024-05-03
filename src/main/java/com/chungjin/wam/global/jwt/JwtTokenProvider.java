@@ -180,13 +180,13 @@ public class JwtTokenProvider {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
-            throw new CustomException(ErrorCodeType.WRONG_TYPE_SIGNATURE);
+            throw new JwtException(ErrorCodeType.WRONG_TYPE_SIGNATURE);
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
-            throw new CustomException(ErrorCodeType.ACCESS_TOKEN_EXPIRED);
+            throw new JwtException(ErrorCodeType.ACCESS_TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
-            throw new CustomException(ErrorCodeType.INVALID_TOKEN);
+            throw new JwtException(ErrorCodeType.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
         }
