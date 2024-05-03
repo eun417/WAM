@@ -81,9 +81,11 @@ jobs:
       - name: docker pull
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wam-image
       
-      # 2. 기존에 실행 중인 컨테이너 삭제
+      # 2. 기존의 컨테이너 중지 및 삭제
       - name: docker stop container
-        run: docker rm -f spring || true
+        run: |
+          sudo docker stop spring || true
+          sudo docker rm spring || true
 
       # 3. 최신 이미지를 컨테이너화하여 실행
       - name: docker run new container
