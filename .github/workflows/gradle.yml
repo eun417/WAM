@@ -73,6 +73,7 @@ jobs:
   run-docker-image-on-ec2:
     # build-docker-image (위)과정이 완료되어야 실행
     needs: build-docker-image
+    if: ${{ needs.build-docker-image.result == 'success' }}
     runs-on: self-hosted
 
     steps:
@@ -80,13 +81,13 @@ jobs:
       - name: docker pull
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wam-image
       
-      # 2. 기존의 컨테이너 중지
+      # 2. 기존에 실행 중인 컨테이너 삭제
       - name: docker stop container
-        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
+        run: docker rm -f spring || true
 
       # 3. 최신 이미지를 컨테이너화하여 실행
       - name: docker run new container
-        run: sudo docker run --name spring --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/wam-image
+        run: sudo docker run --name spring -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/wam-image
 
       # 4. 미사용 이미지 정리
       - name: delete old docker image
