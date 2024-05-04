@@ -1,5 +1,5 @@
 const api = axios.create({
-  baseURL: "http://15.165.6.171:8080",
+  baseURL: "http://cea6439.com",
   headers: { "Content-type": "application/json" },
   withCredentials: true,
 });

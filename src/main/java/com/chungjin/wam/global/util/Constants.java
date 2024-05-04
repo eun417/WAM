@@ -19,6 +19,11 @@ public final class Constants {
     public static final String S3_QNA = "qna";
 
     /**
+     * Project Base URL
+     */
+    public static final String PROJECT_URL = "http://cea6439.com/";
+
+    /**
      * 자연환경조사 데이터 조회에 필요한 상수
      */
     public static final String BASE_URL = "https://www.nie-ecobank.kr/ecoapi/EcpeInfoService/wfs";

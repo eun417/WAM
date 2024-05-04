@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.SEND_MAIL_FAILED;
+import static com.chungjin.wam.global.util.Constants.PROJECT_URL;
 
 @Service
 @Transactional
@@ -65,7 +66,7 @@ public class EmailService {
     public void sendLinkMail(String email) {
         try {
             String authCode = createCode(); //인증코드 생성
-            String changePwLink = "http://ec2-15-165-6-171.ap-northeast-2.compute.amazonaws.com:8081/auth/change-pw/form?authCode=" + authCode;   //인증코드로 링크 생성
+            String changePwLink = PROJECT_URL + "auth/change-pw/form?authCode=" + authCode;   //인증코드로 링크 생성
 
             MimeMessage message = javaMailSender.createMimeMessage();
 
