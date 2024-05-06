@@ -53,7 +53,7 @@ function requestPay(token, amount) {
                         .then(function(response) {
                             console.log(response);
                             alert("후원해주셔서 감사합니다!");
-                            windows.location.reload();  //새로고침
+                            window.location.reload();   //새로고침
                         })
                         .catch(function (error) {
                             console.error(error);

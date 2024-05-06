@@ -121,7 +121,7 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
             alert('일반 회원만 작성할 수 있습니다.');
             window.location.href = "/member/profile";
         } else {
-            alert(error.response.data.message);
+            alert(error.response.data.errors.map(error => error.message));
         }
     });
 });
@@ -191,7 +191,7 @@ document.getElementById('updateDonationBtn').addEventListener('click', function(
             alert('일반 회원만 작성할 수 있습니다.');
             window.location.href = "/member/profile";
         } else {
-            alert(error.response.data.message);
+            alert(error.response.data.errors.map(error => error.message));
         }
     });
 });
