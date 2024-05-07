@@ -1,5 +1,5 @@
 const api = axios.create({
-  baseURL: "http://cea6439.com",
+  baseURL: "http://localhost:8080",
   headers: { "Content-type": "application/json" },
   withCredentials: true,
 });
@@ -74,3 +74,38 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
+/* 빈 화면 */
+//table
+function noResult(colspan, fragment) {
+    const noResult = `<td colspan="${colspan}">
+                            <div class="no-result">
+                                <span class="info-icon material-symbols-outlined">info</span>
+                                <p class="info-memo">조회된 결과가 없습니다.</p>
+                            </div>
+                       </td>`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = noResult;
+    fragment.appendChild(tr);
+}
+
+//div
+function noResultDiv(fragment) {
+    const noResult = `<div class="no-result">
+                        <span class="info-icon material-symbols-outlined">info</span>
+                        <p class="info-memo">조회된 결과가 없습니다.</p>
+                    </div>`;
+    let div = document.createElement('div');
+    div.innerHTML = noResult;
+    fragment.appendChild(div.firstChild);
+}
+
+//삭제 후 요소가 하나도 없을 때 빈 화면 출력하는 함수
+function deleteAfterNoResult(tableBody) {
+    //남은 목록 수 확인
+    const remainingRows = tableBody.querySelectorAll('tr').length;
+    if (remainingRows === 0) {
+        noResult(6, tableBody);
+    }
+}

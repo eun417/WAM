@@ -13,11 +13,7 @@
     text-decoration-line: none;
 }
 
-/* *:not(a, input, textarea, span, i) {
-    cursor: default;
-} */
 *>p, *>span {
-    /* cursor: text; */
     margin: 0;
     text-align: justify;
 }
@@ -31,7 +27,6 @@ ul{
 
 /* 기본화면 레이아웃 */
 .wrapper, .page-content{
-    /*min-height: 100%;*/
     position: relative;
     padding-bottom: 200px;
 }
@@ -205,6 +200,18 @@ span.brand3 {
     justify-content: left;
     padding-bottom: 15px;
 }
+.tag-name{
+    font-size: 14px;
+    border: none;
+    background-color: rgb(243, 243, 243);
+    padding: 10px 20px 10px 20px;
+}
+.tag-name:hover{
+    background-color: #ebebeb;
+}
+.tag-name-active{
+    background-color: #e3e3e3;
+}
 .donation-list-box>.donation-list{
     margin-top: 35px;
 }
@@ -292,10 +299,6 @@ span.brand3 {
 }
 
 /*summernote*/
-/*
-.text-editor{
-    text-align: left;
-}*/
 .text-editor .btn{
     padding: 5px 10px !important;
 }
@@ -331,41 +334,23 @@ div>.active-reg-input{
     color: #a86e57;
 }
 
-.display-block{
-    display: block;
-}
-.display-none{
-    display: none;
-}
 
-
-/* 글씨 색 */
-.fc-1 {
-    color: #25382f;
+/* 빈 화면 */
+body .no-result {
+    margin: 0 auto;
+    text-align: center;
+    padding: 100px 0 100px 0;
 }
-
-.fc-2 {
-    color: #59516e;
+.no-result * {
+    color: #b1b1b1;
 }
+.no-result .info-icon {
+    font-size: 50px;
 
-.fc-3 {
-    color: #eeeeee;
 }
-
-.fc-4 {
-    color: #003154;
-}
-
-.fc-5 {
-    color: #0f631d;
-}
-
-.fc-6 {
-    color: #94310a;
-}
-
-.fc-7 {
-    color: #d6b822;
+.no-result .info-memo {
+    text-align: center;
+    font-weight: 400;
 }
 
 
@@ -622,26 +607,6 @@ div>.active-reg-input{
     padding: 0.2rem 0.5rem 0.2rem 0.5rem;
 }
 
-.bs2 {
-    padding: 1rem 1.3rem 1rem 1.3rem;
-}
-
-.bs3 {
-    padding: 1.2rem 1.5rem 1.2rem 1.5rem;
-    font-size: 1.1em;
-}
-
-.bs4 {
-    padding: 1.3rem 2rem 1.3rem 2rem;
-    font-size: 1.2em;
-}
-
-.bs5 {
-    width: 100%;
-    padding: 2rem;
-    font-size: 1.2em;
-}
-
 
 /* input 디자인 */
 .input-form {
@@ -675,7 +640,7 @@ textarea.input-form {
 }
 
 
-/* 페이징 디자인 1 */
+/* 페이징 디자인 */
 .w3-center{
     text-align: center;
     margin-top: 30px;
@@ -684,17 +649,16 @@ textarea.input-form {
 .w3-pagination {
     display: inline-block;
     padding: 0;
-    margin: 0
+    margin: 0;
 }
 
 .w3-pagination li {
-    display: inline
+    display: inline;
 }
 
 .w3-pagination li a {
     text-decoration: none;
     color: #000;
-    float: left;
     padding: 8px 16px;
     cursor: pointer;
 }
@@ -706,45 +670,4 @@ textarea.input-form {
 .w3-green,.w3-hover-green:hover {
     color: #fff!important;
     background-color: #445D48!important
-}
-
-/* 페이징 디자인 2 */
-.pagination {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.pagination>li>a.page-item {
-    display: block;
-    font-size: 18px;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    margin: 5px;
-}
-
-.pagination>li>a.page-item:not(.active-page):hover{
-    color: #b8b8b8;
-    transition: 0.2s ease-out;
-}
-
-.pagination>li>a.page-item>span.material-icons {
-    display: block;
-    width: 100%;
-    height: 100%;
-    line-height: 40px;
-}
-
-.pagination>li>a.page-item>span.material-icons:hover{
-    color: #b8b8b8;
-    transition: 0.2s ease-out;
-}
-
-.pagination .page-item.active-page {
-    background-color: #445D48;
-    color: #fff;
-    border-radius: 50%;
 }

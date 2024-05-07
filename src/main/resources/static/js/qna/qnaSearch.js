@@ -15,27 +15,31 @@ function loadList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        var searchList = response.data.content;
-        var tableBody = document.querySelector('#qnaTableBody');
+        const searchList = response.data.content;
+        const tableBody = document.querySelector('#qnaTableBody');
 
         //DocumentFragment 생성
-        var fragment = new DocumentFragment();
+        const fragment = new DocumentFragment();
         tableBody.innerHTML = ''; //테이블 내용 초기화
 
-        searchList.forEach(function(qna) {
-            var row = `<tr>
-                        <td>${qna.qnaId}</td>
-                        <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
-                        <td>${qna.nickname}</td>
-                        <td>${qna.createDate}</td>
-                        <td>${qna.viewCount}</td>
-                        <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
-                    </tr>`;
-            var tr = document.createElement('tr');
-            tr.innerHTML = row;
+        if (searchList.length === 0) {
+            noResult(6, fragment);
+        } else {
+            searchList.forEach(function(qna) {
+                let row = `<tr>
+                            <td>${qna.qnaId}</td>
+                            <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
+                            <td>${qna.nickname}</td>
+                            <td>${qna.createDate}</td>
+                            <td>${qna.viewCount}</td>
+                            <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
+                        </tr>`;
+                let tr = document.createElement('tr');
+                tr.innerHTML = row;
 
-            fragment.appendChild(tr);
-        });
+                fragment.appendChild(tr);
+            });
+        }
 
         //테이블 내용을 한 번에 추가
         tableBody.innerHTML = '';
