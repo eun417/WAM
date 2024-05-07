@@ -169,6 +169,7 @@
 }
 .qna-detail-box p{
     width: 100%;
+    text-align: left !important;
 }
 .qna-detail-box img{
     width: 100%;

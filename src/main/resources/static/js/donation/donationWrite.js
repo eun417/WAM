@@ -3,13 +3,13 @@ const token = localStorage.getItem('accessToken');
 
 document.addEventListener('DOMContentLoaded', function() {
     /*달력 설정*/
-    var today = new Date().toISOString().substring(0, 10);
+    let today = new Date().toISOString().substring(0, 10);
     document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
     document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
     document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
 
     /*파일 선택 -> 파일 이름 설정*/
-    var fileInput = document.getElementById('firstImg');
+    let fileInput = document.getElementById('firstImg');
 
     //파일 변경되면 이름 변경
     fileInput.addEventListener('change', function() {
@@ -41,7 +41,7 @@ function getSupportDetail() {
 
         axios.get('/support/' + supportId)
             .then(function (response) {
-                var supportDetail = response.data;
+                const supportDetail = response.data;
                 fillSupportDetail(supportDetail);   //supportDetail 값을 채우는 함수 실행
             })
             .catch(function (error) {
@@ -59,7 +59,7 @@ function fillSupportDetail(supportDetail) {
     document.getElementById('endDate').value = dashFormatDate(supportDetail.endDate);
     //파일 선택란에 파일 이름 표시
     if (supportDetail.firstImg) {
-        var fileName = supportDetail.firstImg.substring(supportDetail.firstImg.lastIndexOf('/') + 1);
+        let fileName = supportDetail.firstImg.substring(supportDetail.firstImg.lastIndexOf('/') + 1);
         document.querySelector('.file-name').textContent = fileName;
     }
     $('#summernote').summernote('code', supportDetail.content);
@@ -146,7 +146,7 @@ document.getElementById('updateDonationBtn').addEventListener('click', function(
     console.log('수정할 후원: ' + supportId);
 
     //기존 대표 이미지 삭제 여부(기본값:false)
-    var firstImgDeleted = false;
+    let firstImgDeleted = false;
 
     //대표 이미지를 새로 설정한 경우
     if (newFirstImg !== undefined && newFirstImg !== null) {
@@ -218,7 +218,7 @@ function checkCommentOption() {
 
 //이미지 업로드 요청 함수
 function uploadImage(file) {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('file', file);
 
     return axios.post('/support/image-upload', formData, {
@@ -265,7 +265,7 @@ function dashFormatDate(inputDate) {
 
 //요소를 보이게 하거나 숨기는 함수
 function showHideElement(element) {
-    var element = document.querySelector(element);
+    const element = document.querySelector(element);
     if (element.style.display === 'none') {
         element.style.display = 'block';
     } else {

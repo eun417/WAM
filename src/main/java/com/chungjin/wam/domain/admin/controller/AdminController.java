@@ -8,12 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    //테스트 페이지 이동(나중에 삭제 필요)
-    @GetMapping("/test")
-    public String testPage() {
-        return "testPage";
-    }
-
     /**
      * Member 목록 조회
      */

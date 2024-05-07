@@ -11,14 +11,14 @@ function loadList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        var qnaList = response.data.content;
-        var tableBody = document.querySelector('#qnaTableBody');
+        const qnaList = response.data.content;
+        const tableBody = document.querySelector('#qnaTableBody');
 
         //DocumentFragment 생성
-        var fragment = new DocumentFragment();
+        const fragment = new DocumentFragment();
 
         qnaList.forEach(function(qna) {
-            var row = `<tr>
+            let row = `<tr>
                         <td>${qna.qnaId}</td>
                         <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
                         <td>${qna.nickname}</td>
@@ -26,7 +26,7 @@ function loadList(pageNo) {
                         <td>${qna.viewCount}</td>
                         <td><button class="answer-btn btn bs1 ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
                     </tr>`;
-            var tr = document.createElement('tr');
+            let tr = document.createElement('tr');
             tr.innerHTML = row;
 
             fragment.appendChild(tr);

@@ -11,18 +11,18 @@ function loadQnaDetail() {
 
     axios.get(`/qna/${qnaId}`)
         .then(function(response) {
-            var qnaDetail = response.data;
+            const qnaDetail = response.data;
 
             document.title = qnaDetail.title;   //페이지 제목 설정
 
             //로컬 스토리지에서 액세스 토큰 가져오기
             const token = localStorage.getItem('accessToken');
 
-            var titleElement = document.querySelector('.D-title');
-            var nicknameElement = document.querySelector('.D-top');
-            var createDateElement = document.querySelector('.D-date');
-            var viewCountElement = document.querySelector('.viewCount-num');
-            var contentElement = document.querySelector('.D-textarea');
+            const titleElement = document.querySelector('.D-title');
+            const nicknameElement = document.querySelector('.D-top');
+            const createDateElement = document.querySelector('.D-date');
+            const viewCountElement = document.querySelector('.viewCount-num');
+            const contentElement = document.querySelector('.D-textarea');
 
             //데이터 넣기
             document.getElementById('qnaId').value = qnaDetail.qnaId;
@@ -34,9 +34,9 @@ function loadQnaDetail() {
 
             //답변한 QnA인 경우
             if (qnaDetail.answerDate !== null && qnaDetail.answer !== null) {
-                var answerDateElement = document.querySelector('.answer-date');
-                var answerContentElement = document.querySelector('.answer-content');
-                var answerTextarea = document.getElementById('answerTextarea');
+                const answerDateElement = document.querySelector('.answer-date');
+                const answerContentElement = document.querySelector('.answer-content');
+                const answerTextarea = document.getElementById('answerTextarea');
                 answerDateElement.textContent = qnaDetail.answerDate;
                 answerContentElement.textContent = qnaDetail.answer;
                 answerTextarea.value = qnaDetail.answer;
@@ -45,14 +45,14 @@ function loadQnaDetail() {
                 showHideElement('#answerContent');  //답변 내용 보이기
 
                 //답변 작성 버튼 텍스트 변경
-                var answerButton = document.querySelector('.btn-answer');
+                const answerButton = document.querySelector('.btn-answer');
                 if (answerButton) {
                     answerButton.textContent = '답변 수정하기';
                 }
             }
 
             //답변 상태에 따라 버튼 스타일 설정
-            var answerButton = document.querySelector('.answer-comp');
+            const answerButton = document.querySelector('.answer-comp');
             answerButton.classList.add(qnaDetail.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7');
             answerButton.textContent = qnaDetail.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료';
 
@@ -104,8 +104,8 @@ document.querySelector('.btn-answer').addEventListener('click', function() {
 
 /*qnaWrite 페이지 이동(update)*/
 document.getElementById('updateQnaBtn').addEventListener('click', function() {
-    var qnaId = document.getElementById('qnaId').value;
-    console.log('수정할 후원: ' + qnaId);
+    const qnaId = document.getElementById('qnaId').value;
+//    console.log('수정할 QnA: ' + qnaId);
 
     //로컬 스토리지에서 액세스 토큰 가져오기
     const token = localStorage.getItem('accessToken') || null;
@@ -122,7 +122,7 @@ document.getElementById('updateQnaBtn').addEventListener('click', function() {
 /*QnA 삭제*/
 document.getElementById('deleteQnaBtn').addEventListener('click', function() {
     const qnaId = document.getElementById('qnaId').value;
-    console.log('삭제할 QnA: ' + qnaId);
+//    console.log('삭제할 QnA: ' + qnaId);
 
     if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
         //사용자가 확인을 누르면 QnA 삭제 요청
@@ -142,11 +142,11 @@ document.getElementById('deleteQnaBtn').addEventListener('click', function() {
 
 //요소를 보이게 하거나 숨기는 함수
 function showHideElement(element) {
-    var element = document.querySelector(element);
-    if (element.style.display === 'none') {
-        element.style.display = 'block';
+    let e = document.querySelector(element);
+    if (e.style.display === 'none') {
+        e.style.display = 'block';
     } else {
-        element.style.display = 'none';
+        e.style.display = 'none';
     }
 }
 

@@ -1,6 +1,6 @@
 //사용자로부터 후원금액 입력 받는 함수
 function promptAmount(token) {
-    var amount = prompt("후원할 금액을 입력해주세요:");
+    const amount = prompt("후원할 금액을 입력해주세요:");
 
     if (amount !== null) {
         //입력된 값이 숫자인지 확인
@@ -20,11 +20,11 @@ function requestPay(token, amount) {
         .then(function (response) {
             const memberData = response.data;   //회원 정보
 
-            var impKey = document.getElementById('impKey').getAttribute('href');
+            const impKey = document.getElementById('impKey').getAttribute('href');
             IMP.init(impKey);
 
-            var today = new Date();
-            var makeMerchantUid = today.getFullYear()+""+(today.getMonth()+1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes()+""+today.getSeconds();
+            let today = new Date();
+            const makeMerchantUid = today.getFullYear()+""+(today.getMonth()+1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes()+""+today.getSeconds();
 
             IMP.request_pay({
                 pg: 'html5_inicis.INIpayTest',
@@ -37,9 +37,9 @@ function requestPay(token, amount) {
                 buyer_tel: memberData.phoneNumber
             }, function (rsp) {
                 if (rsp.success) {
-                    var supportId = document.getElementById("supportId").value;
-                    var impUid = rsp.imp_uid;
-                    var inputAmount = amount;
+                    const supportId = document.getElementById("supportId").value;
+                    const impUid = rsp.imp_uid;
+                    let inputAmount = amount;
 
                     //PaymentRequestDto 객체 생성
                     const paymentReq = {

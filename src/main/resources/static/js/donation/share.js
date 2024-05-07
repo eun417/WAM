@@ -1,19 +1,19 @@
 const supportId = document.getElementById('supportId').value;
 
 function shareTwitter() {
-    var sendText = "WAM - 야생동물후원사이트"; // 전달할 텍스트
-    var sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
+    const sendText = "WAM - 야생동물후원사이트"; // 전달할 텍스트
+    const sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
 }
 
 function shareFacebook() {
-    var sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
+    const sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
 }
 
 function shareKakao() {
   //사용할 앱의 JavaScript 키 설정
-  var jsKey = document.getElementById('jsKey').getAttribute('href');
+  const jsKey = document.getElementById('jsKey').getAttribute('href');
   Kakao.init(jsKey);
 
   //카카오링크 버튼 생성

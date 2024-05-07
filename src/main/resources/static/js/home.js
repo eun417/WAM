@@ -33,7 +33,7 @@ function loadEndingSoonSupport() {
     axios.get('/support/ending-soon')
         .then(function(response) {
             const endingSoonSupportList = response.data;
-            var hasData = false; // 데이터 조회 여부를 나타내는 변수
+            let hasData = false; // 데이터 조회 여부를 나타내는 변수
 
             if (endingSoonSupportList && endingSoonSupportList.length > 0) {
                 hasData = true; // 데이터가 있을 경우 true 로 설정
@@ -47,7 +47,7 @@ function loadEndingSoonSupport() {
                 const graphWidth = progress > 100 ? '100%' : progress + '%';
                 const graph = `<div class="graph" style="width: ${graphWidth};"></div>`;
 
-                var box = `<div class="ending-soon-box">
+                let box = `<div class="ending-soon-box">
                                <div class="ending-soon-img-box">
                                    <div class="remaining-time"><span class="material-symbols-outlined">schedule</span><span></span></div>
                                    <div class="donation-status ending-soon">
@@ -95,16 +95,16 @@ function loadEndingSoonSupport() {
 
 //남은 후원 시간 카운트하는 함수
 function updateTime() {
-    var now = new Date();
-    var midnight = new Date();
+    let now = new Date();
+    let midnight = new Date();
     midnight.setHours(24, 0, 0, 0); //자정
 
-    var timeUntilMidnight = midnight - now; //자정까지의 시간(밀리초 단위)
+    let timeUntilMidnight = midnight - now; //자정까지의 시간(밀리초 단위)
 
     //시, 분, 초로 변환
-    var hours = Math.floor(timeUntilMidnight / (1000 * 60 * 60));
-    var minutes = Math.floor((timeUntilMidnight % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((timeUntilMidnight % (1000 * 60)) / 1000);
+    let hours = Math.floor(timeUntilMidnight / (1000 * 60 * 60));
+    let minutes = Math.floor((timeUntilMidnight % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((timeUntilMidnight % (1000 * 60)) / 1000);
 
     //두 자리 숫자로 포맷팅
     hours = formatTwoDigits(hours);
@@ -112,7 +112,7 @@ function updateTime() {
     seconds = formatTwoDigits(seconds);
 
     //시간을 화면에 표시
-    var secondSpan = document.querySelector('.remaining-time span:nth-child(2)');
+    const secondSpan = document.querySelector('.remaining-time span:nth-child(2)');
     secondSpan.textContent = hours + ':' + minutes + ':' + seconds;
 }
 
@@ -200,7 +200,7 @@ function loadQna(pageNo) {
         for (let i = 0; i < 3; i++) {
             const qna = qnaList[i];
             if (qna) {
-                var row = `<div class="qna-detail-box">
+                let row = `<div class="qna-detail-box">
                                 <a href="/qna/detail/${qna.qnaId}" class="qna-detail-title title-hover">${qna.title}</a>
                                 <p class="gray-text">${qna.createDate}</p>
                                 <p class="qna-content">${qna.content}</p>

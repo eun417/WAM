@@ -47,7 +47,7 @@ $(document).ready(function () {
         callbacks : {
             //이미지 업로드
             onImageUpload : function(files, editor, welEditable){
-                for (var i = files.length - 1; i >= 0; i--) {
+                for (let i = files.length - 1; i >= 0; i--) {
                     console.log('fileName: ' + files[i].name);
                     uploadSummernoteImageFile(files[i], this);
                 }
@@ -55,7 +55,7 @@ $(document).ready(function () {
             //이미지 삭제
             onMediaDelete: function ($target, editor, $editable) {
                 if (confirm('이미지를 삭제 하시겠습니까?')) {
-                    var deletedImageUrl = $target.attr('src');  //이미지의 URL 반환
+                    let deletedImageUrl = $target.attr('src');  //이미지의 URL 반환
                     console.log('deletedImageUrl: ' + deletedImageUrl);
                     deleteSummernoteImageFile(deletedImageUrl);
                 }
@@ -68,8 +68,8 @@ $(document).ready(function () {
 function uploadSummernoteImageFile(file, editor) {
     uploadImage(file)
         .then(function(response) {
-            var imageUrl = response.data; //이미지 업로드 후의 이미지 URL
-            var $image = $('<img>').attr('src', imageUrl);
+            const imageUrl = response.data; //이미지 업로드 후의 이미지 URL
+            const $image = $('<img>').attr('src', imageUrl);
             $(editor).summernote('insertNode', $image[0]);
             console.log(response.data); //값이 잘 넘어오는지 확인
         })

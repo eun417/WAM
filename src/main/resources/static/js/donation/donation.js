@@ -45,7 +45,7 @@ function goToSupportWrite(event) {
 
 /*donationSearch 페이지 이동*/
 document.getElementById('searchBtn').addEventListener('click', function() {
-    var searchValue = document.querySelector('.search').value;
+    let searchValue = document.querySelector('.search').value;
     window.location.href = "/support/search?q=" + searchValue;
 });
 

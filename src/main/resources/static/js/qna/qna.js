@@ -16,7 +16,7 @@ function goToQnaWrite(event) {
 
 /*qnaSearch 페이지 이동*/
 document.getElementById('searchBtn').addEventListener('click', function() {
-    var searchValue = document.querySelector('.search').value;
+    let searchValue = document.querySelector('.search').value;
     console.log(searchValue);
     window.location.href = "/qna/search?q=" + searchValue;
 });

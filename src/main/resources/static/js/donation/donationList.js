@@ -14,10 +14,10 @@ function loadSupportList(pageNo) {
         }
     })
     .then(function(response) {
-        var supportList = response.data.content;
+        const supportList = response.data.content;
 
         //DocumentFragment 생성
-        var fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
         totalPages = response.data.totalPages;
 
         supportList.forEach(function(support) {
@@ -26,7 +26,7 @@ function loadSupportList(pageNo) {
             const graphWidth = progress > 100 ? '100%' : progress + '%';
             const graph = '<div class="graph" style="width: ' + graphWidth + ';"></div>';
 
-            var row = `<div class="donation-box">
+            let row = `<div class="donation-box">
                             <div class="donation-img-box">
                                 <div class="donation-status ${support.supportStatus === 'START' ? 'start' :
                                                                support.supportStatus === 'ENDING_SOON' ? 'ending-soon' :
@@ -47,14 +47,14 @@ function loadSupportList(pageNo) {
                                 <p class="support-amount"><span>${support.supportAmount}</span>원</p>
                             </div>
                         </div>`;
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             div.innerHTML = row;
 
             fragment.appendChild(div.firstChild);
         });
 
         //DOM에 fragment 추가
-        var donationLine = document.querySelector('.donation-line');
+        const donationLine = document.querySelector('.donation-line');
         donationLine.appendChild(fragment);
     })
     .catch(function(error) {

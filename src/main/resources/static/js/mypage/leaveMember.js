@@ -1,8 +1,8 @@
 document.querySelector('.leaveMember-btn').addEventListener('click', function() {
-    var memberId = document.getElementById('memberId').value;
+    const memberId = document.getElementById('memberId').value;
     console.log('탈퇴할 회원: ' + memberId);
-    var password = document.getElementById('password').value;
-    var quitAgreement = document.getElementById('quit-agreement').checked; //탈퇴 동의 여부 가져오기
+    const password = document.getElementById('password').value;
+    const quitAgreement = document.getElementById('quit-agreement').checked; //탈퇴 동의 여부 가져오기
 
     //필요한 유효성 검사 등을 수행
     if (!quitAgreement) {

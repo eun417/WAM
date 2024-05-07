@@ -7,27 +7,27 @@ async function loadDataAndAddMarkers(apiUrl) {
     let previousOverlay = null; //이전에 열렸던 overlay
 
     try {
-        var mapContainer = document.getElementById('map'), //지도를 표시할 div
+        const mapContainer = document.getElementById('map'), //지도를 표시할 div
            mapOption = {
               center: new kakao.maps.LatLng(36, 127.8), //지도의 중심좌표
               level: 13 //지도의 확대 레벨
            };
 
         //지도를 표시할 div와 지도 옵션으로 지도를 생성
-        var map = new kakao.maps.Map(mapContainer, mapOption);
+        const map = new kakao.maps.Map(mapContainer, mapOption);
 
         const response = await axios.get(apiUrl);
         const mapDataList = response.data;
 
        //마커 클러스터러 생성
-       var clusterer = new kakao.maps.MarkerClusterer({
+       let clusterer = new kakao.maps.MarkerClusterer({
            map: map,    //마커들을 클러스터로 관리하고 표시할 지도 객체
            averageCenter: true, //클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
            minLevel: 10 //클러스터 할 최소 지도 레벨
        });
 
         //마커들을 저장할 변수 생성(마커 클러스터러 관련)
-        var markers = [];
+        let markers = [];
 
         mapDataList.forEach(async (mapData) => {
             //좌표 변환 (EPSG:5186 -> WGS84)

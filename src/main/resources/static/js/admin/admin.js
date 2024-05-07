@@ -5,14 +5,14 @@ function loadMemberList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        var memberList = response.data.content;
-        var tableBody = document.querySelector('#memberTableBody');
+        const memberList = response.data.content;
+        const tableBody = document.querySelector('#memberTableBody');
 
         //DocumentFragment 생성
-        var fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
 
         memberList.forEach(function(member) {
-            var row = `<tr>
+            let row = `<tr>
                         <td>${member.memberId}</td>
                         <td>${member.name == null ? '(알 수 없음)' : member.name}</td>
                         <td>${member.email}</td>
@@ -21,7 +21,7 @@ function loadMemberList(pageNo) {
                         <td><button class="answer-btn btn btn-s bc3" style="cursor: default;">${member.authority == 'ROLE_ADMIN' ? '관리자' : (member.authority == 'ROLE_USER' ? '사용자' : '임시회원')}</button></td>
                         <td><button class="deleteMember-btn btn-s bc6">회원 탈퇴</button></td>
                     </tr>`;
-            var tr = document.createElement('tr');
+            let tr = document.createElement('tr');
             tr.innerHTML = row;
 
             fragment.appendChild(tr);
@@ -37,16 +37,15 @@ function loadMemberList(pageNo) {
         //회원 탈퇴 버튼에 이벤트 리스너 추가
         tableBody.querySelectorAll('.deleteMember-btn').forEach(function(button) {
             button.addEventListener('click', function() {
-                var memberId = this.parentNode.parentNode.firstElementChild.textContent;
-                console.log(memberId);
+                const memberId = this.parentNode.parentNode.firstElementChild.textContent;
+//                console.log(memberId);
 
-                if (confirm("정말로 회원을 탈퇴시키겠습니까?")) {
+                if (confirm("회원을 탈퇴시키겠습니까?")) {
                     //사용자가 확인을 누르면 회원 탈퇴 요청
                     api.delete('/admin/member/' + memberId)
                         .then(function(response) {
-                            console.log(response);
+                            button.parentNode.parentNode.remove();  //테이블에서 해당 행 제거
                             alert(response.data);
-                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);
@@ -68,14 +67,14 @@ function loadSupportList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        var supportList = response.data.content;
-        var tableBody = document.querySelector('#supportTableBody');
+        const supportList = response.data.content;
+        const tableBody = document.querySelector('#supportTableBody');
 
         //DocumentFragment 생성
-        var fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
 
         supportList.forEach(function(support) {
-            var row = `<tr>
+            let row = `<tr>
                         <td>${support.supportId}</td>
                         <td><a href="/support/detail/${support.supportId}" class="donation-title title-hover">${support.title}</a></td>
                         <td>${support.nickname}</td>
@@ -84,7 +83,7 @@ function loadSupportList(pageNo) {
                         <td>${support.createDate}</td>
                         <td><button class="deleteSupport-btn btn-s bc6">삭제</button></td>
                     </tr>`;
-            var tr = document.createElement('tr');
+            let tr = document.createElement('tr');
             tr.innerHTML = row;
 
             fragment.appendChild(tr);
@@ -100,16 +99,15 @@ function loadSupportList(pageNo) {
         //삭제 버튼에 이벤트 리스너 추가
         tableBody.querySelectorAll('.deleteSupport-btn').forEach(function(button) {
             button.addEventListener('click', function() {
-                var supportId = this.parentNode.parentNode.firstElementChild.textContent;
+                let supportId = this.parentNode.parentNode.firstElementChild.textContent;
                 console.log(supportId);
 
-                if (confirm("정말로 후원을 삭제하시겠습니까?")) {
+                if (confirm("후원을 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 후원 삭제 요청
                     api.delete('/admin/support/' + supportId)
                         .then(function(response) {
-                            console.log(response);
+                            button.parentNode.parentNode.remove();  //테이블에서 해당 행 제거
                             alert(response.data);
-                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);
@@ -131,14 +129,14 @@ function loadQnaList(pageNo) {
             pageNo: pageNo
         }
     }).then(function(response) {
-        var qnaList = response.data.content;
-        var tableBody = document.querySelector('#qnaTableBody');
+        const qnaList = response.data.content;
+        const tableBody = document.querySelector('#qnaTableBody');
 
         //DocumentFragment 생성
-        var fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
 
         qnaList.forEach(function(qna) {
-            var row = `<tr>
+            let row = `<tr>
                         <td>${qna.qnaId}</td>
                         <td><a href="/qna/detail/${qna.qnaId}" class="title-hover">${qna.title}</a></td>
                         <td>${qna.nickname}</td>
@@ -147,7 +145,7 @@ function loadQnaList(pageNo) {
                         <td><button class="answer-btn btn btn-s ${qna.qnaCheck === 'CHECKING' ? 'bc3' : 'bc7'}" style="cursor: default;">${qna.qnaCheck === 'CHECKING' ? '확인 중' : '답변 완료'}</button></td>
                         <td><button class="deleteQna-btn btn-s bc6">삭제</button></td>
                     </tr>`;
-            var tr = document.createElement('tr');
+            let tr = document.createElement('tr');
             tr.innerHTML = row;
 
             fragment.appendChild(tr);
@@ -163,16 +161,15 @@ function loadQnaList(pageNo) {
         //삭제 버튼에 이벤트 리스너 추가
         tableBody.querySelectorAll('.deleteQna-btn').forEach(function(button) {
             button.addEventListener('click', function() {
-                var qnaId = this.parentNode.parentNode.firstElementChild.textContent;
-                console.log(qnaId);
+                const qnaId = this.parentNode.parentNode.firstElementChild.textContent;
+//                console.log(qnaId);
 
-                if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
+                if (confirm("QnA를 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 QnA 삭제 요청
                     api.delete('/admin/qna/' + qnaId)
                         .then(function(response) {
-                            console.log(response);
+                            button.parentNode.parentNode.remove();  //테이블에서 해당 행 제거
                             alert(response.data);
-                            window.location.reload();
                         })
                         .catch(function(error) {
                             console.error(error);

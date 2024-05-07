@@ -13,8 +13,8 @@ function enterLoginBtn(event) {
 
 function login() {
     //LoginRequest 객체 생성
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
     const loginReq = {
         email: email,

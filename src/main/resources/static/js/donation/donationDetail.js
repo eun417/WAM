@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /*후원 상세 조회*/
 function loadSupportDetail() {
     const supportId = document.getElementById('supportId').value;
-    console.log('조회된 후원:' + supportId);
+//    console.log('조회된 후원:' + supportId);
 
     const token = localStorage.getItem("accessToken");
 
@@ -133,8 +133,8 @@ function disablePaymentBtn() {
 
 /*supportWrite 페이지 이동(update)*/
 document.getElementById('updateDonationBtn').addEventListener('click', function() {
-    var supportId = document.getElementById('supportId').value;
-    console.log('수정할 후원: ' + supportId);
+    const supportId = document.getElementById('supportId').value;
+//    console.log('수정할 후원: ' + supportId);
 
     const token = localStorage.getItem("accessToken");
 
@@ -150,7 +150,7 @@ document.getElementById('updateDonationBtn').addEventListener('click', function(
 
 /*좋아요 상태에 따라 생성 or 삭제*/
 document.getElementById('likeBtn').addEventListener('click', function() {
-    var likeBtn = document.getElementById('likeBtn');
+    const likeBtn = document.getElementById('likeBtn');
     const supportId = document.getElementById('supportId').value;
 
     if (likeBtn.classList.contains('liked')) {
@@ -176,10 +176,10 @@ document.getElementById('createCommentBtn').addEventListener('click', function()
 
 /*후원 삭제*/
 document.getElementById('deleteDonationBtn').addEventListener('click', function() {
-    var supportId = document.getElementById('supportId').value;
-    console.log('삭제할 후원: ' + supportId);
+    const supportId = document.getElementById('supportId').value;
+//    console.log('삭제할 후원: ' + supportId);
 
-    if (confirm("정말로 후원을 삭제하시겠습니까?")) {
+    if (confirm("후원을 삭제하시겠습니까?")) {
         //사용자가 확인을 누르면 컨트롤러 호출
         api.delete(`/support/${supportId}`)
             .then(function(response) {
@@ -197,11 +197,11 @@ document.getElementById('deleteDonationBtn').addEventListener('click', function(
 
 //요소를 보이게 하거나 숨기는 함수
 function showHideElement(element) {
-    var element = document.querySelector(element);
-    if (element.style.display === 'none') {
-        element.style.display = 'block';
+    let e = document.querySelector(element);
+    if (e.style.display === 'none') {
+        e.style.display = 'block';
     } else {
-        element.style.display = 'none';
+        e.style.display = 'none';
     }
 }
 
@@ -216,8 +216,8 @@ function isLoggedInMember(token, memberId) {
     if (token) {
         //payload 에서 데이터 가져오기
         const payload = getPayloadData(token);
-        console.log('login memberId:' + payload.sub);
-        console.log('memberId:' + memberId);
+//        console.log('login memberId:' + payload.sub);
+//        console.log('memberId:' + memberId);
 
         if (payload.sub == memberId) {
             return true;
