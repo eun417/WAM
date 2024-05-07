@@ -37,11 +37,8 @@ body>.donationDetail-wrapper{
     padding: 20px 0 20px 0;
 }
 .donation-tag>.tag-name{
-    font-size: 14px;
-    border: none;
-    background-color: rgb(243, 243, 243);
-    padding: 10px 20px 10px 20px;
     cursor: default;
+    pointer-events: none;
 }
 .donation-amount{
     text-align: right;

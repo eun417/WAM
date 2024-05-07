@@ -62,45 +62,56 @@ function loadSupportDetail() {
 
             //댓글 리스트
             const commentList = document.querySelector('.comment-list');
-            commentList.innerHTML = '';
-            supportDetail.comments.forEach(function(comment) {
-                const commentBox = document.createElement('div');
-                commentBox.classList.add('commentBox');
-                commentBox.innerHTML = `
-                    <div class="commentBox-R"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" width="55" height="55"></div>
-                    <div class="commentBox-L">
-                        <div class="commentBox-LT">
-                            <div class="edit-box">
-                                <input type="hidden" class="commentId" value="${comment.commentId}">
-                                <div class="delete-comment-btn">삭제하기</div>
-                            </div>
-                            <div class="commentBox-LTR comment-nickname">${comment.nickname}</div>
-                            <div class="commentBox-LTL">
-                                <span class="material-symbols-outlined comment-edit">more_horiz</span>
-                            </div>
-                        </div>
-                        <div class="commentBox-LM"><p class="comment-content">${comment.content}</p></div>
-                        <div class="commentBox-LB"><span class="comment-date gray-text">${comment.createDate}</span></div>
-                    </div>`;
-                commentList.appendChild(commentBox);
 
-                //각 댓글에 대한 이벤트 처리
-                commentBox.querySelector('.comment-edit').addEventListener('click', function() {
-                    const editBox = this.closest('.commentBox-LT').querySelector('.edit-box');
-                    //.edit-box 가 보이지 않는 경우 보이도록 함
-                    //showHideElement(editBox);
-                    if (editBox.style.display === 'none') {
-                        editBox.style.display = 'block';
-                    } else {
-                        editBox.style.display = 'none';
+            commentList.innerHTML = '';
+
+            if (supportDetail.comments.length === 0) {
+                const div = document.createElement('div');
+                div.innerHTML = `<div class="no-result">
+                                    <span class="info-icon material-symbols-outlined">info</span>
+                                    <p class="info-memo">아직 댓글이 없습니다.</p>
+                                </div>`;
+                commentList.appendChild(div);
+            } else {
+                supportDetail.comments.forEach(function(comment) {
+                    const commentBox = document.createElement('div');
+                    commentBox.classList.add('commentBox');
+                    commentBox.innerHTML = `
+                        <div class="commentBox-R"><img src="https://cdn4.iconfinder.com/data/icons/christmas-special/512/renne.png" width="55" height="55"></div>
+                        <div class="commentBox-L">
+                            <div class="commentBox-LT">
+                                <div class="edit-box">
+                                    <input type="hidden" class="commentId" value="${comment.commentId}">
+                                    <div class="delete-comment-btn">삭제하기</div>
+                                </div>
+                                <div class="commentBox-LTR comment-nickname">${comment.nickname}</div>
+                                <div class="commentBox-LTL">
+                                    <span class="material-symbols-outlined comment-edit">more_horiz</span>
+                                </div>
+                            </div>
+                            <div class="commentBox-LM"><p class="comment-content">${comment.content}</p></div>
+                            <div class="commentBox-LB"><span class="comment-date gray-text">${comment.createDate}</span></div>
+                        </div>`;
+                    commentList.appendChild(commentBox);
+
+                    //각 댓글에 대한 이벤트 처리
+                    commentBox.querySelector('.comment-edit').addEventListener('click', function() {
+                        const editBox = this.closest('.commentBox-LT').querySelector('.edit-box');
+                        //.edit-box 가 보이지 않는 경우 보이도록 함
+                        //showHideElement(editBox);
+                        if (editBox.style.display === 'none') {
+                            editBox.style.display = 'block';
+                        } else {
+                            editBox.style.display = 'none';
+                        }
+                    });
+
+                    if (isLoggedInMember(token, comment.memberId)) {
+                        //삭제 버튼 보이기
+                        commentBox.querySelector('.comment-edit').style.display = 'block';
                     }
                 });
-
-                if (isLoggedInMember(token, comment.memberId)) {
-                    // Show the comment edit button
-                    commentBox.querySelector('.comment-edit').style.display = 'block';
-                }
-            });
+            }
 
             //댓글 삭제 함수 실행
             deleteComment();
