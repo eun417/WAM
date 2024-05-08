@@ -44,11 +44,9 @@ function loadTagList(pageNo) {
 
                 let row = `<div class="donation-box">
                                 <div class="donation-img-box">
-                                    <div class="donation-status ${supportTag.supportStatus === 'START' ? 'start' :
-                                                                   supportTag.supportStatus === 'ENDING_SOON' ? 'ending-soon' :
+                                    <div class="donation-status ${supportTag.supportStatus === 'ENDING_SOON' ? 'ending-soon' :
                                                                    supportTag.supportStatus === 'END' ? 'end' : ''}">
-                                        ${supportTag.supportStatus === 'START' ? '후원 시작' :
-                                          supportTag.supportStatus === 'ENDING_SOON' ? '종료 임박' :
+                                        ${supportTag.supportStatus === 'ENDING_SOON' ? '종료 임박' :
                                           supportTag.supportStatus === 'END' ? '후원 종료' : ''}
                                     </div>
                                     <div class="donation-img"><img src="${supportTag.firstImg}" class="first-pic" alt="animal"></div>

@@ -155,9 +155,8 @@ document.querySelectorAll('.tag').forEach(function(btn) {
 
                     var row = `<div class="donation-box">
                                     <div class="donation-img-box">
-                                        <div class="donation-status ${support.supportStatus === 'START' ? 'start' : support.supportStatus === 'ENDING_SOON' ? 'ending-soon' : support.supportStatus === 'END' ? 'end' : ''}">
-                                            ${support.supportStatus === 'START' ? '후원 시작' :
-                                            support.supportStatus === 'ENDING_SOON' ? '종료 임박' :
+                                        <div class="donation-status ${support.supportStatus === 'ENDING_SOON' ? 'ending-soon' : support.supportStatus === 'END' ? 'end' : ''}">
+                                            ${support.supportStatus === 'ENDING_SOON' ? '종료 임박' :
                                             support.supportStatus === 'END' ? '후원 종료' : ''}
                                         </div>
                                         <div class="donation-img"><img src="${support.firstImg}" class="first-pic" alt="animal"></div>

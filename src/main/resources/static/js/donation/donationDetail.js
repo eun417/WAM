@@ -24,10 +24,7 @@ function loadSupportDetail() {
             document.querySelector('#supportId').value = supportId;
             document.querySelector('.donation-title').textContent = supportDetail.title;
             var donationStatusElement = document.querySelector('.donation-status');
-            if (supportDetail.supportStatus === 'START') {
-                donationStatusElement.classList.add('start');
-                donationStatusElement.textContent = '후원 시작';
-            } else if (supportDetail.supportStatus === 'ENDING_SOON') {
+            if (supportDetail.supportStatus === 'ENDING_SOON') {
                 donationStatusElement.classList.add('ending-soon');
                 donationStatusElement.textContent = '종료 임박';
             } else if (supportDetail.supportStatus === 'END') {
