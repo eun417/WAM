@@ -67,7 +67,7 @@ api.interceptors.response.use(
             localStorage.clear();
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");
             window.location.href = "/auth/login";
-        } else if (msg == "잘못된 JWT 서명입니다." || msg = "지원하지 않는 JWT 토큰입니다." || msg == "JWT 토큰이 잘못되었습니다." || msg == "토큰의 유저 정보가 일치하지 않습니다.") {
+        } else if (msg === "잘못된 JWT 서명입니다." || msg === "지원하지 않는 JWT 토큰입니다." || msg === "JWT 토큰이 잘못되었습니다." || msg === "토큰의 유저 정보가 일치하지 않습니다.") {
             localStorage.clear();
             alert("토큰이 잘못되어 자동으로 로그아웃 되었습니다.");
             window.location.href = "/auth/login";
