@@ -3,13 +3,13 @@ const token = localStorage.getItem('accessToken');
 
 document.addEventListener('DOMContentLoaded', function() {
     /*달력 설정*/
-    let today = new Date().toISOString().substring(0, 10);
+    const today = new Date().toISOString().substring(0, 10);
     document.getElementById('startDate').value = today; //시작일을 오늘 날짜로 설정
     document.getElementById('startDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
     document.getElementById('endDate').setAttribute('min', today);    //오늘 이전 날짜 비허용
 
     /*파일 선택 -> 파일 이름 설정*/
-    let fileInput = document.getElementById('firstImg');
+    const fileInput = document.getElementById('firstImg');
 
     //파일 변경되면 이름 변경
     fileInput.addEventListener('change', function() {
@@ -265,10 +265,10 @@ function dashFormatDate(inputDate) {
 
 //요소를 보이게 하거나 숨기는 함수
 function showHideElement(element) {
-    const element = document.querySelector(element);
-    if (element.style.display === 'none') {
-        element.style.display = 'block';
+    const e = document.querySelector(element);
+    if (e.style.display === 'none') {
+        e.style.display = 'block';
     } else {
-        element.style.display = 'none';
+        e.style.display = 'none';
     }
 }

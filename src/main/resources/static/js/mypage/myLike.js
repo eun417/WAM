@@ -56,7 +56,7 @@ function loadList(pageNo) {
                 const supportId = this.parentNode.parentNode.firstElementChild.textContent;
 //                console.log('삭제할 후원: ' + supportId);
 
-                if (confirm("정말로 좋아요를 삭제하시겠습니까?")) {
+                if (confirm("좋아요를 삭제하시겠습니까?")) {
                     //사용자가 확인을 누르면 좋아요 삭제 요청
                     api.delete('/support/' + supportId + '/like')
                         .then(function(response) {

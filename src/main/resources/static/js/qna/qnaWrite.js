@@ -6,7 +6,7 @@ window.onload = function() {
 /*수정폼인 경우 QnA 데이터를 가져오는 함수*/
 function getQnaDetail() {
     const qnaId = document.getElementById('qnaId').value;
-    console.log('수정할 QnA: ' + qnaId);
+//    console.log('수정할 QnA: ' + qnaId);
 
     document.getElementById('qnaId').value = qnaId;
 
@@ -74,7 +74,7 @@ document.getElementById('updateQnaBtn').addEventListener('click', function() {
     };
 
     const qnaId = document.getElementById('qnaId').value;
-    console.log('수정할 QnA: ' + qnaId);
+//    console.log('수정할 QnA: ' + qnaId);
 
     //QnA 수정 요청
     api.put('/qna/' + qnaId, updateQnaReq)

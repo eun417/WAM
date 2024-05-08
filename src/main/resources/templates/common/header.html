@@ -35,6 +35,7 @@
                 <a href="/auth/signup/main" class="button-join btn bc5 bs1" style="display: none;">회원가입</a>
                 <a href="/member/profile" class="button-mypage btn bc3 bs1" style="display: none;">My Page</a>
                 <a class="button-logout btn bc5 bs1" style="display: none;">로그아웃</a>
+                <a href="/admin/member/list" class="button-admin btn bc5 bs1" style="display:none;">관리자 페이지</a>
             </div>
         </div>
     </div>
@@ -42,59 +43,6 @@
     <script th:src="@{/js/common/checkToken.js}"></script>
     <script th:src="@{/js/common/default.js}"></script>
     <script th:src="@{/js/login/logout.js}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus(); //로그인 여부 따라 헤더 버튼 수정
-            moveMenuItem(); //현재 있는 탭 표시
-        });
-
-        //로그아웃
-        document.querySelector('.button-logout').addEventListener('click', function() {
-            logout();
-        });
-
-
-        //로그인 상태 확인, 헤더 버튼 표시 함수
-        function checkLoginStatus() {
-            const token = localStorage.getItem('accessToken');
-
-            if (token) {
-                //토큰이 있는 경우 (로그인)
-                document.querySelector('.button-login').style.display = 'none';
-                document.querySelector('.button-join').style.display = 'none';
-                document.querySelector('.button-mypage').style.display = 'block';
-                document.querySelector('.button-logout').style.display = 'block';
-            } else {
-                //토큰이 없는 경우 (로그아웃)
-                document.querySelector('.button-mypage').style.display = 'none';
-                document.querySelector('.button-logout').style.display = 'none';
-                document.querySelector('.button-login').style.display = 'block';
-                document.querySelector('.button-join').style.display = 'block';
-            }
-        }
-
-        //현재 있는 탭에 menu-acitve 클래스 추가 함수
-        function moveMenuItem() {
-            //현재 URL에 따라 클래스 추가
-            var currentPath = window.location.pathname;
-
-            var menuItems = document.querySelectorAll('.menu a');
-            menuItems.forEach(function(item) {
-                item.classList.remove('menu-active'); // 모든 메뉴에서 클래스 제거
-            });
-
-            var qnaMenuItem = document.querySelector('.menu a[href^="/qna"]');
-            var supportMenuItem = document.querySelector('.menu a[href^="/support"]');
-            var animalMapMenuItem = document.querySelector('.menu a[href^="/animal-map"]');
-
-            if (qnaMenuItem && currentPath.startsWith("/qna")) {
-                qnaMenuItem.classList.add('menu-active');
-            } else if (supportMenuItem && currentPath.startsWith("/support")) {
-                supportMenuItem.classList.add('menu-active');
-            } else if (animalMapMenuItem && currentPath.startsWith("/animal-map")) {
-                animalMapMenuItem.classList.add('menu-active');
-            }
-        }
-    </script>
+    <script th:src="@{/js/common/header.js}"></script>
 </header>
 </html>

@@ -82,9 +82,8 @@ document.querySelector('.btn-answer').addEventListener('click', function() {
         //답변 등록 요청
         api.put(`/qna/${qnaId}/answer`, qnaAnswerReq)
             .then(function(response) {
-                console.log(response.data);
                 alert(response.data);
-                window.location.href = `/qna/detail/${qnaId}`;  //페이지 로드
+                window.location.reload();  //페이지 로드
             })
             .catch(function(error) {
                 console.error('답변 등록 실패', error);
@@ -124,11 +123,10 @@ document.getElementById('deleteQnaBtn').addEventListener('click', function() {
     const qnaId = document.getElementById('qnaId').value;
 //    console.log('삭제할 QnA: ' + qnaId);
 
-    if (confirm("정말로 QnA를 삭제하시겠습니까?")) {
+    if (confirm("QnA를 삭제하시겠습니까?")) {
         //사용자가 확인을 누르면 QnA 삭제 요청
         api.delete('/qna/' + qnaId)
             .then(function(response) {
-                console.log(response.data);
                 alert(response.data);
                 window.location.href = "/qna/list";  //목록 페이지로 이동
             })
@@ -155,7 +153,7 @@ function showUpDelBtnForWriter(token, memberId) {
     if (token) {
         //payload 에서 데이터 가져오기
         const payload = getPayloadData(token);
-        console.log('login memberId:'+payload.sub);
+//        console.log('login memberId:'+payload.sub);
 
         //memberId가 같으면 버튼 보이기
         if (payload.sub == memberId) {
