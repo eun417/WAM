@@ -9,7 +9,7 @@ function socialLoginSuccess() {
     if (accessToken && refreshToken) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      window.location.replace = "/";
+      window.location.replace('/');
       return;
     }
 }
