@@ -59,7 +59,7 @@ public class AuthService {
 
         //Redis 에 저장된 인증코드가 존재하지 않거나, 입력받은 인증코드와 일치하지 않을 때 에러 발생
         if(!redisService.checkExistsValue(redisAuthCode) || !redisAuthCode.equals(verifyEmailReq.getAuthCode())) {
-            throw new CustomException(INCORRECT_VERIFICATION_CODE);
+            throw new CustomException(INCORRECT_AUTH_CODE);
         }
 
         //입력받은 인증코드와 Redis 에 저장된 인증코드가 같은 경우 Redis 에서 해당 인증코드 삭제
@@ -186,12 +186,16 @@ public class AuthService {
      */
     @Transactional
     public void changePw(ChangePwRequestDto changePwReq, String authCode) {
+        if (!redisService.existData(authCode)) {
+            throw new CustomException(AUTH_CODE_NOT_FOUND);
+        }
+
         //Redis 에 저장된 이메일 가져오기
         String email = redisService.getData(authCode);
 
         //인증코드에 해당하는 이메일이 없는 경우
         if (email == null) {
-            throw new CustomException(INCORRECT_VERIFICATION_CODE);
+            throw new CustomException(INCORRECT_AUTH_CODE);
         }
 
         //이메일로 사용자 조회

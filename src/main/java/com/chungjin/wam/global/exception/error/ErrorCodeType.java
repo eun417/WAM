@@ -25,8 +25,9 @@ public enum ErrorCodeType implements ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER-004", "이미 사용 중인 이메일입니다."),
 
     //Auth
-    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "AUTH-001", "잘못된 인증번호입니다."),
-    ALREADY_LOGGED_OUT(HttpStatus.BAD_REQUEST, "AUTH-002", "이미 로그아웃된 회원입니다."),
+    INCORRECT_AUTH_CODE(HttpStatus.BAD_REQUEST, "AUTH-001", "잘못된 인증번호입니다."),
+    AUTH_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH-002", "인증 시간이 만료되었습니다."),
+    ALREADY_LOGGED_OUT(HttpStatus.BAD_REQUEST, "AUTH-003", "이미 로그아웃된 회원입니다."),
 
     //JWT Token
     WRONG_TYPE_SIGNATURE(HttpStatus.UNAUTHORIZED, "JWT-001", "잘못된 JWT 서명입니다."),

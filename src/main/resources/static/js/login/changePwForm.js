@@ -26,6 +26,8 @@ document.getElementById('finBtn').addEventListener('click', function() {
         })
         .catch(function (error) {
           console.error('비밀번호 재설정 실패:', error.response.data);
+          alert(error.response.data.message);
+          window.location.replace('/auth/change-pw');
         });
 });
 
