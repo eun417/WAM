@@ -4,6 +4,7 @@ import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SupportScheduler {
@@ -24,6 +26,7 @@ public class SupportScheduler {
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?")
     public void checkSupportExpirations() {
+        log.info("Scheduler 실행");
         changeStatusEndingSoon();   //END 로 변경
         changeStatusEnd();  //ENDING_SOON 으로 변경
     }
@@ -36,7 +39,7 @@ public class SupportScheduler {
         List<Support> expiringSupports = supportRepository.findByEndDateAndSupportStatusNot(yesterday, SupportStatus.END);
 
         for (Support support : expiringSupports) {
-            support.setSupportStatus(SupportStatus.END); //후원 상태를 "END"로 변경
+            support.updateSupportStatus(SupportStatus.END); //후원 상태를 "END"로 변경
         }
     }
 

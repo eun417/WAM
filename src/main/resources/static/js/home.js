@@ -56,7 +56,7 @@ function loadEndingSoonSupport() {
                                    <div class="ending-soon-img"><img src="${randomEndingSoonSupport.firstImg}" class="first-pic" alt="animal"></div>
                                </div>
                                <div class="ending-soon-detail">
-                                   <div class="ending-soon-title">${randomEndingSoonSupport.title}</div>
+                                   <a href="/support/detail/${randomEndingSoonSupport.supportId}" class="ending-soon-title title-hover">${randomEndingSoonSupport.title}</a>
                                    <div class="donation-nickname gray-text">${randomEndingSoonSupport.nickname}</div>
                                    <div class="ending-soon-content">
                                        <div class="ending-soon-amount">
