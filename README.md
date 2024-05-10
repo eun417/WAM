@@ -117,8 +117,8 @@ WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 
 
 ### 비밀번호 재설정
 ![chagePw](https://github.com/eun417/wam/assets/126125547/f9527d00-6580-473f-929b-a5a96a87ee09)
-비밀번호 재설정 링크 메일 전송, 해당 링크에서 비밀번호 재설정 가능
-URL에 있는 인증번호는 Redis에 저장되며, 시간 만료 시 에러 페이지 반환
+- 비밀번호 재설정 링크 메일 전송, 해당 링크에서 비밀번호 재설정 가능
+- URL에 있는 인증번호는 Redis에 저장되며, 인증 시간 만료 시 안내 메시지 반환 후 첫 화면으로 돌아감
 
 <br/>
 
@@ -163,7 +163,7 @@ URL에 있는 인증번호는 Redis에 저장되며, 시간 만료 시 에러 �
 3. **후원하기(결제)**
 
 ![support-payment](https://github.com/eun417/wam/assets/126125547/87ecc174-ee48-482c-935b-ba01c8b498cc)
-PortOne API를 이용하여 결제 후 후원
+PortOne API를 이용하여 결제
 
 <br/>
 
