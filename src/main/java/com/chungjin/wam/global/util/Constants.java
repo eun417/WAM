@@ -21,7 +21,7 @@ public final class Constants {
     /**
      * Project Base URL
      */
-    public static final String PROJECT_URL = "http://cea6439.com/";
+    public static final String PROJECT_URL = "https://cea6439.com/";
 
     /**
      * 자연환경조사 데이터 조회에 필요한 상수
