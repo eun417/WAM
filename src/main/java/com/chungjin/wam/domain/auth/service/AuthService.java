@@ -47,7 +47,7 @@ public class AuthService {
         checkEmailExists(emailReq.getEmail());
 
         //인증코드 전송
-        emailService.sendCodeMail(emailReq.getEmail());
+        emailService.sendAuthCodeMail(emailReq.getEmail());
     }
 
     /**
