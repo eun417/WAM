@@ -81,6 +81,14 @@ dependencies {
 	//AOP
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+	//Jackson
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
+
+	//WebClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	//Thymeleaf 실시간 반영
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
