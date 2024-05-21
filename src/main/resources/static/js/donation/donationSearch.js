@@ -2,8 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
     loadSupportList(0);
 });
 
+//무한 스크롤
+window.addEventListener('scroll', function() {
+    scrollList("loadSupportList");
+});
+
 //전체 페이지 수
-let totalPages = 0
+let totalPages = 0;
 
 /*후원 검색 목록 조회*/
 function loadSupportList(pageNo) {
@@ -72,6 +77,6 @@ function getQueryParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const search = urlParams.get('q');
-    console.log(search);
+//    console.log(search);
     return { search };
 }

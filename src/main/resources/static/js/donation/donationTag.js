@@ -16,7 +16,8 @@ document.querySelectorAll('.tag-name').forEach(function(btn) {
 
         pageNo = 0;
         document.querySelector('.donation-line').innerHTML = '';    //요소 초기화
-        loadTagList(pageNo);   //목록 조회
+//        loadTagList(pageNo);   //목록 조회
+        scrollList("loadTagList");
     });
 });
 
