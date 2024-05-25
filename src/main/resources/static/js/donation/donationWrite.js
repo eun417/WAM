@@ -89,6 +89,8 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
     const firstImg  = document.getElementById('firstImg').files[0];
     const content = $('#summernote').summernote('code');
     const commentCheck = checkCommentOption();
+    const fileUrls = extractImgSrc(content);
+    console.log(fileUrls);  //이미지 URL 목록
 
     const supportReq = {
         title: title,
@@ -97,7 +99,8 @@ document.getElementById('createDonationBtn').addEventListener('click', function(
         startDate: startDate,
         endDate: endDate,
         content: content,
-        commentCheck: commentCheck
+        commentCheck: commentCheck,
+        fileUrls: fileUrls
     };
 
     const formData = new FormData();

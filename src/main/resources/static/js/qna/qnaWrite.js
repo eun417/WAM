@@ -39,10 +39,13 @@ document.getElementById('createQnaBtn').addEventListener('click', function() {
     //QnaRequestDto 객체 생성
     const title = document.getElementById('title').value.trim();
     const content = $('#summernote').summernote('code');
+    const fileUrls = extractImgSrc(content);
+    console.log(fileUrls);  //이미지 URL 목록
 
     const qnaReq = {
         title: title,
         content: content,
+        fileUrls: fileUrls
     };
 
     //QnA 생성 요청
