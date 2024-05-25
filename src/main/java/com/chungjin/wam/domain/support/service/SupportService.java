@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.comment.service.CommentService;
+import com.chungjin.wam.domain.file.service.FileService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chungjin.wam.domain.file.entity.Board.SUPPORT;
 import static com.chungjin.wam.domain.support.entity.SupportStatus.ENDING_SOON;
 import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 
@@ -38,6 +40,7 @@ public class SupportService {
 
     private final CommentService commentService;
     private final S3Service s3Service;
+    private final FileService fileService;
 
     private final SupportMapper supportMapper;
     private final EntityUtils entityUtils;
@@ -69,6 +72,9 @@ public class SupportService {
 
         //DB에 저장
         supportRepository.save(support);
+
+        //본문 첨부한 이미지들 DB에 저장
+        fileService.saveImages(supportReq.getFileUrls(), SUPPORT, support.getSupportId());
     }
 
     /**

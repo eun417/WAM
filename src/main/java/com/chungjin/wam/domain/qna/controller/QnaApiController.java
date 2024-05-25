@@ -93,21 +93,4 @@ public class QnaApiController {
         return ResponseEntity.ok().body(qnaService.searchQna(keyword, pageNo));
     }
 
-    /**
-     * QnA - 이미지 업로드
-     */
-    @PostMapping("/image-upload")
-    public ResponseEntity<String> uploadQnAImage(@RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok().body(s3Service.uploadFile(file, S3_QNA));
-    }
-
-    /**
-     * QnA - 이미지 삭제
-     */
-    @PostMapping("/image-delete")
-    public ResponseEntity<String> deleteQnAImage(@RequestPart("fileUrl") String fileUrl) {
-        s3Service.deleteImage(fileUrl);
-        return ResponseEntity.ok().body("이미지 삭제 완료");
-    }
-
 }

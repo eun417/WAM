@@ -74,6 +74,7 @@ dependencies {
 
 	//AWS S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'software.amazon.awssdk:s3:2.19.1'
 
 	//PortOne(iamport)
 	implementation 'com.github.iamport:iamport-rest-client-java:0.1.6'

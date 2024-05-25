@@ -1,20 +1,22 @@
 package com.chungjin.wam.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.chungjin.wam.domain.file.dto.S3GetResponseDto;
 import com.chungjin.wam.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.chungjin.wam.global.exception.error.ErrorCodeType.*;
@@ -88,6 +90,39 @@ public class S3Service {
         } catch (Exception e) {
             throw new CustomException(DELETE_FILE_FAILED);
         }
+    }
+
+    /**
+     * S3에서 객체 조회
+     * @param prefix
+     * @return 조회된 파일 URL List
+     */
+    public S3GetResponseDto findFiles(String prefix) {
+        List<String> fileUrls = new ArrayList<>();
+
+        //S3 객체 목록 요청 위한 객체 생성
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucket) //버킷 이름 설정
+                .withPrefix(prefix.isEmpty() ? null : prefix + "/") //null 이면  버킷 내 모든 객체, 아니면 지정된 접두사로 시작하는 객체만 검색
+                .withDelimiter("/"); //디렉토리 구조 구분
+
+        //S3에서 객체 목록 요청
+        ObjectListing objectListing;
+        do {
+            objectListing = s3Client.listObjects(listObjectsRequest);
+
+            //prefix 경로 아래 파일 URL 가져와 리스트 추가
+            for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                String key = objectSummary.getKey();
+                String fileUrl = s3Client.getUrl(bucket, key).toString(); //객체의 URL 가져오기
+                fileUrls.add(fileUrl);
+            }
+
+            //다음 페이지 요청을 위한 마커 설정
+            listObjectsRequest.setMarker(objectListing.getNextMarker());
+        } while (objectListing.isTruncated()); //true 일 때까지 반복
+
+        return S3GetResponseDto.from(fileUrls);
     }
 
     //파일 이름 생성 함수
