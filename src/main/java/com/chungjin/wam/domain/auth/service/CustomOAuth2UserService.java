@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.auth.dto.OAuthAttributes;
 import com.chungjin.wam.domain.member.entity.LoginType;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.member.repository.MemberRepository;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final EntityUtils entityUtils;
 
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
@@ -110,6 +112,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     @Transactional
     private Member saveMember(OAuthAttributes attributes, LoginType loginType) {
+        entityUtils.checkEmailExists(attributes.getOauth2UserInfo().getEmail());    //중복 이메일 확인
         Member createdMember = attributes.toEntity(loginType, attributes.getOauth2UserInfo());
         return memberRepository.save(createdMember);
     }

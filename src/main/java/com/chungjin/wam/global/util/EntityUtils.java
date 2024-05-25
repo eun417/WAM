@@ -46,6 +46,13 @@ public class EntityUtils {
         }
     }
 
+    //중복 이메일 확인하는 함수
+    public void checkEmailExists(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new CustomException(DUPLICATE_EMAIL);
+        }
+    }
+
     //회원이 탈퇴했을 경우 대비하여 memberId 반환하는 함수
     public Long getMemberId(Member member) {
         return (member != null) ? member.getMemberId() : 0L;
