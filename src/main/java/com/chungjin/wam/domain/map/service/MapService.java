@@ -2,19 +2,17 @@ package com.chungjin.wam.domain.map.service;
 
 import com.chungjin.wam.domain.map.dto.MapDataDto;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 
-import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,7 +57,6 @@ public class MapService {
     }
 
     //자연환경조사 데이터 가져오는 함수
-    //자연환경조사 데이터 가져오는 함수
     private List<MapDataDto> getAnimalData(String urlDetail, String typeName) {
         try {
             URI uri = UriComponentsBuilder.fromHttpUrl(BASE_URL + urlDetail)
@@ -71,18 +68,9 @@ public class MapService {
                     .build()
                     .toUri();
 
-            try (BufferedReader rd = new BufferedReader(new InputStreamReader(uri.toURL().openStream()))) {
-                StringBuilder sb = new StringBuilder();
-
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                return extractData(convertXmlToJson(sb.toString()), typeName);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return Collections.emptyList();
+            //XML 데이터 읽기
+            try (InputStream inputStream = uri.toURL().openStream()) {
+                return extractData(inputStream, typeName);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,13 +79,11 @@ public class MapService {
     }
 
     //조회한 데이터(XML)를 파싱하여 Dto 에 저장하는 함수
-    private List<MapDataDto> extractData(String jsonData, String typeName) {
-
-
+    private List<MapDataDto> extractData(InputStream xmlInputStream, String typeName) {
         try {
-            //JSON 문자열을 JsonNode 객체로 변환
-            ObjectMapper jsonMapper = new ObjectMapper();
-            JsonNode rootNode = jsonMapper.readTree(jsonData);
+            //XML 데이터를 JsonNode 객체로 변환
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode rootNode = xmlMapper.readTree(xmlInputStream);
             JsonNode featureMembersNode = rootNode.path("featureMember");
 
             List<MapDataDto> mapDataDtoList = new ArrayList<>();
@@ -106,7 +92,11 @@ public class MapService {
                 JsonNode mvMapEcpeMmlPointNode = featureMemberNode.path(typeName);
 
                 //위도, 경도
-                List<Double> coordinateList = extractCoordinates(mvMapEcpeMmlPointNode.path("geom").path("Point").path("coordinates").path("").asText());
+                List<Double> coordinateList = extractCoordinates(mvMapEcpeMmlPointNode
+                        .path("geom")
+                        .path("Point")
+                        .path("coordinates")
+                        .path("").asText());
 
                 //Json 문자열을 Dto 에 저장
                 MapDataDto mapDataDto = MapDataDto.builder()
@@ -128,21 +118,10 @@ public class MapService {
         }
     }
 
-    //XML -> Json 변환 함수
-    private String convertXmlToJson(String xml) throws IOException {
-        ObjectMapper xmlMapper = new XmlMapper();
-        JsonNode node = xmlMapper.readTree(xml.getBytes());
-        ObjectMapper jsonMapper = new ObjectMapper();
-        return jsonMapper.writeValueAsString(node);
-    }
-
     //위도, 경도 추출하여 List 에 저장하는 함수
     private List<Double> extractCoordinates(String coordinates) {
-        String[] coordinatePairs = coordinates.split(",");  //좌표 데이터 분리
-        List<Double> coordinateList = new ArrayList<>();    //Double로 형 변환하여 List 저장
-        coordinateList.add(Double.parseDouble(coordinatePairs[0])); // 위도
-        coordinateList.add(Double.parseDouble(coordinatePairs[1])); // 경도
-        return coordinateList;
+        String[] coordinatePairs = coordinates.split(",");
+        return Arrays.asList(Double.parseDouble(coordinatePairs[0]), Double.parseDouble(coordinatePairs[1]));
     }
 
 }
