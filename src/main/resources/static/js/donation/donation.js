@@ -24,8 +24,7 @@ function scrollList(listName) {
                 loadSupportList(pageNo);
             }
 
-            //페이지 번호 증가
-            pageNo++;
+            pageNo++;   //페이지 번호 증가
         }
     }
 }
@@ -50,8 +49,9 @@ function goToSupportWrite(event) {
 
 /*donationSearch 페이지 이동*/
 document.getElementById('searchBtn').addEventListener('click', function() {
+    let selectValue = document.querySelector('.select').value;
     let searchValue = document.querySelector('.search').value;
-    window.location.href = "/support/search?q=" + searchValue;
+    window.location.href = "/support/search?s=" + selectValue + "&q=" + searchValue;
 });
 
 //Enter 하면 검색 버튼 클릭

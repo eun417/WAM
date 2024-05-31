@@ -40,7 +40,7 @@ function loadSupportDetail() {
             const tagName = animalSubjects === 'mml' ? '포유류' :
                             animalSubjects === 'bird' ? '조류' :
                             animalSubjects === 'amnrp' ? '양서파충류' :
-                            animalSubjects === 'fishes' ? '어류' :
+                            animalSubjects === 'fish' ? '어류' :
                             animalSubjects === 'etc' ? 'etc' : '';
             document.querySelector('.tag-name').textContent = '#' + tagName;
             document.querySelector('.donation-amount span').textContent = supportDetail.supportAmount;
