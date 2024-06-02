@@ -3,8 +3,14 @@ let pageNo = 0;
 
 //무한 스크롤
 window.addEventListener('scroll', function() {
-    scrollList("loadSupportList");
+    if (tagBool) {
+        scrollList("loadTagList");
+    } else {
+        scrollList("loadSupportList");
+    }
 });
+
+let isLoading = false; //데이터 요청 상태 추적
 
 //무한 스크롤 함수
 function scrollList(listName) {
@@ -15,7 +21,9 @@ function scrollList(listName) {
     //스크롤이 페이지 하단에 도달했는지 확인
     //현재 스크롤 위치 + 화면 높이 = 현재 화면의 맨 아래 위치
     if (scrollTop + clientHeight >= scrollHeight - 10) {
-        if (0 < totalPages && pageNo <= totalPages) {
+        if (0 < totalPages && pageNo <= totalPages && !isLoading) {
+            isLoading = true; //데이터 요청 시작
+
             if (listName == "loadTagList") {
                 //태그 클릭한 경우
                 loadTagList(pageNo);

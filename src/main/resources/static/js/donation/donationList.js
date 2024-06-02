@@ -54,8 +54,11 @@ function loadSupportList(pageNo) {
         //DOM에 fragment 추가
         const donationLine = document.querySelector('.donation-line');
         donationLine.appendChild(fragment);
+
+        isLoading = false; //데이터 요청 완료
     })
     .catch(function(error) {
         console.error(error);
+        isLoading = false; // 오류 발생 시에도 데이터 요청 상태를 초기화
     });
 }
