@@ -120,7 +120,7 @@ public class S3Service {
 
             //다음 페이지 요청을 위한 마커 설정
             listObjectsRequest.setMarker(objectListing.getNextMarker());
-        } while (objectListing.isTruncated()); //true 일 때까지 반복
+        } while (objectListing.isTruncated()); //true 일 때 반복
 
         return S3GetResponseDto.from(fileUrls);
     }

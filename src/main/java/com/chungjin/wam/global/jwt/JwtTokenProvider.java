@@ -34,7 +34,6 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3;  // 3일
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-//    public static final String REFRESH_HEADER = "Refresh";
     public static final String BEARER_PREFIX = "Bearer ";
 
     private final CustomUserDetailsService userDetailsService;
@@ -227,24 +226,5 @@ public class JwtTokenProvider {
             return ex.getClaims();
         }
     }
-
-//    /**
-//     * 응답 메시지에 AccessToken 헤더로 보내기
-//     */
-//    public void sendAccessToken(HttpServletResponse response, String accessToken) {
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        response.setHeader(AUTHORIZATION_HEADER, accessToken);
-//        log.info("재발급된 Access Token : {}", accessToken);
-//    }
-//
-//    /**
-//     * 응답 메시지에 AccessToken + RefreshToken 헤더로 보내기
-//     */
-//    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        response.setHeader(AUTHORIZATION_HEADER, accessToken);
-//        response.setHeader(REFRESH_HEADER, refreshToken);
-//        log.info("Access Token, Refresh Token 헤더 설정 완료");
-//    }
 
 }
