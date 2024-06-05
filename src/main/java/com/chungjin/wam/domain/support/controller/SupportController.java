@@ -43,7 +43,8 @@ public class SupportController {
      * 검색
      */
     @GetMapping("/search")
-    public String goSupportSearch(@RequestParam("q") String search) {
+    public String goSupportSearch(@RequestParam("s") String select,
+                                  @RequestParam("q") String search) {
         return "donation/donationSearch";
     }
 

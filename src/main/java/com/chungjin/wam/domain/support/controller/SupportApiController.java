@@ -5,6 +5,7 @@ import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
+import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.s3.S3Service;
@@ -86,18 +87,19 @@ public class SupportApiController {
      * 검색 - 제목, 내용, 작성자
      */
     @GetMapping("/search-keyword")
-    public ResponseEntity<PageResponse> searchSupport(@RequestParam("keyword") String keyword,
+    public ResponseEntity<PageResponse> searchSupport(@RequestParam("select") String select,
+                                                      @RequestParam("keyword") String keyword,
                                                       @RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.searchSupport(keyword, pageNo));
+        return ResponseEntity.ok().body(supportService.searchSupport(select, keyword, pageNo));
     }
 
     /**
      * 검색 - 태그(동물 분류)
      */
     @GetMapping("/search-tag")
-    public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") String keyword,
+    public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") AnimalSubjects tagName,
                                                          @RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, pageNo));
+        return ResponseEntity.ok().body(supportService.searchSupportTag(tagName, pageNo));
     }
 
 }
