@@ -8,7 +8,6 @@ import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
 import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ import java.util.List;
 public class SupportApiController {
 
     private final SupportService supportService;
-    private final S3Service s3Service;
 
     /**
      * 후원 생성
@@ -49,8 +47,8 @@ public class SupportApiController {
      * 후원 List 조회 (Pagination)
      */
     @GetMapping
-    public ResponseEntity<PageResponse> readAllSupport(@RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
+    public ResponseEntity<List<SupportResponseDto>> readAllSupport(@RequestParam(name = "lastId", required = false) Long lastId) {
+        return ResponseEntity.ok().body(supportService.readAllSupport(lastId));
     }
 
     /**

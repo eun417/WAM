@@ -13,9 +13,11 @@ import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
+import com.chungjin.wam.domain.support.repository.querydsl.SupportQuerydslRepositoryImpl;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.s3.S3Service;
 import com.chungjin.wam.global.util.EntityUtils;
+import com.chungjin.wam.global.util.SearchKeywordUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,7 @@ import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 public class SupportService {
 
     private final SupportRepository supportRepository;
+    private final SupportQuerydslRepositoryImpl supportQuerydslRepository;
 
     private final CommentService commentService;
     private final S3Service s3Service;
@@ -113,10 +116,8 @@ public class SupportService {
     /**
      * 후원 List 조회 (Pagination)
      */
-    public PageResponse readAllSupport(int pageNo) {
-        //한 페이지당 10개 항목 표시
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-        return getSupportPageResponse(supportRepository.findAll(pageable), pageNo);
+    public List<SupportResponseDto> readAllSupport(Long lastId) {
+        return convertToDtoList(supportQuerydslRepository.paginationNoOffset(lastId, 10));
     }
 
     /**
@@ -179,10 +180,10 @@ public class SupportService {
         log.info("select: {}", select);
         log.info("keyword: {}", keyword);
         if (select.equals("tc")) {
-            Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-            return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(keyword, pageable), pageNo);
+            Pageable pageable = PageRequest.of(pageNo, 10);
+            return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(SearchKeywordUtils.convertToBooleanModeKeyword(keyword), pageable), pageNo);
         } else {
-            Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
+            Pageable pageable = PageRequest.of(pageNo, 10);
             return getSupportPageResponse(supportRepository.findByNicknameContaining(keyword, pageable), pageNo);
         }
     }
