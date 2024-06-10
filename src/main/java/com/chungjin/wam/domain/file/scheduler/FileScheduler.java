@@ -61,7 +61,7 @@ public class FileScheduler {
     }
 
     //시작날 ~ 마지막날까지 날짜들 구하는 함수
-    public List<String> getLastWeekDateRange(LocalDate startDate, LocalDate endDate) {
+    private List<String> getLastWeekDateRange(LocalDate startDate, LocalDate endDate) {
         List<String> dateList = new ArrayList<>();
 
         LocalDate currentDate = startDate;
@@ -74,7 +74,7 @@ public class FileScheduler {
     }
 
     //특정 날짜, 폴더에 해당하는 파일 URL 조회 함수
-    public List<String> getFileUrlsForDate(String date, String folder) {
+    private List<String> getFileUrlsForDate(String date, String folder) {
         S3GetResponseDto s3GetResponseDto = s3Service.findFiles(folder + "/" + date);
         return s3GetResponseDto.getFileUrls();
     }

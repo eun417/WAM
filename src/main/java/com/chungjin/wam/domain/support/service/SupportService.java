@@ -114,10 +114,19 @@ public class SupportService {
     }
 
     /**
-     * 후원 List 조회 (Pagination)
+     * 후원 List 조회 (No Offset)
      */
     public List<SupportResponseDto> readAllSupport(Long lastId) {
         return convertToDtoList(supportQuerydslRepository.paginationNoOffset(lastId, 10));
+    }
+
+    /**
+     * 후원 List 조회 (Pagination)
+     */
+    public PageResponse readAllSupport(int pageNo) {
+        //한 페이지당 10개 항목 표시
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
+        return getSupportPageResponse(supportRepository.findAll(pageable), pageNo);
     }
 
     /**
@@ -179,11 +188,10 @@ public class SupportService {
     public PageResponse searchSupport(String select, String keyword, int pageNo) {
         log.info("select: {}", select);
         log.info("keyword: {}", keyword);
+        Pageable pageable = PageRequest.of(pageNo, 10);
         if (select.equals("tc")) {
-            Pageable pageable = PageRequest.of(pageNo, 10);
             return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(SearchKeywordUtils.convertToBooleanModeKeyword(keyword), pageable), pageNo);
         } else {
-            Pageable pageable = PageRequest.of(pageNo, 10);
             return getSupportPageResponse(supportRepository.findByNicknameContaining(keyword, pageable), pageNo);
         }
     }

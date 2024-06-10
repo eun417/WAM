@@ -10,6 +10,12 @@ function getPayloadData(accessToken) {
     return JSON.parse(atob(base64Payload.replace(/-/g, '+').replace(/_/g, '/')));
 }
 
+//토큰 정보 삭제
+function clearLocalStorage() {
+    localStorage.clear();
+    window.location.href = "/auth/login";
+}
+
 //토큰 만료 시간 확인
 function getTokenExpirationDate(exp) {
     //UNIX 시간 스탬프를 밀리초 단위로 변환

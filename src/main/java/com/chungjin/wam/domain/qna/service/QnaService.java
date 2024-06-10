@@ -159,7 +159,7 @@ public class QnaService {
     }
 
     //Entity -> Dto
-    public QnaResponseDto convertToDto(Qna qna) {
+    private QnaResponseDto convertToDto(Qna qna) {
         return QnaResponseDto.builder()
                 .qnaId(qna.getQnaId())
                 .title(qna.getTitle())

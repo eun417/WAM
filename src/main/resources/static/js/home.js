@@ -19,6 +19,9 @@ function loadEndingSoonSupport() {
             let hasData = false; // 데이터 조회 여부를 나타내는 변수
 
             if (endingSoonSupportList && endingSoonSupportList.length > 0) {
+                //종료 임박 후원이 있는 경우 보임
+                document.querySelector('.deadline-donation-box').style.display = 'block';
+
                 hasData = true; // 데이터가 있을 경우 true 로 설정
 
                 //랜덤한 인덱스 선택
@@ -67,8 +70,6 @@ function loadEndingSoonSupport() {
                 }
             } else {
                 console.log('종료 임박 후원 없음');
-                //종료 임박 후원이 없는 경우 숨김
-                document.querySelector('.deadline-donation-box').style.display = 'none';
             }
         })
         .catch(function(error) {
@@ -188,9 +189,7 @@ function loadQna(pageNo) {
                                 <p class="qna-content">${qna.content}</p>
                             </div>`;
                 document.querySelector('.qna-list').innerHTML += row;
-            } else {
-                 console.log('QnA 없음');
-             }
+            }
         }
     })
     .catch(function(error) {
