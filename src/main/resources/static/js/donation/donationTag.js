@@ -15,10 +15,10 @@ document.querySelectorAll('.tag-name').forEach(function(btn) {
 
         keyword = btn.id; //클릭된 버튼의 id 값을 keyword로 설정
 
-        pageNo = 0;
         tagBool = true; //loadTagList 조회 O
         document.querySelector('.donation-line').innerHTML = '';    //요소 초기화
-        loadTagList(pageNo);   //첫 페이지 목록 조회
+        loadTagList(0);   //첫 페이지 목록 조회
+        pageNo = 1;
         scrollList("loadTagList");
     });
 });
