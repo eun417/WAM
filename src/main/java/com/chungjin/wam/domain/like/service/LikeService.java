@@ -3,7 +3,7 @@ package com.chungjin.wam.domain.like.service;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.like.entity.SupportLike;
-import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
+import com.chungjin.wam.domain.like.repository.SupportLikeRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class LikeService {
                 .orElseThrow(() -> new CustomException(SUPPORT_LIKE_NOT_FOUND));
 
         //로그인한 사용자가 좋아요 생성한 사람이 아닌 경우 에러 발생
-        if(!memberId.equals(supportLike.getMember().getMemberId())) throw new CustomException(FORBIDDEN);
+        entityUtils.checkWriter(supportLike.getMember().getMemberId(), memberId);
 
         //좋아요 감소
         support.downLike();

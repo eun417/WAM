@@ -18,6 +18,8 @@ public enum ErrorCodeType implements ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON-004", "서버 내부 오류가 발생하였습니다."),
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "COMMON-005", "일시적으로 서비스를 사용할 수 없습니다."),
 
+    CHARACTER_LIMIT(HttpStatus.BAD_REQUEST, "COMMON-006", "검색어는 2글자 이상 입력해주세요."),
+
     //Member
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER-001", "회원을 찾을 수 없습니다."),
     EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER-002", "존재하지 않는 이메일입니다."),

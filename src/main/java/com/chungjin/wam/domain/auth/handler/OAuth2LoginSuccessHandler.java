@@ -50,11 +50,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         //메인 페이지로 리다이렉트
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
-
-//        //헤더에 등록해서 전송
-//        jwtTokenProvider.sendAccessAndRefreshToken(response, tokenDto.getAccessToken(), tokenDto.getRefreshToken());
-//
-//        response.sendRedirect("/"); //메인 페이지로 리다이렉트
     }
 
     /**

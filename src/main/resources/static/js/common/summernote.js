@@ -88,3 +88,14 @@ function deleteSummernoteImageFile(imgUrl) {
             console.error('이미지 삭제 실패:', error);
         });
 }
+
+
+//문자열에서 <img>의 src 속성 추출 함수
+function extractImgSrc(htmlContent) {
+    const imgElements = $(htmlContent).find('img'); //img 태그 요소들을 모두 가져옴
+    const imgSrcList = [];
+    imgElements.each(function() {
+        imgSrcList.push($(this).attr('src')); //img 태그의 src 속성 값들을 배열에 담음
+    });
+    return imgSrcList;
+}

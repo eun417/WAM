@@ -14,6 +14,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${accessToken}`;
     } else {
         alert("로그인 후 이용해주세요.");
+        window.location.replace("/auth/login");
         return;
     }
     return config;
@@ -60,17 +61,17 @@ api.interceptors.response.use(
                     return api(error.config);
                 })
                 .catch(function(refreshError) {
+                    alert("토큰 재발급 과정 중 오류가 발생했습니다.");
+                    clearLocalStorage();
                     console.error("토큰 재발급 오류:", refreshError);
                     return Promise.reject(refreshError);
                 });
         } else if (msg === "리프레시 토큰이 만료되었습니다.") {
-            localStorage.clear();
             alert("토큰이 만료되어 자동으로 로그아웃 되었습니다.");
-            window.location.href = "/auth/login";
+            clearLocalStorage();
         } else if (msg === "잘못된 JWT 서명입니다." || msg === "지원하지 않는 JWT 토큰입니다." || msg === "JWT 토큰이 잘못되었습니다." || msg === "토큰의 유저 정보가 일치하지 않습니다.") {
-            localStorage.clear();
             alert("토큰이 잘못되어 자동으로 로그아웃 되었습니다.");
-            window.location.href = "/auth/login";
+            clearLocalStorage();
         }
     } else if (status == 400) {
         //alert(msg);

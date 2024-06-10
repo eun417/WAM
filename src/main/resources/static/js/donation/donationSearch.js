@@ -1,17 +1,21 @@
+/*페이지 로드 시 함수 실행*/
 document.addEventListener('DOMContentLoaded', function() {
+    isLoading = true;
     loadSupportList(0);
 });
 
 //전체 페이지 수
-let totalPages = 0
+let tagBool = false;    //loadTagList 조회 X
 
 /*후원 검색 목록 조회*/
 function loadSupportList(pageNo) {
-    const { search } = getQueryParams();
+    const { select, search } = getQueryParams();
+    document.querySelector(".select option[value='" + select + "']").selected = true;   //select 기본값 설정
     document.querySelector('.search').value = search;   //검색창에 검색어 설정
 
     axios.get('/support/search-keyword', {
         params: {
+            select: select,
             keyword: search,
             pageNo: pageNo
         }
@@ -61,9 +65,12 @@ function loadSupportList(pageNo) {
         //DOM에 fragment 추가
         const donationLine = document.querySelector('.donation-line');
         donationLine.appendChild(fragment);
+
+        isLoading = false; //데이터 요청 완료
     })
     .catch(function(error) {
         console.error(error);
+        isLoading = false;
     });
 }
 
@@ -71,7 +78,8 @@ function loadSupportList(pageNo) {
 function getQueryParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const select = urlParams.get('s');
     const search = urlParams.get('q');
-    console.log(search);
+    return { select, search };
     return { search };
 }

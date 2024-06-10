@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class SupportRequestDto {
 
@@ -20,5 +22,6 @@ public class SupportRequestDto {
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
     private Boolean commentCheck;
+    private List<String> fileUrls;  //본문 첨부한 이미지 URL
 
 }

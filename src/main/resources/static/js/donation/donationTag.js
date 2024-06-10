@@ -1,4 +1,5 @@
 let keyword = "";
+let tagBool = false;    //loadTagList 조회 X
 
 //태그 버튼 클릭 이벤트 리스너
 document.querySelectorAll('.tag-name').forEach(function(btn) {
@@ -14,9 +15,11 @@ document.querySelectorAll('.tag-name').forEach(function(btn) {
 
         keyword = btn.id; //클릭된 버튼의 id 값을 keyword로 설정
 
-        pageNo = 0;
+        tagBool = true; //loadTagList 조회 O
         document.querySelector('.donation-line').innerHTML = '';    //요소 초기화
-        loadTagList(pageNo);   //목록 조회
+        loadTagList(0);   //첫 페이지 목록 조회
+        pageNo = 1;
+        scrollList("loadTagList");
     });
 });
 
@@ -73,8 +76,11 @@ function loadTagList(pageNo) {
             const donationLine = document.querySelector('.donation-line');
             donationLine.appendChild(fragment);
         });
+
+        isLoading = false; //데이터 요청 완료
     })
     .catch(function(error) {
         console.error(error);
+        isLoading = false;
     });
 }

@@ -9,6 +9,7 @@ import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.jwt.JwtTokenProvider;
 import com.chungjin.wam.global.util.DataMasking;
+import com.chungjin.wam.global.util.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,15 +40,17 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
+    private final EntityUtils entityUtils;
+
     /**
      * 회원가입 - 1. 인증코드 메일 발송
      */
     public void sendCodeToEmail(EmailRequestDto emailReq) {
         //이미 가입되어 있는 사용자 확인
-        checkEmailExists(emailReq.getEmail());
+        entityUtils.checkEmailExists(emailReq.getEmail());
 
         //인증코드 전송
-        emailService.sendCodeMail(emailReq.getEmail());
+        emailService.sendAuthCodeMail(emailReq.getEmail());
     }
 
     /**
@@ -81,13 +84,6 @@ public class AuthService {
                 .nickname(signUpReq.getNickname())
                 .loginType(LOCAL)
                 .build());
-    }
-
-    //중복 이메일 확인하는 함수
-    public void checkEmailExists(String email) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new CustomException(DUPLICATE_EMAIL);
-        }
     }
 
     /**

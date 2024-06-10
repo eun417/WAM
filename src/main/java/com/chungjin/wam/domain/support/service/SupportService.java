@@ -1,6 +1,7 @@
 package com.chungjin.wam.domain.support.service;
 
 import com.chungjin.wam.domain.comment.service.CommentService;
+import com.chungjin.wam.domain.file.service.FileService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.support.dto.SupportMapper;
 import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
@@ -8,13 +9,17 @@ import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.comment.dto.response.CommentDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
+import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.support.entity.SupportStatus;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
+import com.chungjin.wam.domain.support.repository.querydsl.SupportQuerydslRepositoryImpl;
 import com.chungjin.wam.global.common.PageResponse;
 import com.chungjin.wam.global.s3.S3Service;
 import com.chungjin.wam.global.util.EntityUtils;
+import com.chungjin.wam.global.util.SearchKeywordUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,18 +31,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chungjin.wam.domain.file.entity.Board.SUPPORT;
 import static com.chungjin.wam.domain.support.entity.SupportStatus.ENDING_SOON;
 import static com.chungjin.wam.global.util.Constants.S3_SUPPORT_FIRST;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SupportService {
 
     private final SupportRepository supportRepository;
+    private final SupportQuerydslRepositoryImpl supportQuerydslRepository;
 
     private final CommentService commentService;
     private final S3Service s3Service;
+    private final FileService fileService;
 
     private final SupportMapper supportMapper;
     private final EntityUtils entityUtils;
@@ -69,6 +78,11 @@ public class SupportService {
 
         //DB에 저장
         supportRepository.save(support);
+
+        if (!supportReq.getFileUrls().isEmpty()) {
+            //본문 첨부한 이미지들 DB에 저장
+            fileService.saveImages(supportReq.getFileUrls(), SUPPORT, support.getSupportId());
+        }
     }
 
     /**
@@ -97,6 +111,13 @@ public class SupportService {
                 .commentCheck(support.getCommentCheck())
                 .comments(comments)
                 .build();
+    }
+
+    /**
+     * 후원 List 조회 (No Offset)
+     */
+    public List<SupportResponseDto> readAllSupport(Long lastId) {
+        return convertToDtoList(supportQuerydslRepository.paginationNoOffset(lastId, 10));
     }
 
     /**
@@ -164,21 +185,27 @@ public class SupportService {
     /**
      * 검색 - 제목, 내용, 작성자
      */
-    public PageResponse searchSupport(String keyword, int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-        return getSupportPageResponse(supportRepository.findByTitleOrContentOrNicknameContaining(keyword, pageable), pageNo);
+    public PageResponse searchSupport(String select, String keyword, int pageNo) {
+        log.info("select: {}", select);
+        log.info("keyword: {}", keyword);
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        if (select.equals("tc")) {
+            return getSupportPageResponse(supportRepository.findByTitleOrContentContaining(SearchKeywordUtils.convertToBooleanModeKeyword(keyword), pageable), pageNo);
+        } else {
+            return getSupportPageResponse(supportRepository.findByNicknameContaining(keyword, pageable), pageNo);
+        }
     }
 
     /**
      * 검색 - 태그
      */
-    public PageResponse searchSupportTag(String keyword, int pageNo) {
+    public PageResponse searchSupportTag(AnimalSubjects tagName, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by("supportId").descending());
-        return getSupportPageResponse(supportRepository.findByAnimalSubjectsContaining(keyword, pageable), pageNo);
+        return getSupportPageResponse(supportRepository.findByAnimalSubjectsContaining(tagName, pageable), pageNo);
     }
 
     //Pagination 결과 함수
-    public PageResponse getSupportPageResponse(Page<Support> supportPage, int pageNo) {
+    private PageResponse getSupportPageResponse(Page<Support> supportPage, int pageNo) {
         //현재 페이지의 Support 목록
         List<Support> supports = supportPage.getContent();
         //EntityList -> DtoList
@@ -193,14 +220,14 @@ public class SupportService {
       map()으로 각 Support를 SupportResponseDto로 변환
       collect()를 사용하여 변환된 DTO 객체들을 리스트로 수집
      */
-    public List<SupportResponseDto> convertToDtoList(List<Support> supports) {
+    private List<SupportResponseDto> convertToDtoList(List<Support> supports) {
         return supports.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     //Entity -> Dto
-    public SupportResponseDto convertToDto(Support support) {
+    private SupportResponseDto convertToDto(Support support) {
         return SupportResponseDto.builder()
                 .supportId(support.getSupportId())
                 .title(support.getTitle())
@@ -209,8 +236,6 @@ public class SupportService {
                 .firstImg(support.getFirstImg())
                 .goalAmount(support.getGoalAmount())
                 .supportAmount(support.getSupportAmount())
-                .createDate(support.getCreateDate())
-                .commentCheck(support.getCommentCheck())
                 .build();
     }
 

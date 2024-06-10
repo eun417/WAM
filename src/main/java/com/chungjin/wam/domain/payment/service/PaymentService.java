@@ -55,12 +55,12 @@ public class PaymentService {
     }
 
     //결제 취소하는 함수
-    public CancelData cancelPayment(IamportResponse<Payment> response) {
+    private CancelData cancelPayment(IamportResponse<Payment> response) {
         return new CancelData(response.getResponse().getImpUid(), true);
     }
 
     //기존 금액에서 후원 받은 금액 추가, 결제 정보 저장하는 함수
-    public void createPaymentInfo(Long memberId, PaymentRequestDto paymentReq, Long paidAmount) {
+    private void createPaymentInfo(Long memberId, PaymentRequestDto paymentReq, Long paidAmount) {
         //memberId로 Member 객체 가져오기
         Member member = entityUtils.getMember(memberId);
 

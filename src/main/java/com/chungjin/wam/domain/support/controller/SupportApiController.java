@@ -5,9 +5,9 @@ import com.chungjin.wam.domain.support.dto.request.SupportRequestDto;
 import com.chungjin.wam.domain.support.dto.request.UpdateSupportRequestDto;
 import com.chungjin.wam.domain.support.dto.response.SupportDetailDto;
 import com.chungjin.wam.domain.support.dto.response.SupportResponseDto;
+import com.chungjin.wam.domain.support.entity.AnimalSubjects;
 import com.chungjin.wam.domain.support.service.SupportService;
 import com.chungjin.wam.global.common.PageResponse;
-import com.chungjin.wam.global.s3.S3Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.chungjin.wam.global.util.Constants.S3_SUPPORT;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/support")
 public class SupportApiController {
 
     private final SupportService supportService;
-    private final S3Service s3Service;
 
     /**
      * 후원 생성
@@ -50,8 +47,8 @@ public class SupportApiController {
      * 후원 List 조회 (Pagination)
      */
     @GetMapping
-    public ResponseEntity<PageResponse> readAllSupport(@RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.readAllSupport(pageNo));
+    public ResponseEntity<List<SupportResponseDto>> readAllSupport(@RequestParam(name = "lastId", required = false) Long lastId) {
+        return ResponseEntity.ok().body(supportService.readAllSupport(lastId));
     }
 
     /**
@@ -88,35 +85,19 @@ public class SupportApiController {
      * 검색 - 제목, 내용, 작성자
      */
     @GetMapping("/search-keyword")
-    public ResponseEntity<PageResponse> searchSupport(@RequestParam("keyword") String keyword,
+    public ResponseEntity<PageResponse> searchSupport(@RequestParam("select") String select,
+                                                      @RequestParam("keyword") String keyword,
                                                       @RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.searchSupport(keyword, pageNo));
+        return ResponseEntity.ok().body(supportService.searchSupport(select, keyword, pageNo));
     }
 
     /**
      * 검색 - 태그(동물 분류)
      */
     @GetMapping("/search-tag")
-    public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") String keyword,
+    public ResponseEntity<PageResponse> searchSupportTag(@RequestParam("keyword") AnimalSubjects tagName,
                                                          @RequestParam("pageNo") int pageNo) {
-        return ResponseEntity.ok().body(supportService.searchSupportTag(keyword, pageNo));
-    }
-
-    /**
-     * 후원 - 이미지 업로드
-     */
-    @PostMapping("/image-upload")
-    public ResponseEntity<String> uploadSupportImage(@RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok().body(s3Service.uploadFile(file, S3_SUPPORT));
-    }
-
-    /**
-     * 후원 - 이미지 삭제
-     */
-    @PostMapping("/image-delete")
-    public ResponseEntity<String> deleteSupportImage(@RequestPart("fileUrl") String fileUrl) {
-        s3Service.deleteImage(fileUrl);
-        return ResponseEntity.ok().body("이미지 삭제 완료");
+        return ResponseEntity.ok().body(supportService.searchSupportTag(tagName, pageNo));
     }
 
 }

@@ -1,24 +1,24 @@
 /*페이지 로드 시 함수 실행*/
 document.addEventListener('DOMContentLoaded', function() {
-    loadSupportList(0);
+    isLoading = true;
+    loadSupportList();
 });
 
 //전체 페이지 수
-let totalPages = 0
+let lastId = null;
 
 /*후원 목록 조회*/
-function loadSupportList(pageNo) {
+function loadSupportList() {
     axios.get('/support', {
         params: {
-            pageNo: pageNo
+            lastId: lastId
         }
     })
     .then(function(response) {
-        const supportList = response.data.content;
+        const supportList = response.data;
 
         //DocumentFragment 생성
         const fragment = document.createDocumentFragment();
-        totalPages = response.data.totalPages;
 
         supportList.forEach(function(support) {
             //graph의 width 설정(목표금액의 몇 퍼센트 모였는지 보여줌)
@@ -54,8 +54,20 @@ function loadSupportList(pageNo) {
         //DOM에 fragment 추가
         const donationLine = document.querySelector('.donation-line');
         donationLine.appendChild(fragment);
+
+        isLoading = false; //데이터 요청 완료
+
+        if (supportList.length === 0) {
+            //더 이상 데이터가 없으면 무한 스크롤 멈춤
+            window.removeEventListener('scroll', onScroll);
+        } else {
+            const lastSupport = supportList[supportList.length - 1];
+            lastId = lastSupport.supportId;
+            console.log("lastId: ", lastId);
+        }
     })
     .catch(function(error) {
         console.error(error);
+        isLoading = false; // 오류 발생 시에도 데이터 요청 상태를 초기화
     });
 }

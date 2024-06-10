@@ -1,23 +1,18 @@
 package com.chungjin.wam.domain.map.service;
 
 import com.chungjin.wam.domain.map.dto.MapDataDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
+import java.net.URI;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +20,6 @@ import static com.chungjin.wam.global.util.Constants.*;
 
 @Slf4j
 @Service
-@Transactional
 public class MapService {
 
     private final String serviceKey;
@@ -38,144 +32,96 @@ public class MapService {
      * 포유류 정보 조회
      */
     public List<MapDataDto> getMmlMap() {
-        try {
-            return extractData(getAnimalData(MML_URL_DETAIL, MML_TYPE_NAME), MML_TYPE_NAME);
-        } catch (Exception e) {
-            e.getStackTrace();  //예외 추적 정보 출력
-            return Collections.emptyList(); //빈 리스트 반환
-        }
+        return getAnimalData(MML_URL_DETAIL, MML_TYPE_NAME);
     }
 
     /**
      * 조류 정보 조회
      */
     public List<MapDataDto> getBirdsMap() {
-        try {
-            return extractData(getAnimalData(BIRDS_URL_DETAIL, BIRDS_TYPE_NAME), BIRDS_TYPE_NAME);
-        } catch (Exception e) {
-            e.getStackTrace();
-            return Collections.emptyList();
-        }
+        return getAnimalData(BIRDS_URL_DETAIL, BIRDS_TYPE_NAME);
     }
 
     /**
      * 양서파충류 정보 조회
      */
     public List<MapDataDto> getAmnrpMap() {
-        try {
-            return extractData(getAnimalData(AMNRP_URL_DETAIL, AMNRP_TYPE_NAME), AMNRP_TYPE_NAME);
-        } catch (Exception e) {
-            e.getStackTrace();
-            return Collections.emptyList();
-        }
+        return getAnimalData(AMNRP_URL_DETAIL, AMNRP_TYPE_NAME);
     }
 
     /**
      * 어류 정보 조회
      */
     public List<MapDataDto> getFishesMap() {
+        return getAnimalData(FISHES_URL_DETAIL, FISHES_TYPE_NAME);
+    }
+
+    //자연환경조사 데이터 가져오는 함수
+    private List<MapDataDto> getAnimalData(String urlDetail, String typeName) {
         try {
-            return extractData(getAnimalData(FISHES_URL_DETAIL, FISHES_TYPE_NAME), FISHES_TYPE_NAME);
+            URI uri = UriComponentsBuilder.fromHttpUrl(BASE_URL + urlDetail)
+                    .queryParam("serviceKey", serviceKey)
+                    .queryParam("srs", SRC)
+                    .query("bbox=" + BBOX)
+                    .queryParam("typeName", typeName)
+                    .queryParam("maxFeatures", 500)
+                    .build()
+                    .toUri();
+
+            //XML 데이터 읽기
+            try (InputStream inputStream = uri.toURL().openStream()) {
+                return extractData(inputStream, typeName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    //조회한 데이터(XML)를 파싱하여 Dto 에 저장하는 함수
+    private List<MapDataDto> extractData(InputStream xmlInputStream, String typeName) {
+        try {
+            //XML 데이터를 JsonNode 객체로 변환
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode rootNode = xmlMapper.readTree(xmlInputStream);
+            JsonNode featureMembersNode = rootNode.path("featureMember");
+
+            List<MapDataDto> mapDataDtoList = new ArrayList<>();
+            for (JsonNode featureMemberNode : featureMembersNode) {
+                //야생동물 종류(typeName)에 따라 설정
+                JsonNode mvMapEcpeMmlPointNode = featureMemberNode.path(typeName);
+
+                //위도, 경도
+                List<Double> coordinateList = extractCoordinates(mvMapEcpeMmlPointNode
+                        .path("geom")
+                        .path("Point")
+                        .path("coordinates")
+                        .path("").asText());
+
+                //Json 문자열을 Dto 에 저장
+                MapDataDto mapDataDto = MapDataDto.builder()
+                        .coordinates(coordinateList)
+                        .year(mvMapEcpeMmlPointNode.path("examin_year").asText())
+                        .speciesName(mvMapEcpeMmlPointNode.path("spcs_korean_nm").asText())
+                        .areaName(mvMapEcpeMmlPointNode.path("examin_area_nm").asText())
+                        .beginDate(mvMapEcpeMmlPointNode.path("examin_begin_de").asText())
+                        .endDate(mvMapEcpeMmlPointNode.path("examin_end_de").asText())
+                        .build();
+
+                mapDataDtoList.add(mapDataDto);
+            }
+            return mapDataDtoList;
+
         } catch (Exception e) {
             e.getStackTrace();
             return Collections.emptyList();
         }
     }
 
-    //조회한 데이터(XML)를 파싱하여 Dto에 저장하는 함수
-    public List<MapDataDto> extractData(String xmlData, String typeName) {
-        List<MapDataDto> mapDataDtoList = new ArrayList<>();
-
-        try {
-            //XML 파싱을 위한 DocumentBuilderFactory 생성
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            //XML 데이터를 InputStream으로 변환하여 Document로 파싱
-            ByteArrayInputStream input = new ByteArrayInputStream(xmlData.getBytes());
-            Document document = builder.parse(input);
-
-            //필요한 데이터를 추출하기 위해 XML 트리를 탐색
-            NodeList featureList = document.getElementsByTagName("gml:featureMember");
-
-            log.info("야생동물 데이터 조회: {}", featureList.getLength());
-
-            //featureMember 태그 내의 데이터 추출
-            for (int i = 0; i < featureList.getLength(); i++) {
-                Node featureNode = featureList.item(i);
-                if (featureNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element featureElement = (Element) featureNode;
-                    NodeList ecoBankList = featureElement.getElementsByTagName("EcoBank:" + typeName);
-
-                    if (ecoBankList.getLength() > 0) {
-                        Element ecoBankElement = (Element) ecoBankList.item(0);
-
-                        String speciesName = getElementTextContent(ecoBankElement, "EcoBank:spcs_korean_nm");
-                        if (speciesName.equals("(알 수 없음)")) {
-                            continue;
-                        }
-                        String coordinates = getElementTextContent(ecoBankElement, "EcoBank:geom");
-                        String year = getElementTextContent(ecoBankElement, "EcoBank:examin_year");
-                        String areaName = getElementTextContent(ecoBankElement, "EcoBank:examin_area_nm");
-                        String beginDate = getElementTextContent(ecoBankElement, "EcoBank:examin_begin_de");
-                        String endDate = getElementTextContent(ecoBankElement, "EcoBank:examin_end_de");
-
-                        //좌표 데이터 분리
-                        String[] coordinatePairs = coordinates.split(",");
-
-                        //Double로 형 변환하여 List 저장
-                        List<Double> coordinateList = new ArrayList<>();
-                        coordinateList.add(Double.parseDouble(coordinatePairs[0])); // 위도
-                        coordinateList.add(Double.parseDouble(coordinatePairs[1])); // 경도
-
-                        //DTO에 저장
-                        MapDataDto mapDataDto = MapDataDto.builder()
-                                .coordinates(coordinateList)
-                                .year(year)
-                                .speciesName(speciesName)
-                                .areaName(areaName)
-                                .beginDate(beginDate)
-                                .endDate(endDate)
-                                .build();
-
-                        mapDataDtoList.add(mapDataDto);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.getStackTrace();  //예외 추적 정보 출력
-        }
-
-        return mapDataDtoList;
-    }
-
-    //null 처리하는 함수
-    private String getElementTextContent(Element element, String tagName) {
-        NodeList nodeList = element.getElementsByTagName(tagName);
-        return nodeList.getLength() > 0 ? nodeList.item(0).getTextContent() : "(알 수 없음)";
-    }
-
-    //자연환경조사 데이터 가져오는 함수
-    public String getAnimalData(String urlDetail, String typeName) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder(BASE_URL);
-        urlBuilder.append(urlDetail)
-                .append("?serviceKey=").append(serviceKey)
-                .append("&srs=").append(SRC)
-                .append("&bbox=").append(BBOX)
-                .append("&typeName=").append(typeName)
-                .append("&maxFeatures=500");
-
-        URL url = new URL(urlBuilder.toString());
-
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(url.openStream()))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                sb.append(line);
-            }
-            return sb.toString();
-        }
+    //위도, 경도 추출하여 List 에 저장하는 함수
+    private List<Double> extractCoordinates(String coordinates) {
+        String[] coordinatePairs = coordinates.split(",");
+        return Arrays.asList(Double.parseDouble(coordinatePairs[0]), Double.parseDouble(coordinatePairs[1]));
     }
 
 }

@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="deadline-donation-box box">
+        <div class="deadline-donation-box box" style="display:none;">
             <div class="title-box">
                 <p class="title">마감일이 다가오고 있어요!⏰</p>
                 <p class="title-detail">지금 후원하여 야생동물 보호에 동참해주세요.</p>
@@ -91,7 +91,8 @@
                     <div id="mml" class="tag home-btn">#포유류</div>
                     <div id="bird" class="tag home-btn">#조류</div>
                     <div id="amnrp" class="tag home-btn">#양서파충류</div>
-                    <div id="fishes" class="tag home-btn">#어류</div>
+                    <div id="fish" class="tag home-btn">#어류</div>
+                    <div id="etc" class="tag home-btn">#etc</div>
                 </div>
                 <div class="donation-list">
                     <div class="donation-line">
@@ -118,5 +119,6 @@
 <footer th:insert="~{common/footer :: footer}"></footer>
 
 <script th:src="@{/js/home.js}"></script>
+<script th:src="@{/js/login/oauth2.js}"></script>
 </body>
 </html>

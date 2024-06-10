@@ -1,4 +1,4 @@
-package com.chungjin.wam.domain.support.repository;
+package com.chungjin.wam.domain.like.repository;
 
 import com.chungjin.wam.domain.support.entity.Support;
 import com.chungjin.wam.domain.like.entity.SupportLike;

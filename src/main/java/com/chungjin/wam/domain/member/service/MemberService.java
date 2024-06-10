@@ -13,7 +13,7 @@ import com.chungjin.wam.domain.member.repository.MemberRepository;
 import com.chungjin.wam.domain.qna.entity.Qna;
 import com.chungjin.wam.domain.qna.repository.QnaRepository;
 import com.chungjin.wam.domain.support.entity.Support;
-import com.chungjin.wam.domain.support.repository.SupportLikeRepository;
+import com.chungjin.wam.domain.like.repository.SupportLikeRepository;
 import com.chungjin.wam.domain.support.repository.SupportRepository;
 import com.chungjin.wam.global.exception.CustomException;
 import com.chungjin.wam.global.util.EntityUtils;

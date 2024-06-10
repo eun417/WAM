@@ -89,9 +89,9 @@ public class SecurityConfig {
 
                 //소셜 로그인 설정
                 .oauth2Login(configure -> configure
-                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
-                                .successHandler(oAuth2LoginSuccessHandler)
-                                .failureHandler(oAuth2LoginFailureHandler)
+                        .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
                 )
         ;
 

@@ -1,5 +1,6 @@
 package com.chungjin.wam.domain.qna.service;
 
+import com.chungjin.wam.domain.file.service.FileService;
 import com.chungjin.wam.domain.member.entity.Member;
 import com.chungjin.wam.domain.qna.dto.QnaMapper;
 import com.chungjin.wam.domain.qna.dto.request.QnaAnswerRequestDto;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chungjin.wam.domain.file.entity.Board.QNA;
 import static com.chungjin.wam.domain.qna.entity.QnaCheck.CHECKING;
 
 @Service
@@ -30,6 +32,8 @@ import static com.chungjin.wam.domain.qna.entity.QnaCheck.CHECKING;
 public class QnaService {
 
     private final QnaRepository qnaRepository;
+
+    private final FileService fileService;
 
     private final QnaMapper qnaMapper;
     private final EntityUtils entityUtils;
@@ -52,6 +56,9 @@ public class QnaService {
 
         //DB에 저장
         qnaRepository.save(qna);
+
+        //본문 첨부한 이미지들 DB에 저장
+        fileService.saveImages(qnaReq.getFileUrls(), QNA, qna.getQnaId());
     }
 
     /**
@@ -152,7 +159,7 @@ public class QnaService {
     }
 
     //Entity -> Dto
-    public QnaResponseDto convertToDto(Qna qna) {
+    private QnaResponseDto convertToDto(Qna qna) {
         return QnaResponseDto.builder()
                 .qnaId(qna.getQnaId())
                 .title(qna.getTitle())

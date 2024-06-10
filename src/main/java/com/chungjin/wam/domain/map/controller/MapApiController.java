@@ -8,11 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
-
-import static com.chungjin.wam.global.util.Constants.MML_TYPE_NAME;
-import static com.chungjin.wam.global.util.Constants.MML_URL_DETAIL;
 
 
 @RestController
@@ -21,15 +17,6 @@ import static com.chungjin.wam.global.util.Constants.MML_URL_DETAIL;
 public class MapApiController {
 
     private final MapService mapService;
-
-    /**
-     * 포유류 정보 조회
-     */
-    @GetMapping("/mml-all")
-    public ResponseEntity<String> callAllmmlMapApi() throws IOException {
-        return ResponseEntity.ok(mapService.getAnimalData(MML_URL_DETAIL, MML_TYPE_NAME));
-    }
-
 
     /**
      * 포유류 정보 조회

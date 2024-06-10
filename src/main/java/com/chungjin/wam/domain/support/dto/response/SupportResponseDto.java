@@ -17,7 +17,5 @@ public class SupportResponseDto {
     private String firstImg;
     private Long goalAmount;
     private Long supportAmount;
-    private String createDate;
-    private Boolean commentCheck;
 
 }
