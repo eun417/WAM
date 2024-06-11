@@ -1,6 +1,6 @@
 # 🦌 WAM
 
-WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 조회하고, 야생동물 후원 및 QnA를 이용할 수 있는 웹 서비스입니다.
+WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 조회하고, 후원 및 QnA를 이용할 수 있는 웹 서비스입니다.
 
 ---
 ## 목차
@@ -19,7 +19,7 @@ WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 
 
 **BackEnd**
 
-<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=Spring Security&logoColor=white"/> <img src="https://img.shields.io/badge/JAVA 17-007396?style=flat&logo=Java&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=Gradle&logoColor=white"/>
+<img src="https://img.shields.io/badge/JAVA 17-007396?style=flat&logo=Java&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=Spring Security&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=Gradle&logoColor=white"/>
 <br>
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/Redis-DC382D?style=flat&logo=Redis&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat&logo=Spring Data JPA&logoColor=white"/> <img src="https://img.shields.io/badge/QueryDSL-4479A1?style=flat&logo=QueryDSL&logoColor=white"/>
 <br>
@@ -80,11 +80,11 @@ WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 
 
 ---
 ## ERD 설계
-![WAM (1)](https://github.com/eun417/wam/assets/126125547/abd85181-7092-4388-967a-7bee10efa5b2)
+![wam-erd](https://github.com/eun417/wam/assets/126125547/2e0179e4-5619-437c-8175-eba4b101019d)
 
 ---
 ## Architecture
-![architecture](https://github.com/eun417/wam/assets/126125547/97a45470-547e-47d7-acfc-31b503f2bf7b)
+![architecture](https://github.com/eun417/wam/assets/126125547/b469dbfa-ac89-447c-b1c1-4e8bee7a3cd8))
 
 ---
 ## 기능별 화면 및 시연
