@@ -1,6 +1,6 @@
 # 🦌 WAM
 
-WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 조회하고, 후원 및 QnA를 이용할 수 있는 웹 서비스입니다.
+WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 조회하고, 야생동물 후원 및 QnA를 이용할 수 있는 웹 서비스입니다.
 
 ---
 ## 목차
@@ -84,7 +84,7 @@ WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 
 
 ---
 ## Architecture
-![architecture](https://github.com/eun417/wam/assets/126125547/b469dbfa-ac89-447c-b1c1-4e8bee7a3cd8))
+![architecture](https://github.com/eun417/wam/assets/126125547/b469dbfa-ac89-447c-b1c1-4e8bee7a3cd8)
 
 ---
 ## 기능별 화면 및 시연
