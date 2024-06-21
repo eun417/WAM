@@ -2,12 +2,12 @@ const supportId = document.getElementById('supportId').value;
 
 function shareTwitter() {
     const sendText = "WAM - 야생동물후원사이트"; // 전달할 텍스트
-    const sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
+    const sendUrl = "https://cea6439.com/support/detail/" + supportId; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
 }
 
 function shareFacebook() {
-    const sendUrl = "http://cea6439.com/support/detail/" + supportId; // 전달할 URL
+    const sendUrl = "https://cea6439.com/support/detail/" + supportId; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
 }
 
@@ -26,7 +26,7 @@ function shareKakao() {
       imageUrl: "https://cdn0.iconfinder.com/data/icons/christmas-time-02/91/Christmas_-_Celebrate_-_New_Year_28-512.png", // 콘텐츠 URL
       link: {
          mobileWebUrl: "http://cea6439.com/support/detail/" + supportId,
-         webUrl: "http://cea6439.com/support/detail/" + supportId
+         webUrl: "https://cea6439.com/support/detail/" + supportId
       }
     }
   });

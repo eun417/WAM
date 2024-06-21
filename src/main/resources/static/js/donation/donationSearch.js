@@ -27,7 +27,7 @@ function loadSupportList(pageNo) {
         //DocumentFragment 생성
         const fragment = document.createDocumentFragment();
 
-        if (searchList.length === 0) {
+        if (searchList.length === 0 && pageNo === 0) {
             noResultDiv(fragment);
         } else {
             searchList.forEach(function(support) {
