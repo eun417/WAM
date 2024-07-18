@@ -4,7 +4,7 @@ WAM은 국립생태원 EcoBank에서 제공하는 야생동물 위치 정보를 
 
 ---
 ## 목차
-1. [Teck Stack](#teck-stack)
+1. [Tech Stack](#tech-stack)
 
 2. [주요 기능](#주요-기능)
 
